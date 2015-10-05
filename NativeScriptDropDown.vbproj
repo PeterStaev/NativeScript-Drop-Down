@@ -79,6 +79,7 @@
     <Import Include="System.Web.UI.HtmlControls" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="docs\screenshot.png" />
     <Content Include="gruntfile.js" />
     <Content Include="package.json" />
   </ItemGroup>

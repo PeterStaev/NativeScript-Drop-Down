@@ -21,6 +21,7 @@ import types = require("utils/types");
 import view = require("ui/core/view");
 import label = require("ui/label");
 import stackLayout = require("ui/layouts/stack-layout");
+import style = require("ui/styling");
 
 // merge the exports of the common file with the exports of this file
 declare var exports;
@@ -112,11 +113,12 @@ export class DropDown extends common.DropDown
             var defaultPadding = 4 * utils.layout.getDisplayDensity();
 
             view.id = LABELVIEWID;
-            view.fontSize = 18; // Default font size
-            layout.paddingLeft = layout.paddingRight = defaultPadding;
+            layout.style.padding = this.style.padding
+            copyDropDownItemStyleProperties(view.style, this.style);
+
             if (realizedViewType == RealizedViewType.DropDownView)
             {
-                layout.paddingTop = layout.paddingBottom = defaultPadding;
+                layout.paddingTop = layout.paddingBottom = layout.paddingLeft = layout.paddingRight = defaultPadding;
             }
 
             layout.addChild(view);
@@ -228,4 +230,14 @@ class DropDownAdapter extends android.widget.BaseAdapter
 
         return convertView;
     }
+}
+
+function copyDropDownItemStyleProperties(targetStyle: style.Style, sourceStyle: style.Style)
+{
+    targetStyle.color = sourceStyle.color;
+    targetStyle.fontFamily = sourceStyle.fontFamily;
+    targetStyle.fontSize = sourceStyle.fontSize;
+    targetStyle.fontStyle = sourceStyle.fontStyle;
+    targetStyle.fontWeight = sourceStyle.fontWeight;
+    targetStyle.textAlignment = sourceStyle.textAlignment;
 }
