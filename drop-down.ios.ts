@@ -21,9 +21,7 @@ import dependencyObservable = require("ui/core/dependency-observable");
 import observable = require("data/observable");
 import common = require("./drop-down-common");
 
-// merge the exports of the common file with the exports of this file
-declare var exports;
-require("utils/module-merge").merge(common, exports);
+global.moduleMerge(common, exports);
 
 export class DropDown extends common.DropDown
 {

@@ -23,9 +23,7 @@ import label = require("ui/label");
 import stackLayout = require("ui/layouts/stack-layout");
 import style = require("ui/styling");
 
-// merge the exports of the common file with the exports of this file
-declare var exports;
-require("utils/module-merge").merge(common, exports);
+global.moduleMerge(common, exports);
 
 var LABELVIEWID = "spinner-label";
 
@@ -113,7 +111,6 @@ export class DropDown extends common.DropDown
             var defaultPadding = 4 * utils.layout.getDisplayDensity();
 
             view.id = LABELVIEWID;
-            layout.style.padding = this.style.padding
             copyDropDownItemStyleProperties(view.style, this.style);
 
             if (realizedViewType == RealizedViewType.DropDownView)
@@ -234,10 +231,4 @@ class DropDownAdapter extends android.widget.BaseAdapter
 
 function copyDropDownItemStyleProperties(targetStyle: style.Style, sourceStyle: style.Style)
 {
-    targetStyle.color = sourceStyle.color;
-    targetStyle.fontFamily = sourceStyle.fontFamily;
-    targetStyle.fontSize = sourceStyle.fontSize;
-    targetStyle.fontStyle = sourceStyle.fontStyle;
-    targetStyle.fontWeight = sourceStyle.fontWeight;
-    targetStyle.textAlignment = sourceStyle.textAlignment;
 }

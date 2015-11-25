@@ -1,0 +1,260 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <PropertyGroup>
+    <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
+    <TypeScriptSourceMap>False</TypeScriptSourceMap>
+    <ProjectHome>.</ProjectHome>
+    <ProjectName>GridViewSample</ProjectName>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ProjectGuid>0c581aae-e414-4965-b372-c3a67d0dd821</ProjectGuid>
+    <ProjectTypeGuids>{F0A65104-D4F4-4012-B799-F612D75820F6}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include=".abignore" />
+    <Content Include=".abproject" />
+    <Content Include="package.json" />
+    <Content Include="app\app.css" />
+    <Content Include="app\app.js" />
+    <Content Include="typings\tns-core-modules-schemas\tns.xsd" />
+    <Content Include="typings\tns-core-modules\LICENSE" />
+    <Content Include="typings\tns-core-modules\package.json" />
+    <TypeScriptCompile Include="app\app.ts" />
+    <Content Include="app\LICENSE" />
+    <Content Include="app\main-page.js" />
+    <TypeScriptCompile Include="app\main-page.ts" />
+    <Content Include="app\main-page.xml" />
+    <Content Include="app\package.json" />
+    <Content Include="app\App_Resources\Android\drawable-hdpi\icon.png" />
+    <Content Include="app\App_Resources\Android\drawable-ldpi\icon.png" />
+    <Content Include="app\App_Resources\Android\drawable-mdpi\icon.png" />
+    <Content Include="app\App_Resources\Android\drawable-nodpi\splashscreen.9.png" />
+    <Content Include="app\App_Resources\iOS\Default-568h@2x.png" />
+    <Content Include="app\App_Resources\iOS\Default-Landscape.png" />
+    <Content Include="app\App_Resources\iOS\Default-Landscape@2x.png" />
+    <Content Include="app\App_Resources\iOS\Default-Portrait.png" />
+    <Content Include="app\App_Resources\iOS\Default-Portrait@2x.png" />
+    <Content Include="app\App_Resources\iOS\Default.png" />
+    <Content Include="app\App_Resources\iOS\Default@2x.png" />
+    <Content Include="app\App_Resources\iOS\icon-40.png" />
+    <Content Include="app\App_Resources\iOS\icon-40@2x.png" />
+    <Content Include="app\App_Resources\iOS\icon-60.png" />
+    <Content Include="app\App_Resources\iOS\icon-60@2x.png" />
+    <Content Include="app\App_Resources\iOS\icon-72.png" />
+    <Content Include="app\App_Resources\iOS\icon-72@2x.png" />
+    <Content Include="app\App_Resources\iOS\icon-76.png" />
+    <Content Include="app\App_Resources\iOS\icon-76@2x.png" />
+    <Content Include="app\App_Resources\iOS\Icon-Small-50.png" />
+    <Content Include="app\App_Resources\iOS\Icon-Small-50@2x.png" />
+    <Content Include="app\App_Resources\iOS\Icon-Small.png" />
+    <Content Include="app\App_Resources\iOS\Icon-Small@2x.png" />
+    <Content Include="app\App_Resources\iOS\icon.png" />
+    <Content Include="app\App_Resources\iOS\icon@2x.png" />
+    <TypeScriptCompile Include="typings\tns-core-modules\android17.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\application-settings\application-settings.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\application\application.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\camera\camera.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\color\color.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\color\known-colors.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\connectivity\connectivity.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\console\console.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\css-value\reworkcss-value.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\css\reworkcss.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\data\observable-array\observable-array.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\data\observable\observable.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\data\virtual-array\virtual-array.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\declarations.android.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\declarations.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\declarations.ios.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\es-collections.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\es6-promise.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\file-system\file-name-resolver.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\file-system\file-system-access.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\file-system\file-system.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\fps-meter\fps-meter.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\fps-meter\fps-native.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\http\http.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\image-source\image-source.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ios.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\js-libs\esprima\esprima.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\location\location.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\org.nativescript.widgets.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\platform\platform.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\text\formatted-string.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\text\span.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\text\text.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\timer\timer.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\trace\trace.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\action-bar\action-bar.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\activity-indicator\activity-indicator.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\animation\animation.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\border\border.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\builder\builder.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\builder\component-builder.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\builder\special-properties.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\button\button.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\content-view\content-view.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\core\bindable.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\core\control-state-change.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\core\dependency-observable.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\core\proxy.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\core\view.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\core\weak-event-listener.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\date-picker\date-picker.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\dialogs\dialogs.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\editable-text-base\editable-text-base.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\enums\enums.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\frame\frame.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\gestures\gestures.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\html-view\html-view.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\image-cache\image-cache.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\image\image.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\label\label.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\layouts\absolute-layout\absolute-layout.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\layouts\dock-layout\dock-layout.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\layouts\grid-layout\grid-layout.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\layouts\layout-base.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\layouts\layout.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\layouts\stack-layout\stack-layout.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\layouts\wrap-layout\wrap-layout.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\list-picker\list-picker.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\list-view\list-view.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\page\page.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\placeholder\placeholder.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\progress\progress.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\repeater\repeater.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\scroll-view\scroll-view.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\search-bar\search-bar.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\segmented-bar\segmented-bar.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\slider\slider.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\styling\background.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\styling\css-selector.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\styling\font.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\styling\style-property.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\styling\stylers.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\styling\styling.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\styling\visual-state-constants.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\switch\switch.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\tab-view\tab-view.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\text-base\text-base.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\text-field\text-field.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\text-view\text-view.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\time-picker\time-picker.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\ui.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\utils.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\ui\web-view\web-view.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\utils\types.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\utils\utils.d.ts" />
+    <TypeScriptCompile Include="typings\tns-core-modules\xml\xml.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="app\" />
+    <Folder Include="app\App_Resources\" />
+    <Folder Include="app\App_Resources\Android\" />
+    <Folder Include="app\App_Resources\Android\drawable-hdpi\" />
+    <Folder Include="app\App_Resources\Android\drawable-ldpi\" />
+    <Folder Include="app\App_Resources\Android\drawable-mdpi\" />
+    <Folder Include="app\App_Resources\Android\drawable-nodpi\" />
+    <Folder Include="app\App_Resources\iOS\" />
+    <Folder Include="typings\" />
+    <Folder Include="typings\tns-core-modules-schemas\" />
+    <Folder Include="typings\tns-core-modules\" />
+    <Folder Include="typings\tns-core-modules\application-settings\" />
+    <Folder Include="typings\tns-core-modules\application\" />
+    <Folder Include="typings\tns-core-modules\camera\" />
+    <Folder Include="typings\tns-core-modules\color\" />
+    <Folder Include="typings\tns-core-modules\connectivity\" />
+    <Folder Include="typings\tns-core-modules\console\" />
+    <Folder Include="typings\tns-core-modules\css-value\" />
+    <Folder Include="typings\tns-core-modules\css\" />
+    <Folder Include="typings\tns-core-modules\data\" />
+    <Folder Include="typings\tns-core-modules\data\observable-array\" />
+    <Folder Include="typings\tns-core-modules\data\observable\" />
+    <Folder Include="typings\tns-core-modules\data\virtual-array\" />
+    <Folder Include="typings\tns-core-modules\file-system\" />
+    <Folder Include="typings\tns-core-modules\fps-meter\" />
+    <Folder Include="typings\tns-core-modules\http\" />
+    <Folder Include="typings\tns-core-modules\image-source\" />
+    <Folder Include="typings\tns-core-modules\js-libs\" />
+    <Folder Include="typings\tns-core-modules\js-libs\esprima\" />
+    <Folder Include="typings\tns-core-modules\location\" />
+    <Folder Include="typings\tns-core-modules\platform\" />
+    <Folder Include="typings\tns-core-modules\text\" />
+    <Folder Include="typings\tns-core-modules\timer\" />
+    <Folder Include="typings\tns-core-modules\trace\" />
+    <Folder Include="typings\tns-core-modules\ui\" />
+    <Folder Include="typings\tns-core-modules\ui\action-bar\" />
+    <Folder Include="typings\tns-core-modules\ui\activity-indicator\" />
+    <Folder Include="typings\tns-core-modules\ui\animation\" />
+    <Folder Include="typings\tns-core-modules\ui\border\" />
+    <Folder Include="typings\tns-core-modules\ui\builder\" />
+    <Folder Include="typings\tns-core-modules\ui\button\" />
+    <Folder Include="typings\tns-core-modules\ui\content-view\" />
+    <Folder Include="typings\tns-core-modules\ui\core\" />
+    <Folder Include="typings\tns-core-modules\ui\date-picker\" />
+    <Folder Include="typings\tns-core-modules\ui\dialogs\" />
+    <Folder Include="typings\tns-core-modules\ui\editable-text-base\" />
+    <Folder Include="typings\tns-core-modules\ui\enums\" />
+    <Folder Include="typings\tns-core-modules\ui\frame\" />
+    <Folder Include="typings\tns-core-modules\ui\gestures\" />
+    <Folder Include="typings\tns-core-modules\ui\html-view\" />
+    <Folder Include="typings\tns-core-modules\ui\image-cache\" />
+    <Folder Include="typings\tns-core-modules\ui\image\" />
+    <Folder Include="typings\tns-core-modules\ui\label\" />
+    <Folder Include="typings\tns-core-modules\ui\layouts\" />
+    <Folder Include="typings\tns-core-modules\ui\layouts\absolute-layout\" />
+    <Folder Include="typings\tns-core-modules\ui\layouts\dock-layout\" />
+    <Folder Include="typings\tns-core-modules\ui\layouts\grid-layout\" />
+    <Folder Include="typings\tns-core-modules\ui\layouts\stack-layout\" />
+    <Folder Include="typings\tns-core-modules\ui\layouts\wrap-layout\" />
+    <Folder Include="typings\tns-core-modules\ui\list-picker\" />
+    <Folder Include="typings\tns-core-modules\ui\list-view\" />
+    <Folder Include="typings\tns-core-modules\ui\page\" />
+    <Folder Include="typings\tns-core-modules\ui\placeholder\" />
+    <Folder Include="typings\tns-core-modules\ui\progress\" />
+    <Folder Include="typings\tns-core-modules\ui\repeater\" />
+    <Folder Include="typings\tns-core-modules\ui\scroll-view\" />
+    <Folder Include="typings\tns-core-modules\ui\search-bar\" />
+    <Folder Include="typings\tns-core-modules\ui\segmented-bar\" />
+    <Folder Include="typings\tns-core-modules\ui\slider\" />
+    <Folder Include="typings\tns-core-modules\ui\styling\" />
+    <Folder Include="typings\tns-core-modules\ui\switch\" />
+    <Folder Include="typings\tns-core-modules\ui\tab-view\" />
+    <Folder Include="typings\tns-core-modules\ui\text-base\" />
+    <Folder Include="typings\tns-core-modules\ui\text-field\" />
+    <Folder Include="typings\tns-core-modules\ui\text-view\" />
+    <Folder Include="typings\tns-core-modules\ui\time-picker\" />
+    <Folder Include="typings\tns-core-modules\ui\web-view\" />
+    <Folder Include="typings\tns-core-modules\utils\" />
+    <Folder Include="typings\tns-core-modules\xml\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+  <Import Project="$(IceniumTargets)Build.targets" />
+  <!--
+    TODO: Uncomment this code if you need to customize the build process.
+    <Target Name="BeforeBuild">
+        <Message Text="TODO: Implement BeforeBuild" Importance="high" />
+    </Target>
+
+    <Target Name="AfterBuild">
+        <Message Text="TODO: Implement AfterBuild" Importance="high" />
+    </Target>
+    -->
+</Project>
