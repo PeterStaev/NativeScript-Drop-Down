@@ -9,12 +9,14 @@ module.exports = function (grunt)
         typeScriptSrc: [
             "**/*.ts",
             "!node_modules/**/*.*",
+            "!sample/**/*.*",
             "!bin/**/*.*",
             "!_references.ts"
         ],
         typeScriptDeclarations: [
             "**/*.d.ts",
             "!node_modules/**/*.*",
+            "!sample/**/*.*",
             "!bin/**/*.*"
         ],
         outDir: "bin/dist/"
