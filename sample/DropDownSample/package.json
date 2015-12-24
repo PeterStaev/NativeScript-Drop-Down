@@ -1,7 +1,16 @@
 {
-  "dependencies": {
-    "nativescript-drop-down": "1.1.0",
-    "tns-core-modules": "1.4.0"
-  },
-  "devDependencies": {}
+	"nativescript": {
+		"id": "net.tangrainc.DropDownSample",
+		"tns-ios": {
+			"version": "1.4.1"
+		},
+		"tns-android": {
+			"version": "1.4.0"
+		}
+	},
+	"dependencies": {
+		"tns-core-modules": "1.4.0",
+		"nativescript-drop-down": "1.1.0"
+	},
+	"devDependencies": {}
 }

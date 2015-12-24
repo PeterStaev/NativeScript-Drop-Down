@@ -2,7 +2,7 @@
   "ProjectName": "GridViewSample",
   "ProjectGuid": "0c581aae-e414-4965-b372-c3a67d0dd821",
   "projectVersion": 1,
-  "AppIdentifier": "com.telerik.DropDownSample",
+  "AppIdentifier": "net.tangrainc.DropDownSample",
   "DisplayName": "DropDownSample",
   "Author": "",
   "Description": "DropDownSample",
