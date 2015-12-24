@@ -46,7 +46,7 @@ bin
 obj
 .vs
 *.user
-#*.js
+*.js
 !gruntfile.js
 node_modules
 *.tmp.*
