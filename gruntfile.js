@@ -99,6 +99,7 @@ module.exports = function (grunt)
     grunt.loadNpmTasks("grunt-exec");
 
     grunt.registerTask("build", [
+        "tslint:build",
         "clean:build",
         "ts:build",
         "copy"
