@@ -54,7 +54,8 @@ declare module "ui/animation" {
         iterations?: number;
         
         /**
-         * An optional animation curve of type UIViewAnimationCurve for iOS or android.animation.TimeInterpolator for Android.
+         * An optional animation curve. Possible values are contained in the [AnimationCurve enumeration](../enums/AnimationCurve/README.md).
+         * Alternatively, you can pass an instance of type UIViewAnimationCurve for iOS or android.animation.TimeInterpolator for Android.
          */
         curve?: any;
     }
@@ -75,5 +76,6 @@ declare module "ui/animation" {
         public play: () => Promise<void>;
         public cancel: () => void;
         public isPlaying: boolean;
+        
     }
 }

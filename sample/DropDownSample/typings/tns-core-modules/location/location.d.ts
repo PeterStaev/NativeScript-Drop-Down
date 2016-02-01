@@ -57,12 +57,12 @@ declare module "location" {
        /**
         * The android-specific [location](http://developer.android.com/reference/android/location/Location.html) object.
         */
-        android: android.location.Location;
+        android: any /* android.location.Location */;
 
        /**
         * The ios-specific [CLLocation](https://developer.apple.com/library/ios/documentation/CoreLocation/Reference/CLLocation_Class/) object.
         */
-        ios: CLLocation;
+        ios: any /* CLLocation */;
     }
 
    /**
@@ -144,48 +144,48 @@ declare module "location" {
         */
         lastKnownLocation: Location;
 
-		/**
-		 * An android-specific data for location.
-		 */
-		android: AndroidLocationManager;
+        /**
+         * An android-specific data for location.
+         */
+        android: AndroidLocationManager;
 
-		/**
-		 * An ios-specific data for location.
-		 */
-		ios: iOSLocationManager;
+        /**
+         * An ios-specific data for location.
+         */
+        ios: iOSLocationManager;
     }
 
-	/**
-	 * Provides Android specific data related to location.
-	 */
-	export interface AndroidLocationManager {
-		/**
-		 * The android-specific location manager [LocationManager](http://developer.android.com/reference/android/location/LocationManager.html)
-		 */
-		manager: android.location.LocationManager;
+    /**
+     * Provides Android specific data related to location.
+     */
+    export interface AndroidLocationManager {
+        /**
+         * The android-specific location manager [LocationManager](http://developer.android.com/reference/android/location/LocationManager.html)
+         */
+        manager: any /* android.location.LocationManager */;
 
-		/**
-		 * The minimum time interval between subsequent location updates, in milliseconds.
-		 */
+        /**
+         * The minimum time interval between subsequent location updates, in milliseconds.
+         */
         minimumUpdateTime: number;
-	}
+    }
 
-	/**
-	 * Fires a single shot location search. If you specify timeout in options (milliseconds), location search will stop on timeout.
-	 * If you specify timeout = 0 it just requests the last known location.
-	 * However if you specify maximumAge and the location received is older it won't be received.
-	 * @param options - An optional object specifying location update settings.
-	 */
+    /**
+     * Fires a single shot location search. If you specify timeout in options (milliseconds), location search will stop on timeout.
+     * If you specify timeout = 0 it just requests the last known location.
+     * However if you specify maximumAge and the location received is older it won't be received.
+     * @param options - An optional object specifying location update settings.
+     */
     export function getLocation(options?: Options): Promise<Location>;
 
-	/* tslint:disable */
-	/**
-	 * Provides iOS specific data related to location.
-	 */
-	export interface iOSLocationManager {
-		/**
-		 * The ios-specific location manager [CLLocationManager](https://developer.apple.com/library/ios/documentation/CoreLocation/Reference/CLLocationManager_Class/)
-		 */
-		manager: CLLocationManager;
-	}
+    /* tslint:disable */
+    /**
+     * Provides iOS specific data related to location.
+     */
+    export interface iOSLocationManager {
+        /**
+         * The ios-specific location manager [CLLocationManager](https://developer.apple.com/library/ios/documentation/CoreLocation/Reference/CLLocationManager_Class/)
+         */
+        manager: any /* CLLocationManager */;
+    }
 }

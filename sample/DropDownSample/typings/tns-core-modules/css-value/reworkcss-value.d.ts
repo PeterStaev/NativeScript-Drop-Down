@@ -1,10 +1,11 @@
 declare module "css-value" {
-    export interface CSSValue {
+    interface CSSValue {
         type: string;
         string: string;
-        unit: string;
-        value: number;
+        unit?: string;
+        value?: number;
     }
 
-    export function parse(cssValue: string): Array<CSSValue>;
+    function parse(cssValue: string): Array<CSSValue>;
+    export = parse;
 }

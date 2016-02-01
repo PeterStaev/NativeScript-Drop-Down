@@ -26,7 +26,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <TypeScriptToolsVersion>1.6</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>1.7</TypeScriptToolsVersion>
     <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
     <TypeScriptSourceMap>False</TypeScriptSourceMap>
   </PropertyGroup>
@@ -53,7 +53,7 @@
     <TypeScriptCompile Include="drop-down.android.ts" />
     <TypeScriptCompile Include="drop-down.d.ts" />
     <TypeScriptCompile Include="drop-down.ios.ts" />
-    <TypeScriptCompile Include="_references.ts" />
+    <TypeScriptCompile Include="_references.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />

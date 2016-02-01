@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<!--SCHEMA VERSION: 1.4.0-2015.10.12.7-->
-<xs:schema id="tns" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.nativescript.org/tns.xsd" xmlns="http://www.nativescript.org/tns.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<!--SCHEMA VERSION: 1.5.1-->
+<xs:schema id="tns" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://schemas.nativescript.org/tns.xsd" xmlns="http://schemas.nativescript.org/tns.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
     <xs:attributeGroup name="actionBarAttributes">
         <xs:attribute name="title" type="StringValidator"/>
         <xs:attribute name="navigationButton" type="StringValidator"/>
@@ -24,29 +24,22 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="ActionBar" type="ActionBar"/>
-    <xs:attributeGroup name="actionItemBaseAttributes">
-        <xs:attribute name="tap" type="StringValidator"/>
+    <xs:element name="action-bar" type="ActionBar"/>
+    <xs:attributeGroup name="actionItemAttributes">
         <xs:attribute name="text" type="StringValidator"/>
         <xs:attribute name="icon" type="StringValidator"/>
+        <xs:attribute name="visibility" type="StringValidator"/>
         <xs:attribute name="actionBar" type="StringValidator"/>
     </xs:attributeGroup>
-    <xs:complexType name="ActionItemBase">
-        <xs:complexContent>
-            <xs:extension base="Bindable">
-                <xs:attributeGroup ref="actionItemBaseAttributes"/>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-    <xs:element name="ActionItemBase" type="ActionItemBase"/>
-    <xs:attributeGroup name="actionItemAttributes"/>
     <xs:complexType name="ActionItem">
         <xs:complexContent>
-            <xs:extension base="ActionItemBase">
+            <xs:extension base="Bindable">
                 <xs:attributeGroup ref="actionItemAttributes"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="ActionItem" type="ActionItem"/>
+    <xs:element name="action-item" type="ActionItem"/>
     <xs:attributeGroup name="activityIndicatorAttributes">
         <xs:attribute name="busy" type="BooleanValidator"/>
     </xs:attributeGroup>
@@ -58,6 +51,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="ActivityIndicator" type="ActivityIndicator"/>
+    <xs:element name="activity-indicator" type="ActivityIndicator"/>
     <xs:attributeGroup name="borderAttributes">
         <xs:attribute name="cornerRadius" type="NumberValidator"/>
     </xs:attributeGroup>
@@ -69,9 +63,10 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="Border" type="Border"/>
+    <xs:element name="border" type="Border"/>
     <xs:attributeGroup name="buttonAttributes">
-        <xs:attribute name="tap" type="StringValidator"/>
         <xs:attribute name="text" type="StringValidator"/>
+        <xs:attribute name="textWrap" type="BooleanValidator"/>
         <xs:attribute name="formattedText" type="StringValidator"/>
     </xs:attributeGroup>
     <xs:complexType name="Button">
@@ -82,6 +77,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="Button" type="Button"/>
+    <xs:element name="button" type="Button"/>
     <xs:attributeGroup name="contentViewAttributes"/>
     <xs:complexType name="ContentView">
         <xs:complexContent>
@@ -94,11 +90,13 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="ContentView" type="ContentView"/>
+    <xs:element name="content-view" type="ContentView"/>
     <xs:attributeGroup name="bindableAttributes"/>
     <xs:complexType name="Bindable">
         <xs:attributeGroup ref="bindableAttributes"/>
     </xs:complexType>
     <xs:element name="Bindable" type="Bindable"/>
+    <xs:element name="bindable" type="Bindable"/>
     <xs:attributeGroup name="viewAttributes">
         <xs:attribute name="borderRadius" type="NumberValidator"/>
         <xs:attribute name="borderWidth" type="NumberValidator"/>
@@ -125,6 +123,8 @@
         <xs:attribute name="translateY" type="NumberValidator"/>
         <xs:attribute name="scaleX" type="NumberValidator"/>
         <xs:attribute name="scaleY" type="NumberValidator"/>
+        <xs:attribute name="originX" type="NumberValidator"/>
+        <xs:attribute name="originY" type="NumberValidator"/>
         <xs:attribute name="rotate" type="NumberValidator"/>
         <xs:attribute name="isEnabled" type="BooleanValidator"/>
         <xs:attribute name="isUserInteractionEnabled" type="BooleanValidator"/>
@@ -140,11 +140,27 @@
         <xs:attribute name="left" type="NumberValidator"/>
         <xs:attribute name="top" type="NumberValidator"/>
         <xs:attribute name="dock" type="StringValidator"/>
+        <xs:attribute name="class" type="StringValidator"/>
+        <xs:attribute name="tap" type="StringValidator"/>
+        <xs:attribute name="ontap" type="StringValidator"/>
+        <xs:attribute name="doubletap" type="StringValidator"/>
+        <xs:attribute name="ondoubletap" type="StringValidator"/>
+        <xs:attribute name="longpress" type="StringValidator"/>
+        <xs:attribute name="onlongpress" type="StringValidator"/>
+        <xs:attribute name="pinch" type="StringValidator"/>
+        <xs:attribute name="onpinch" type="StringValidator"/>
+        <xs:attribute name="pan" type="StringValidator"/>
+        <xs:attribute name="onpan" type="StringValidator"/>
+        <xs:attribute name="swipe" type="StringValidator"/>
+        <xs:attribute name="onswipe" type="StringValidator"/>
+        <xs:attribute name="rotation" type="StringValidator"/>
+        <xs:attribute name="onrotation" type="StringValidator"/>
     </xs:attributeGroup>
     <xs:complexType name="View">
         <xs:attributeGroup ref="viewAttributes"/>
     </xs:complexType>
     <xs:element name="View" type="View"/>
+    <xs:element name="view" type="View"/>
     <xs:attributeGroup name="customLayoutViewAttributes"/>
     <xs:complexType name="CustomLayoutView">
         <xs:complexContent>
@@ -157,6 +173,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="CustomLayoutView" type="CustomLayoutView"/>
+    <xs:element name="custom-layout-view" type="CustomLayoutView"/>
     <xs:attributeGroup name="datePickerAttributes">
         <xs:attribute name="year" type="NumberValidator"/>
         <xs:attribute name="month" type="NumberValidator"/>
@@ -172,6 +189,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="DatePicker" type="DatePicker"/>
+    <xs:element name="date-picker" type="DatePicker"/>
     <xs:attributeGroup name="editableTextBaseAttributes">
         <xs:attribute name="keyboardType" type="StringValidator"/>
         <xs:attribute name="returnKeyType" type="StringValidator"/>
@@ -189,6 +207,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="EditableTextBase" type="EditableTextBase"/>
+    <xs:element name="editable-text-base" type="EditableTextBase"/>
     <xs:attributeGroup name="htmlViewAttributes">
         <xs:attribute name="html" type="StringValidator"/>
     </xs:attributeGroup>
@@ -200,6 +219,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="HtmlView" type="HtmlView"/>
+    <xs:element name="html-view" type="HtmlView"/>
     <xs:attributeGroup name="imageAttributes">
         <xs:attribute name="isLoading" type="BooleanValidator"/>
         <xs:attribute name="stretch" type="StringValidator"/>
@@ -213,6 +233,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="Image" type="Image"/>
+    <xs:element name="image" type="Image"/>
     <xs:attributeGroup name="labelAttributes">
         <xs:attribute name="textWrap" type="BooleanValidator"/>
     </xs:attributeGroup>
@@ -224,6 +245,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="Label" type="Label"/>
+    <xs:element name="label" type="Label"/>
     <xs:attributeGroup name="absoluteLayoutAttributes"/>
     <xs:complexType name="AbsoluteLayout">
         <xs:complexContent>
@@ -233,6 +255,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="AbsoluteLayout" type="AbsoluteLayout"/>
+    <xs:element name="absolute-layout" type="AbsoluteLayout"/>
     <xs:attributeGroup name="dockLayoutAttributes">
         <xs:attribute name="stretchLastChild" type="BooleanValidator"/>
     </xs:attributeGroup>
@@ -244,6 +267,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="DockLayout" type="DockLayout"/>
+    <xs:element name="dock-layout" type="DockLayout"/>
     <xs:attributeGroup name="gridLayoutAttributes">
         <xs:attribute name="rows" type="StringValidator"/>
         <xs:attribute name="columns" type="StringValidator"/>
@@ -256,6 +280,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="GridLayout" type="GridLayout"/>
+    <xs:element name="grid-layout" type="GridLayout"/>
     <xs:attributeGroup name="layoutBaseAttributes">
         <xs:attribute name="padding" type="StringValidator"/>
         <xs:attribute name="paddingBottom" type="NumberValidator"/>
@@ -271,6 +296,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="LayoutBase" type="LayoutBase"/>
+    <xs:element name="layout-base" type="LayoutBase"/>
     <xs:attributeGroup name="layoutAttributes"/>
     <xs:complexType name="Layout">
         <xs:complexContent>
@@ -283,6 +309,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="Layout" type="Layout"/>
+    <xs:element name="layout" type="Layout"/>
     <xs:attributeGroup name="stackLayoutAttributes">
         <xs:attribute name="orientation" type="StringValidator"/>
     </xs:attributeGroup>
@@ -294,6 +321,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="StackLayout" type="StackLayout"/>
+    <xs:element name="stack-layout" type="StackLayout"/>
     <xs:attributeGroup name="wrapLayoutAttributes">
         <xs:attribute name="orientation" type="StringValidator"/>
         <xs:attribute name="itemWidth" type="NumberValidator"/>
@@ -307,6 +335,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="WrapLayout" type="WrapLayout"/>
+    <xs:element name="wrap-layout" type="WrapLayout"/>
     <xs:attributeGroup name="listPickerAttributes">
         <xs:attribute name="selectedIndex" type="NumberValidator"/>
     </xs:attributeGroup>
@@ -318,6 +347,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="ListPicker" type="ListPicker"/>
+    <xs:element name="list-picker" type="ListPicker"/>
     <xs:attributeGroup name="listViewAttributes">
         <xs:attribute name="itemLoading" type="StringValidator"/>
         <xs:attribute name="itemTap" type="StringValidator"/>
@@ -325,6 +355,7 @@
         <xs:attribute name="isScrolling" type="BooleanValidator"/>
         <xs:attribute name="itemTemplate" type="StringValidator"/>
         <xs:attribute name="separatorColor" type="ColorValidator"/>
+        <xs:attribute name="rowHeight" type="NumberValidator"/>
         <xs:attribute name="items" type="StringValidator"/>
     </xs:attributeGroup>
     <xs:complexType name="ListView">
@@ -333,7 +364,9 @@
                 <xs:all>
                     <xs:element name="ListView.itemTemplate" minOccurs="0" maxOccurs="1">
                         <xs:complexType>
-                            <xs:group ref="UIComponents" minOccurs="0" maxOccurs="1"/>
+                            <xs:sequence>
+                                <xs:group ref="UIComponents" minOccurs="0" maxOccurs="1"/>
+                            </xs:sequence>
                         </xs:complexType>
                     </xs:element>
                 </xs:all>
@@ -342,6 +375,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="ListView" type="ListView"/>
+    <xs:element name="list-view" type="ListView"/>
     <xs:attributeGroup name="pageAttributes">
         <xs:attribute name="shownModally" type="StringValidator"/>
         <xs:attribute name="navigatingTo" type="StringValidator"/>
@@ -352,6 +386,7 @@
         <xs:attribute name="actionBarHidden" type="BooleanValidator"/>
         <xs:attribute name="css" type="StringValidator"/>
         <xs:attribute name="actionBar" type="StringValidator"/>
+        <xs:attribute name="modal" type="StringValidator"/>
     </xs:attributeGroup>
     <xs:complexType name="Page">
         <xs:complexContent>
@@ -371,6 +406,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="Page" type="Page"/>
+    <xs:element name="page" type="Page"/>
     <xs:attributeGroup name="placeholderAttributes">
         <xs:attribute name="creatingView" type="StringValidator"/>
     </xs:attributeGroup>
@@ -382,6 +418,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="Placeholder" type="Placeholder"/>
+    <xs:element name="placeholder" type="Placeholder"/>
     <xs:attributeGroup name="progressAttributes">
         <xs:attribute name="value" type="NumberValidator"/>
         <xs:attribute name="maxValue" type="NumberValidator"/>
@@ -394,9 +431,11 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="Progress" type="Progress"/>
+    <xs:element name="progress" type="Progress"/>
     <xs:attributeGroup name="repeaterAttributes">
         <xs:attribute name="itemTemplate" type="StringValidator"/>
         <xs:attribute name="itemsLayout" type="LayoutValidator"/>
+        <xs:attribute name="items" type="StringValidator"/>
     </xs:attributeGroup>
     <xs:complexType name="Repeater">
         <xs:complexContent>
@@ -404,7 +443,9 @@
                 <xs:all>
                     <xs:element name="Repeater.itemTemplate" minOccurs="0" maxOccurs="1">
                         <xs:complexType>
-                            <xs:group ref="UIComponents" minOccurs="0" maxOccurs="1"/>
+                            <xs:sequence>
+                                <xs:group ref="UIComponents" minOccurs="0" maxOccurs="1"/>
+                            </xs:sequence>
                         </xs:complexType>
                     </xs:element>
                     <xs:element name="Repeater.itemsLayout" maxOccurs="1">
@@ -418,7 +459,9 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="Repeater" type="Repeater"/>
+    <xs:element name="repeater" type="Repeater"/>
     <xs:attributeGroup name="scrollViewAttributes">
+        <xs:attribute name="scroll" type="StringValidator"/>
         <xs:attribute name="verticalOffset" type="NumberValidator"/>
         <xs:attribute name="horizontalOffset" type="NumberValidator"/>
         <xs:attribute name="scrollableHeight" type="NumberValidator"/>
@@ -433,6 +476,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="ScrollView" type="ScrollView"/>
+    <xs:element name="scroll-view" type="ScrollView"/>
     <xs:attributeGroup name="searchBarAttributes">
         <xs:attribute name="submit" type="StringValidator"/>
         <xs:attribute name="clear" type="StringValidator"/>
@@ -449,6 +493,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="SearchBar" type="SearchBar"/>
+    <xs:element name="search-bar" type="SearchBar"/>
     <xs:attributeGroup name="segmentedBarAttributes">
         <xs:attribute name="selectedIndex" type="NumberValidator"/>
         <xs:attribute name="selectedBackgroundColor" type="ColorValidator"/>
@@ -476,6 +521,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="SegmentedBar" type="SegmentedBar"/>
+    <xs:element name="segmented-bar" type="SegmentedBar"/>
     <xs:attributeGroup name="sliderAttributes">
         <xs:attribute name="value" type="NumberValidator"/>
         <xs:attribute name="minValue" type="NumberValidator"/>
@@ -489,6 +535,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="Slider" type="Slider"/>
+    <xs:element name="slider" type="Slider"/>
     <xs:attributeGroup name="switchAttributes">
         <xs:attribute name="checked" type="BooleanValidator"/>
     </xs:attributeGroup>
@@ -500,9 +547,12 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="Switch" type="Switch"/>
+    <xs:element name="switch" type="Switch"/>
     <xs:attributeGroup name="tabViewAttributes">
         <xs:attribute name="items" type="StringValidator"/>
         <xs:attribute name="selectedIndex" type="NumberValidator"/>
+        <xs:attribute name="selectedColor" type="ColorValidator"/>
+        <xs:attribute name="tabsBackgroundColor" type="ColorValidator"/>
         <xs:attribute name="selectedIndexChanged" type="StringValidator"/>
     </xs:attributeGroup>
     <xs:complexType name="TabView">
@@ -519,7 +569,9 @@
                                                 <xs:all>
                                                     <xs:element name="TabViewItem.view" minOccurs="0" maxOccurs="1">
                                                         <xs:complexType>
-                                                            <xs:group ref="UIComponents" minOccurs="0" maxOccurs="1"/>
+                                                            <xs:sequence>
+                                                                <xs:group ref="UIComponents" minOccurs="0" maxOccurs="1"/>
+                                                            </xs:sequence>
                                                         </xs:complexType>
                                                     </xs:element>
                                                 </xs:all>
@@ -537,6 +589,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="TabView" type="TabView"/>
+    <xs:element name="tab-view" type="TabView"/>
     <xs:attributeGroup name="textBaseAttributes">
         <xs:attribute name="text" type="StringValidator"/>
         <xs:attribute name="textAlignment" type="StringValidator"/>
@@ -551,6 +604,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="TextBase" type="TextBase"/>
+    <xs:element name="text-base" type="TextBase"/>
     <xs:attributeGroup name="textFieldAttributes">
         <xs:attribute name="returnPress" type="StringValidator"/>
         <xs:attribute name="secure" type="BooleanValidator"/>
@@ -563,6 +617,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="TextField" type="TextField"/>
+    <xs:element name="text-field" type="TextField"/>
     <xs:attributeGroup name="textViewAttributes"/>
     <xs:complexType name="TextView">
         <xs:complexContent>
@@ -572,9 +627,15 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="TextView" type="TextView"/>
+    <xs:element name="text-view" type="TextView"/>
     <xs:attributeGroup name="timePickerAttributes">
         <xs:attribute name="hour" type="NumberValidator"/>
         <xs:attribute name="minute" type="NumberValidator"/>
+        <xs:attribute name="maxHour" type="NumberValidator"/>
+        <xs:attribute name="maxMinute" type="NumberValidator"/>
+        <xs:attribute name="minHour" type="NumberValidator"/>
+        <xs:attribute name="minMinute" type="NumberValidator"/>
+        <xs:attribute name="minuteInterval" type="NumberValidator"/>
     </xs:attributeGroup>
     <xs:complexType name="TimePicker">
         <xs:complexContent>
@@ -584,6 +645,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="TimePicker" type="TimePicker"/>
+    <xs:element name="time-picker" type="TimePicker"/>
     <xs:attributeGroup name="webViewAttributes">
         <xs:attribute name="loadStarted" type="StringValidator"/>
         <xs:attribute name="loadFinished" type="StringValidator"/>
@@ -600,6 +662,7 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:element name="WebView" type="WebView"/>
+    <xs:element name="web-view" type="WebView"/>
     <xs:simpleType name="BindingValidator">
         <xs:restriction base="xs:string">
             <xs:pattern value="\{\{.*\}\}"/>
@@ -822,6 +885,36 @@
             <xs:element name="TextView" type="TextView"/>
             <xs:element name="TimePicker" type="TimePicker"/>
             <xs:element name="WebView" type="WebView"/>
+            <xs:element name="action-bar" type="ActionBar"/>
+            <xs:element name="activity-indicator" type="ActivityIndicator"/>
+            <xs:element name="border" type="Border"/>
+            <xs:element name="button" type="Button"/>
+            <xs:element name="content-view" type="ContentView"/>
+            <xs:element name="date-picker" type="DatePicker"/>
+            <xs:element name="html-view" type="HtmlView"/>
+            <xs:element name="image" type="Image"/>
+            <xs:element name="label" type="Label"/>
+            <xs:element name="absolute-layout" type="AbsoluteLayout"/>
+            <xs:element name="dock-layout" type="DockLayout"/>
+            <xs:element name="grid-layout" type="GridLayout"/>
+            <xs:element name="stack-layout" type="StackLayout"/>
+            <xs:element name="wrap-layout" type="WrapLayout"/>
+            <xs:element name="list-picker" type="ListPicker"/>
+            <xs:element name="list-view" type="ListView"/>
+            <xs:element name="page" type="Page"/>
+            <xs:element name="placeholder" type="Placeholder"/>
+            <xs:element name="progress" type="Progress"/>
+            <xs:element name="repeater" type="Repeater"/>
+            <xs:element name="scroll-view" type="ScrollView"/>
+            <xs:element name="search-bar" type="SearchBar"/>
+            <xs:element name="segmented-bar" type="SegmentedBar"/>
+            <xs:element name="slider" type="Slider"/>
+            <xs:element name="switch" type="Switch"/>
+            <xs:element name="tab-view" type="TabView"/>
+            <xs:element name="text-field" type="TextField"/>
+            <xs:element name="text-view" type="TextView"/>
+            <xs:element name="time-picker" type="TimePicker"/>
+            <xs:element name="web-view" type="WebView"/>
         </xs:choice>
     </xs:group>
     <xs:group name="UILayouts">

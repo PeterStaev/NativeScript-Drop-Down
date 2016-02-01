@@ -45,9 +45,11 @@ Temporary Items
 bin
 obj
 .vs
+.tscache
 *.user
 *.js
 !gruntfile.js
 node_modules
 *.tmp.*
 platforms
+/sample/DropDownSample/typings/tns-core-modules

@@ -34,12 +34,12 @@ declare module "ui/search-bar" {
         /**
          * Gets the native [android widget](http://developer.android.com/reference/android/widget/SearchView.html) that represents the user interface for this component. Valid only when running on Android OS.
          */
-        android: android.widget.SearchView;
+        android: any /* android.widget.SearchView */;
 
         /**
          * Gets the native iOS [UISearchBar](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UISearchBar_Class/) that represents the user interface for this component. Valid only when running on iOS.
          */
-        ios: UISearchBar;
+        ios: any /* UISearchBar */;
 
         /**
          * Gets or sets a search bar text.
@@ -60,7 +60,7 @@ declare module "ui/search-bar" {
          * Gets or sets the TextField Hint color of the SearchBar component.
          */
         textFieldHintColor: color.Color;
-				
+                
         /**
          * A basic method signature to hook an event listener (shortcut alias to the addEventListener method).
          * @param eventNames - String corresponding to events (e.g. "propertyChange"). Optionally could be used more events separated by `,` (e.g. "propertyChange", "change"). 
@@ -78,5 +78,10 @@ declare module "ui/search-bar" {
          * Raised when a search bar search is closed.
          */
         on(event: "close", callback: (args: observable.EventData) => void, thisArg?: any);
+
+        /**
+         * Hides the soft input method, ususally a soft keyboard.
+         */
+        dismissSoftInput(): void;
     }
 }

@@ -152,6 +152,9 @@ declare module org {
 
                 setItems(items: Array<TabItemSpec>, viewPager: android.support.v4.view.ViewPager): void;
                 updateItemAt(position: number, itemSpec: TabItemSpec): void;
+
+                getTextViewForItemAt(index: number): android.widget.TextView;
+                getViewForItemAt(index: number): android.widget.LinearLayout;
             }
 
             export class TabItemSpec {

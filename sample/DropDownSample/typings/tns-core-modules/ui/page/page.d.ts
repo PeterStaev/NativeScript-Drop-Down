@@ -19,6 +19,11 @@ declare module "ui/page" {
          * The navigation context (optional, may be undefined) passed to the page navigation events method.
          */
         context: any;
+
+        /**
+         * Represents if a navigation is forward or backward.
+         */
+        isBackNavigation: boolean;
     }
 
     /**
@@ -166,9 +171,19 @@ declare module "ui/page" {
         showModal(moduleName: string, context: any, closeCallback: Function, fullscreen?: boolean);
 
         /**
-         * Closes the current modal dialog that this page is showing.
+         * Shows the page as a modal view.
+         */
+        showModal();
+
+        /**
+         * Closes the current modal view that this page is showing.
          */
         closeModal();
+
+        /**
+         * Returns the current modal view that this page is showing (is parent of), if any.
+         */
+        modal: Page;
         
         
     }

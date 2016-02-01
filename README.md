@@ -40,7 +40,7 @@ Gets or sets the selected index of the DropDown.
 ## Example
 ```XML
 <!-- test-page.xml -->
-<Page xmlns="http://www.nativescript.org/tns.xsd" loaded="pageLoaded" xmlns:dd="nativescript-drop-down">
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" loaded="pageLoaded" xmlns:dd="nativescript-drop-down">
   <GridLayout rows="auto, auto, *" columns="auto, *">
     <dd:DropDown items="{{ items }}" selectedIndex="{{ selectedIndex }}" row="0" colSpan="2" />
     <Label text="Selected Index:" row="1" col="0" fontSize="18" verticalAlignment="bottom"/>

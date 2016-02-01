@@ -4,7 +4,7 @@ declare module "ui/builder" {
 
     export function load(fileName: string, exports?: any): view.View;
     export function load(options: LoadOptions): view.View;
-    export function parse(value: string, exports?: any): view.View;
+    export function parse(value: string | view.Template, exports?: any): view.View;
 
     export interface LoadOptions {
         path: string;

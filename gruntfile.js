@@ -10,11 +10,11 @@ module.exports = function (grunt)
             "**/*.ts",
             "!node_modules/**/*.*",
             "!sample/**/*.*",
-            "!bin/**/*.*",
-            "!_references.ts"
+            "!bin/**/*.*"
         ],
         typeScriptDeclarations: [
             "**/*.d.ts",
+            "!_references.d.ts",
             "!node_modules/**/*.*",
             "!sample/**/*.*",
             "!bin/**/*.*"
@@ -39,7 +39,7 @@ module.exports = function (grunt)
                     noImplicitAny: false,
                     removeComments: true,
                     sourceMap: false,
-                    noLib: true,
+                    noLib: false,
                     outDir: "dist",
                     isolatedModules: true
                 }
@@ -72,16 +72,27 @@ module.exports = function (grunt)
                     }
                 }
             }
+        },
+        exec: {
+            npm_publish: {
+                cmd: "npm publish",
+                cwd: localConfig.outDir
+            }
         }
     });
 
     grunt.loadNpmTasks("grunt-ts");
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-contrib-clean");
+    grunt.loadNpmTasks("grunt-exec");
 
     grunt.registerTask("build", [
         "clean:build",
         "ts:build",
         "copy"
+    ]);
+    grunt.registerTask("publish", [
+        "build",
+        "exec:npm_publish"
     ]);
 };

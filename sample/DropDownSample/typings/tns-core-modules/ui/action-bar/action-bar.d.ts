@@ -83,9 +83,9 @@ declare module "ui/action-bar" {
     }
 
     /**
-     * Base class for action items.
+     * Represents an action item in the action bar.
      */
-    export class ActionItemBase extends bindable.Bindable {
+    export class ActionItem extends bindable.Bindable {
         /**
          * String value used when hooking to tap event.
          */
@@ -102,6 +102,11 @@ declare module "ui/action-bar" {
         public static iconProperty: dependencyObservable.Property;
 
         /**
+         * Represents the observable property backing the visibility property.
+         */
+        public static visibilityProperty: dependencyObservable.Property;
+
+        /**
          * Gets or sets the text of the action item.
          */
         text: string;
@@ -110,6 +115,11 @@ declare module "ui/action-bar" {
          * Gets or sets the icon of the action item.
          */
         icon: string;
+
+        /**
+         * Gets or sets the visibility of the action item.
+         */
+        visibility: string;
         
         /**
          * Gets the action bar that contains the action item.
@@ -130,12 +140,7 @@ declare module "ui/action-bar" {
         on(event: "tap", callback: (args: observable.EventData) => void);
 
         
-    }
 
-    /**
-     * Represents an action item in the action bar.
-     */
-    export class ActionItem extends ActionItemBase {
         /**
          * Gets the iOS specific options of the action item.
          */
@@ -156,8 +161,17 @@ declare module "ui/action-bar" {
          *  1. actionBar - item is shown in the action bar.
          *  2. actionBarIfRoom - item is shown in the action bar if there is room for it. Otherwise it is put in the popup menu.
          *  3. popup - item is shown in the popup menu.
+         * Note: Property not applicable to NavigationButton
          */
         position: string;
+        
+        /**
+         * Gets or sets the name of the system drawable resource to be displayed.
+         * Use this property instead of ActionItem.icon if you want to diplsay a built-in Android system icon.
+         * The value should be a string such as 'ic_menu_search' if you want to display the built-in Android Menu Search icon for example.
+         * For a full list of Android drawable names, please visit http://androiddrawables.com
+         */
+        systemIcon: string;
     }
     
     /**
@@ -168,8 +182,42 @@ declare module "ui/action-bar" {
          * Gets or sets the position of the action item in the action bar.
          *  1. left - items is shown at the left part of the navigation bar. This is the default value.
          *  2. right - items is shown at the right part of the navigation bar.
+         * Note: Property not applicable to NavigationButton
          */
         position: string;
+
+        /**
+         * Gets or sets a number representing the iOS system item to be displayed.
+         * Use this property instead of ActionItem.icon if you want to diplsay a built-in iOS system icon.
+         * Note: Property not applicable to NavigationButton
+         * The value should be a number from the UIBarButtonSystemItem enumeration
+         * (https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIBarButtonItem_Class/#//apple_ref/c/tdef/UIBarButtonSystemItem)
+         *  0: Done
+         *  1: Cancel
+         *  2: Edit
+         *  3: Save
+         *  4: Add
+         *  5: FlexibleSpace
+         *  6: FixedSpace
+         *  7: Compose
+         *  8: Reply
+         *  9: Action
+         * 10: Organize
+         * 11: Bookmarks
+         * 12: Search
+         * 13: Refresh
+         * 14: Stop
+         * 15: Camera
+         * 16: Trash
+         * 17: Play
+         * 18: Pause
+         * 19: Rewind
+         * 20: FastForward
+         * 21: Undo
+         * 22: Redo
+         * 23: PageCurl
+         */
+        systemIcon: number;
     }
 
     /**
@@ -196,7 +244,9 @@ declare module "ui/action-bar" {
     /**
      * Represents the navigation (a.k.a. "back") button.
      */
-    export class NavigationButton extends ActionItemBase {
+    export class NavigationButton extends ActionItem {
 
     }
+
+    
 }

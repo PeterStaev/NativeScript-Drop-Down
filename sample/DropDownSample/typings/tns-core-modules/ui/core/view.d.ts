@@ -260,6 +260,16 @@ declare module "ui/core/view" {
         scaleY: number;
 
         /**
+         * Gets or sets the X component of the origin point around which the view will be transformed. The deafault value is 0.5 representing the center of the view.
+         */
+        originX: number;
+
+        /**
+         * Gets or sets the Y component of the origin point around which the view will be transformed. The deafault value is 0.5 representing the center of the view.
+         */
+        originY: number;
+
+        /**
          * Gets or sets the rotate affine transform of the view.
          */
         rotate: number;
@@ -316,8 +326,8 @@ declare module "ui/core/view" {
         /**
          * This is called to find out how big a view should be. The parent supplies constraint information in the width and height parameters.
          * The actual measurement work of a view is performed in onMeasure(int, int), called by this method. Therefore, only onMeasure(int, int) can and must be overridden by subclasses.
-         * @param widthMeasureSpec	Horizontal space requirements as imposed by the parent
-         * @param heightMeasureSpec	Vertical space requirements as imposed by the parent
+         * @param widthMeasureSpec    Horizontal space requirements as imposed by the parent
+         * @param heightMeasureSpec    Vertical space requirements as imposed by the parent
          */
         public measure(widthMeasureSpec: number, heightMeasureSpec: number): void;
 
@@ -350,8 +360,8 @@ declare module "ui/core/view" {
         /**
          * Measure the view and its content to determine the measured width and the measured height. This method is invoked by measure(int, int) and should be overriden by subclasses to provide accurate and efficient measurement of their contents.
          * When overriding this method, you must call setMeasuredDimension(int, int) to store the measured width and height of this view. Failure to do so will trigger an exception, thrown by measure(int, int).
-         * @param widthMeasureSpec	horizontal space requirements as imposed by the parent. The requirements are encoded with View.MeasureSpec.
-         * @param heightMeasureSpec	vertical space requirements as imposed by the parent. The requirements are encoded with View.MeasureSpec.
+         * @param widthMeasureSpec    horizontal space requirements as imposed by the parent. The requirements are encoded with View.MeasureSpec.
+         * @param heightMeasureSpec    vertical space requirements as imposed by the parent. The requirements are encoded with View.MeasureSpec.
          */
         public onMeasure(widthMeasureSpec: number, heightMeasureSpec: number): void;
 
@@ -360,14 +370,14 @@ declare module "ui/core/view" {
          * @param left Left position, relative to parent
          * @param top Top position, relative to parent
          * @param right Right position, relative to parent
-         * @param bottom	Bottom position, relative to parent
+         * @param bottom    Bottom position, relative to parent
          */
         public onLayout(left: number, top: number, right: number, bottom: number): void;
 
         /**
          * This method must be called by onMeasure(int, int) to store the measured width and measured height. Failing to do so will trigger an exception at measurement time.
-         * @param measuredWidth	The measured width of this view. May be a complex bit mask as defined by MEASURED_SIZE_MASK and MEASURED_STATE_TOO_SMALL.
-         * @param measuredHeight	The measured height of this view. May be a complex bit mask as defined by MEASURED_SIZE_MASK and MEASURED_STATE_TOO_SMALL.
+         * @param measuredWidth    The measured width of this view. May be a complex bit mask as defined by MEASURED_SIZE_MASK and MEASURED_STATE_TOO_SMALL.
+         * @param measuredHeight    The measured height of this view. May be a complex bit mask as defined by MEASURED_SIZE_MASK and MEASURED_STATE_TOO_SMALL.
          */
         public setMeasuredDimension(measuredWidth: number, measuredHeight: number): void;
 
@@ -452,7 +462,7 @@ declare module "ui/core/view" {
         _propagateInheritableProperties(view: View)
         _inheritProperties(parentView: View)
         _removeView(view: View);
-        _context: android.content.Context;
+        _context: any /* android.content.Context */;
 
         public _applyXmlAttribute(attribute: string, value: any): boolean;
 
@@ -465,8 +475,18 @@ declare module "ui/core/view" {
      */
     export class CustomLayoutView extends View {
     }
-
     
+    /**
+     * Defines an interface for a View factory function.
+     * Commonly used to specify the visualization of data objects.
+     */
+    interface Template {
+        /**
+         * Call signature of the factory function.
+         * Returns a new View instance.
+         */
+        (): View;
+    }
 
     /**
      * Defines an interface for adding arrays declared in xml.
@@ -486,7 +506,7 @@ declare module "ui/core/view" {
     interface AddChildFromBuilder {
         /**
          * Called for every child element declared in xml.
-         * This function will create an instance of declared child element.
+         * This method will add a child element (value) to current element.
          * @param name - Name of the element.
          * @param value - Value of the element.
          */

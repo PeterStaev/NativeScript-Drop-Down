@@ -40,6 +40,28 @@ declare module "ui/gestures" {
     }
 
     /**
+     * Defines an enum with supported gesture types.
+     */
+    export enum GestureStateTypes {
+        /**
+         * Gesture cancelled.
+         */
+        cancelled,
+        /**
+         * Gesture began.
+         */
+        began,
+        /**
+         * Gesture changed.
+         */
+        changed,
+        /**
+         * Gesture ended.
+         */
+        ended
+    }
+
+    /**
      * Defines an enum for swipe gesture direction.
      */
     export enum SwipeDirection {
@@ -76,7 +98,7 @@ declare module "ui/gestures" {
         /**
          * Gets the underlying native iOS specific [UIGestureRecognizer](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIGestureRecognizer_Class/).
          */
-        ios: UIGestureRecognizer
+        ios: any /* UIGestureRecognizer */;
         /**
          * Gets the underlying native android specific [gesture detector](http://developer.android.com/reference/android/view/GestureDetector.html).
          */
@@ -86,8 +108,18 @@ declare module "ui/gestures" {
     /**
      * Provides gesture event data for pinch gesture.
      */
-    export interface PinchGestureEventData extends GestureEventData {
+    export interface GestureEventDataWithState extends GestureEventData {
+        state: number;
+    }
+
+    /**
+     * Provides gesture event data for pinch gesture.
+     */
+    export interface PinchGestureEventData extends GestureEventDataWithState {
         scale: number;
+
+        getFocusX(): number;
+        getFocusY(): number;
     }
 
     /**
@@ -100,7 +132,7 @@ declare module "ui/gestures" {
     /**
      * Provides gesture event data for pan gesture.
      */
-    export interface PanGestureEventData extends GestureEventData {
+    export interface PanGestureEventData extends GestureEventDataWithState {
         deltaX: number;
         deltaY: number;
     }
@@ -108,7 +140,7 @@ declare module "ui/gestures" {
     /**
      * Provides gesture event data for rotation gesture.
      */
-    export interface RotationGestureEventData extends GestureEventData {
+    export interface RotationGestureEventData extends GestureEventDataWithState {
         rotation: number;
     }
 
@@ -151,7 +183,7 @@ declare module "ui/gestures" {
         /**
          * An internal Android specific method used to pass the motion event to the correct gesture observer.
          */
-        androidOnTouchEvent: (motionEvent: android.view.MotionEvent) => void;
+        androidOnTouchEvent: (motionEvent: any /* android.view.MotionEvent */) => void;
     }
 
     /**

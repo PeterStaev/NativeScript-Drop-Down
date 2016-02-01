@@ -162,6 +162,11 @@ declare module "ui/enums" {
         export var center: string;
 
         /**
+         * Same as center. An element should be aligned in the middle.
+         */
+        export var middle: string;
+
+        /**
          * An element should be bottom aligned.
          */
         export var bottom: string;
@@ -354,7 +359,7 @@ declare module "ui/enums" {
      */
     module NavigationBarVisibility {
         /**
-         * NavigationBar will be visible if there if frame backstack canGoBack is true or Page have optionsMenu with menuItems.
+         * NavigationBar will be visible if there if frame backstack canGoBack is true or if the page Action Bar is not empty.
          */
         export var auto: string;
 
@@ -412,7 +417,66 @@ declare module "ui/enums" {
          */
         export var italic: string;
     }
-    
+
+    /**
+     * Specifies different text decorations.
+     */
+    export module TextDecoration {
+        /**
+         * No decoration.
+         */
+        export var none: string;
+        
+        /**
+         * Text decoration underline.
+         */
+        export var underline: string;
+
+        /**
+         * Text decoration line-through.
+         */
+        export var lineThrough: string;
+    }
+
+    /**
+     * Specifies different text transforms.
+     */
+    export module TextTransform {
+        /**
+         * No transform.
+         */
+        export var none: string;
+        
+        /**
+         * Text transform capitalize.
+         */
+        export var capitalize: string;
+
+        /**
+         * Text transform uppercase.
+         */
+        export var uppercase: string;
+        
+        /**
+         * Text transform lowercase.
+         */
+        export var lowercase: string;
+    }
+
+    /**
+     * Specifies different white spaces.
+     */
+    export module WhiteSpace {
+        /**
+         * Normal wrap.
+         */
+        export var normal: string;
+        
+        /**
+         * No wrap.
+         */
+        export var nowrap: string;
+    }
     
     /**
      * Specifies different font weights.
@@ -452,5 +516,30 @@ declare module "ui/enums" {
          * Show this item at the right of the action bar.
          */
         export var right: string;
+    }
+
+    /**
+     * Represents an animation curve type.
+     */
+    module AnimationCurve {
+        /**
+         * An ease-in curve causes the animation to begin slowly, and then speed up as it progresses.
+         */
+        export var easeIn: string;
+
+        /**
+         * An ease-out curve causes the animation to begin quickly, and then slow down as it completes.
+         */
+        export var easeOut: string;
+
+        /**
+         * An ease-in ease-out curve causes the animation to begin slowly, accelerate through the middle of its duration, and then slow again before completing.
+         */
+        export var easeInOut: string;
+        
+        /**
+         * A linear animation curve causes an animation to occur evenly over its duration.
+         */
+        export var linear: string;
     }
 }

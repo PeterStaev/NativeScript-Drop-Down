@@ -10,11 +10,16 @@ declare module "ui/button" {
     /**
      * Represents a standard Button widget.
      */
-    export class Button extends view.View {
+    export class Button extends view.View implements formattedString.FormattedStringView, view.AddChildFromBuilder {
         /**
          * Represents the observable property backing the text property of each Button instance.
          */
         public static textProperty: dependencyObservable.Property;
+
+        /**
+         * Dependency property used to support binding operations for the text wrapping of the current button instance.
+         */
+        public static textWrapProperty: dependencyObservable.Property;
 
         /**
          * String value used when hooking to tap event.
@@ -24,17 +29,22 @@ declare module "ui/button" {
         /**
          * Gets the native [android widget](http://developer.android.com/reference/android/widget/Button.html) that represents the user interface for this component. Valid only when running on Android OS.
          */
-        android: android.widget.Button;
+        android: any /* android.widget.Button */;
 
         /**
          * Gets the native [UIButton](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIButton_Class/) that represents the user interface for this component. Valid only when running on iOS.
          */
-        ios: UIButton;
+        ios: any /* UIButton */;
 
         /**
          * Gets or sets the text (label) displayed by this instance.
          */
         text: string;
+
+        /**
+         * Gets or sets whether the Button wraps text or not.
+         */
+        textWrap: boolean;
 
         /**
          * Gets or sets the formatted text (label) displayed by this instance.
@@ -53,5 +63,13 @@ declare module "ui/button" {
          * Raised when a tap event occurs.
          */
         on(event: "tap", callback: (args: observable.EventData) => void, thisArg?: any);
+
+        /**
+         * Called for every child element declared in xml.
+         * This method will add a child element (value) to current element.
+         * @param name - Name of the element.
+         * @param value - Value of the element.
+         */
+        _addChildFromBuilder(name: string, value: any): void;
     }
 }

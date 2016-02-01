@@ -198,6 +198,10 @@ declare module "ui/styling" {
          */
         opacity: number;
 
+        textDecoration: string;
+        textTransform: string;
+        whiteSpace: string;
+
         
     }
 
