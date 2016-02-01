@@ -22,22 +22,59 @@ import common = require("./drop-down-common");
 
 global.moduleMerge(common, exports);
 
+const TOOLBAR_HEIGHT = 44;
+
 export class DropDown extends common.DropDown
 {
     private _textField: textField.TextField;
     private _listPicker: listPicker.ListPicker;
+    private _toolbar: UIToolbar;
+    private _flexToolbarSpace: UIBarButtonItem;
+    private _doneButton: UIBarButtonItem;
+    private _doneTapDelegate: TapHandler;
+    private _accessoryViewVisible: boolean;
 
     constructor()
     {
         super();
 
+        let applicationFrame = UIScreen.mainScreen().applicationFrame;
+
         this._textField = new textField.TextField();
         this._listPicker = new listPicker.ListPicker();
+
+        this._flexToolbarSpace = UIBarButtonItem.alloc().initWithBarButtonSystemItemTargetAction(UIBarButtonSystemItem.UIBarButtonSystemItemFlexibleSpace, null, null);
+        this._doneTapDelegate = TapHandler.initWithOwner(new WeakRef(this));
+        this._doneButton = UIBarButtonItem.alloc().initWithBarButtonSystemItemTargetAction(UIBarButtonSystemItem.UIBarButtonSystemItemDone, this._doneTapDelegate, "tap");
+
+        this._accessoryViewVisible = true;
+        this._toolbar = UIToolbar.alloc().initWithFrame(CGRectMake(0, 0, applicationFrame.size.width, TOOLBAR_HEIGHT));
+        this._toolbar.autoresizingMask = UIViewAutoresizing.UIViewAutoresizingFlexibleWidth;
+
+        let nsArray = NSMutableArray.alloc().init();
+        nsArray.addObject(this._flexToolbarSpace);
+        nsArray.addObject(this._doneButton);
+        this._toolbar.setItemsAnimated(nsArray, false);
     }
 
     get ios(): UITextField
     {
         return this._textField.ios;
+    }
+
+    get accessoryViewVisible(): boolean
+    {
+        return this._accessoryViewVisible;
+    }
+    set accessoryViewVisible(value: boolean)
+    {
+        this._accessoryViewVisible = value;
+        this._showHideAccessoryView();
+    }
+
+    private _showHideAccessoryView()
+    {
+        this.ios.inputAccessoryView = (this._accessoryViewVisible ? this._toolbar : null);
     }
 
     public onLoaded()
@@ -56,11 +93,16 @@ export class DropDown extends common.DropDown
                 }
             });
         this.ios.inputView = this._listPicker.ios;
+        this._showHideAccessoryView();
     }
 
     public onUnloaded()
     {
+        this.ios.inputView = null;
+        this.ios.inputAccessoryView = null;
+
         this._listPicker.off(observable.Observable.propertyChangeEvent);
+
         this._textField.onUnloaded();
         this._listPicker.onUnloaded();
 
@@ -76,5 +118,28 @@ export class DropDown extends common.DropDown
     {
         super._onSelectedIndexPropertyChanged(data);
         this._listPicker.selectedIndex = data.newValue;
+    }
+}
+
+class TapHandler extends NSObject
+{
+    public static ObjCExposedMethods =
+    {
+        "tap": { returns: interop.types.void, params: [] }
+    };
+
+    private _owner: WeakRef<DropDown>;
+
+    public static initWithOwner(owner: WeakRef<DropDown>)
+    {
+        let tapHandler = <TapHandler>TapHandler.new();
+        tapHandler._owner = owner;
+
+        return tapHandler;
+    }
+
+    public tap()
+    {
+        this._owner.get().ios.resignFirstResponder();
     }
 }

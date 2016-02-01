@@ -26,6 +26,7 @@ declare module "nativescript-drop-down"
 
         items: any;
         selectedIndex: number;
+        accessoryViewVisible: boolean; /* iOS ONLY! */
 
         ios: UITextField;
         android: android.widget.Spinner;
