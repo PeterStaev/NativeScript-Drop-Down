@@ -26,11 +26,13 @@
 
   "devDependencies": {
     "typescript": "1.7.3",
+    "tslint": "3.3.0",
     "tns-core-modules": "git+https://github.com/NativeScript/NativeScript.git#70728c4442d9bc78a88c43493e8b3522d0cbb141",
 
     "grunt-contrib-copy": "0.8.1",
     "grunt-contrib-clean": "0.6.0",
     "grunt-ts": "5.3.2", 
+    "grunt-tslint": "3.0.1",
     "grunt-exec": "0.4.6"
   }
 

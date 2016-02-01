@@ -16,7 +16,6 @@ limitations under the License.
 
 import textField = require("ui/text-field");
 import listPicker = require("ui/list-picker");
-import proxy = require("ui/core/proxy");
 import dependencyObservable = require("ui/core/dependency-observable");
 import observable = require("data/observable");
 import common = require("./drop-down-common");
@@ -50,7 +49,7 @@ export class DropDown extends common.DropDown
         this._listPicker.on(observable.Observable.propertyChangeEvent,
             (data: observable.PropertyChangeData) =>
             {
-                if (data.propertyName == "selectedIndex")
+                if (data.propertyName === "selectedIndex")
                 {
                     this.selectedIndex = data.value;
                     this._textField.text = (this.items && this.items.getItem ? this.items.getItem(data.value) : this.items[data.value]);
@@ -61,7 +60,7 @@ export class DropDown extends common.DropDown
 
     public onUnloaded()
     {
-        this._listPicker.off(observable.Observable.propertyChangeEvent)
+        this._listPicker.off(observable.Observable.propertyChangeEvent);
         this._textField.onUnloaded();
         this._listPicker.onUnloaded();
 

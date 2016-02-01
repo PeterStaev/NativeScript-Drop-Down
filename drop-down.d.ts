@@ -18,15 +18,14 @@ declare module "nativescript-drop-down"
 {
     import view = require("ui/core/view");
     import dependencyObservable = require("ui/core/dependency-observable");
-    import observable = require("data/observable");
 
-    export class DropDown extends view.View 
+    export class DropDown extends view.View
     {
         public static itemsProperty: dependencyObservable.Property;
         public static selectedIndexProperty: dependencyObservable.Property;
 
         items: any;
-        selectedIndex: number
+        selectedIndex: number;
 
         ios: UITextField;
         android: android.widget.Spinner;

@@ -14,28 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
 
-import observable = require("data/observable");
 import proxy = require("ui/core/proxy");
 import dependencyObservable = require("ui/core/dependency-observable");
 import view = require("ui/core/view");
 import types = require("utils/types");
 
-var DROPDOWN = "DropDown";
-var CHANGE = "change";
+const DROPDOWN = "DropDown";
 
 function onSelectedIndexPropertyChanged(data: dependencyObservable.PropertyChangeData)
 {
-    var picker = <DropDown>data.object;
+    let  picker = <DropDown>data.object;
     picker._onSelectedIndexPropertyChanged(data);
 }
 
 function onItemsPropertyChanged(data: dependencyObservable.PropertyChangeData)
 {
-    var picker = <DropDown>data.object;
+    let  picker = <DropDown>data.object;
     picker._onItemsPropertyChanged(data);
 }
 
-export class DropDown extends view.View
+export abstract class DropDown extends view.View
 {
     public static itemsProperty = new dependencyObservable.Property(
         "items"
@@ -80,14 +78,11 @@ export class DropDown extends view.View
         this._setValue(DropDown.selectedIndexProperty, value);
     }
 
-    public _onItemsPropertyChanged(data: dependencyObservable.PropertyChangeData)
-    {
-        // Implemented in platform specific files!
-    }
+    public abstract _onItemsPropertyChanged(data: dependencyObservable.PropertyChangeData)
 
     public _onSelectedIndexPropertyChanged(data: dependencyObservable.PropertyChangeData)
     {
-        var index = this.selectedIndex;
+        let  index = this.selectedIndex;
         if (types.isUndefined(index))
         {
             return;

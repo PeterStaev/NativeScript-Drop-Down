@@ -21,11 +21,10 @@ import types = require("utils/types");
 import view = require("ui/core/view");
 import label = require("ui/label");
 import stackLayout = require("ui/layouts/stack-layout");
-import style = require("ui/styling");
 
 global.moduleMerge(common, exports);
 
-var LABELVIEWID = "spinner-label";
+const LABELVIEWID = "spinner-label";
 
 enum RealizedViewType
 {
@@ -35,7 +34,7 @@ enum RealizedViewType
 
 export class DropDown extends common.DropDown
 {
-    private _android: android.widget.Spinner
+    private _android: android.widget.Spinner;
     private _androidViewId: number;
     public _realizedItems = {};
 
@@ -51,17 +50,17 @@ export class DropDown extends common.DropDown
 
         this.android.setAdapter(new DropDownAdapter(this));
 
-        var that = new WeakRef(this);
+        let that = new WeakRef(this);
         this.android.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener(
             {
                 onItemSelected:
                 function (parent: any, convertView: android.view.View, index: number, id: number)
                 {
-                    var owner = that.get();
+                    let owner = that.get();
 
                     owner.selectedIndex = index;
                 }
-                , onNothingSelected: () => { }
+                , onNothingSelected: () => { /* Currently Not Needed */ }
             }));
     }
 
@@ -87,11 +86,11 @@ export class DropDown extends common.DropDown
         super._onDetached(force);
 
         // clear the cache
-        var keys = Object.keys(this._realizedItems);
-        var i;
-        var length = keys.length;
-        var view: view.View;
-        var key;
+        let keys = Object.keys(this._realizedItems);
+        let i;
+        let length = keys.length;
+        let view: view.View;
+        let key;
 
         for (i = 0; i < length; i++)
         {
@@ -106,14 +105,13 @@ export class DropDown extends common.DropDown
     {
         if (!convertView)
         {
-            var view = new label.Label();
-            var layout = new stackLayout.StackLayout()
-            var defaultPadding = 4 * utils.layout.getDisplayDensity();
+            let view = new label.Label();
+            let layout = new stackLayout.StackLayout();
+            let defaultPadding = 4 * utils.layout.getDisplayDensity();
 
             view.id = LABELVIEWID;
-            copyDropDownItemStyleProperties(view.style, this.style);
 
-            if (realizedViewType == RealizedViewType.DropDownView)
+            if (realizedViewType === RealizedViewType.DropDownView)
             {
                 layout.paddingTop = layout.paddingBottom = layout.paddingLeft = layout.paddingRight = defaultPadding;
             }
@@ -134,7 +132,7 @@ export class DropDown extends common.DropDown
 
     private _updateSelectedIndexOnItemsPropertyChanged(newItems)
     {
-        var newItemsCount = 0;
+        let newItemsCount = 0;
         if (newItems && newItems.length)
         {
             newItemsCount = newItems.length;
@@ -211,7 +209,7 @@ class DropDownAdapter extends android.widget.BaseAdapter
             return null;
         }
 
-        var view = this._dropDown._getRealizedView(convertView, realizedViewType);
+        let view = this._dropDown._getRealizedView(convertView, realizedViewType);
 
         if (view)
         {
@@ -227,8 +225,4 @@ class DropDownAdapter extends android.widget.BaseAdapter
 
         return convertView;
     }
-}
-
-function copyDropDownItemStyleProperties(targetStyle: style.Style, sourceStyle: style.Style)
-{
 }

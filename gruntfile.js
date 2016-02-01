@@ -45,6 +45,17 @@ module.exports = function (grunt)
                 }
             }
         },
+        tslint:
+        {
+            build:
+            {
+                src: localConfig.typeScriptSrc
+                , options:
+                {
+                    configuration: grunt.file.readJSON("./tslint.json")
+                }
+            }
+        },
         copy: {
             declarations: {
                 src: localConfig.typeScriptDeclarations,
@@ -82,6 +93,7 @@ module.exports = function (grunt)
     });
 
     grunt.loadNpmTasks("grunt-ts");
+    grunt.loadNpmTasks("grunt-tslint");
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-exec");
