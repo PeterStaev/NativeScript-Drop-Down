@@ -52,4 +52,3 @@ obj
 node_modules
 *.tmp.*
 platforms
-/sample/DropDownSample/typings/tns-core-modules
