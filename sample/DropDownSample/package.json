@@ -1,5 +1,13 @@
 {
-  "nativescript": {},
+  "nativescript": {
+	"id": "net.tangrainc.dropdownsample",
+	"tns-ios": {
+		"version": "1.5.1"
+	},
+	"tns-android": {
+		"version": "1.5.1"
+	}
+  },
   "dependencies": {
     "tns-core-modules": "1.5.1",
     "nativescript-drop-down": "1.2.1"
