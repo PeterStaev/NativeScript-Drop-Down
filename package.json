@@ -1,12 +1,12 @@
 {
   "name": "nativescript-drop-down",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "A NativeScript DropDown widget.",
   "main": "drop-down.js",
   "nativescript": {
     "platforms": {
-      "ios": "1.5.2",
-      "android": "1.5.2"
+      "ios": ">=1.5.0",
+      "android": ">=1.5.0"
     }
   },
 
@@ -27,7 +27,7 @@
   "devDependencies": {
     "typescript": "1.7.3",
     "tslint": "3.3.0",
-    "tns-core-modules": "git+https://github.com/NativeScript/NativeScript.git#70728c4442d9bc78a88c43493e8b3522d0cbb141",
+    "tns-core-modules": "git+https://github.com/NativeScript/NativeScript.git#v1.6.0",
 
     "grunt-contrib-copy": "0.8.1",
     "grunt-contrib-clean": "0.6.0",
