@@ -10,7 +10,7 @@
 	},
 	"dependencies": {
 		"tns-core-modules": "1.6.0",
-		"nativescript-drop-down": "1.2.2"
+		"nativescript-drop-down": "1.2.3"
 	},
 	"devDependencies": {}
 }
