@@ -29,6 +29,7 @@
     "tslint": "3.3.0",
     "tns-core-modules": "git+https://github.com/NativeScript/NativeScript.git#v1.6.0",
 
+    "grunt": "1.0.1",
     "grunt-contrib-copy": "0.8.1",
     "grunt-contrib-clean": "0.6.0",
     "grunt-ts": "5.3.2", 

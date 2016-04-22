@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "noEmitOnError": true,
+        "noEmitHelpers": true,
+        "noLib": false,
+        "sourceMap": false,
+        "target": "es5",
+        "module": "commonjs",
+        "outDir": "bin/dist",
+        "rootDir": "./"
+    }, 
+    "exclude": [
+        "node_modules", 
+        "sample", 
+        "bin"
+    ]
+}
