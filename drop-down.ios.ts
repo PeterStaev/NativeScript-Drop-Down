@@ -19,6 +19,8 @@ import listPicker = require("ui/list-picker");
 import dependencyObservable = require("ui/core/dependency-observable");
 import observable = require("data/observable");
 import common = require("./drop-down-common");
+import style = require("ui/styling/style");
+import utils = require("utils/utils");
 
 global.moduleMerge(common, exports);
 
@@ -143,3 +145,38 @@ class TapHandler extends NSObject
         this._owner.get().ios.resignFirstResponder();
     }
 }
+
+//#region Styling
+export class DropDownStyler implements style.Styler
+{
+    //#region Text Align Prperty
+    private static setTextAlignmentProperty(dropDown: DropDown, newValue: any) 
+    {
+        utils.ios.setTextAlignment(dropDown._nativeView, newValue);
+    }
+
+    private static resetTextAlignmentProperty(dropDown: DropDown, nativeValue: any) 
+    {
+        let ios = <utils.ios.TextUIView>dropDown._nativeView;
+        ios.textAlignment = nativeValue;
+    }
+
+    private static getNativeTextAlignmentValue(dropDown: DropDown): any 
+    {
+        let ios = <utils.ios.TextUIView>dropDown._nativeView;
+        return ios.textAlignment;
+    }
+    //#endregion
+
+    public static registerHandlers()
+    {
+        style.registerHandler(style.textAlignmentProperty
+            , new style.StylePropertyChangedHandler(DropDownStyler.setTextAlignmentProperty
+                , DropDownStyler.resetTextAlignmentProperty
+                , DropDownStyler.getNativeTextAlignmentValue)
+            , "DropDown");
+    }
+
+}
+DropDownStyler.registerHandlers();
+//#endregion
