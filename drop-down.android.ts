@@ -62,6 +62,13 @@ export class DropDown extends common.DropDown
                 }
                 , onNothingSelected: () => { /* Currently Not Needed */ }
             }));
+        
+        // When used in templates the selectedIndex changed event is fired before the native widget is init.
+        // So here we must set the value (if any)    
+        if (this.selectedIndex !== null && this.selectedIndex !== undefined)
+        {
+            this.android.setSelection(this.selectedIndex);
+        }
     }
 
     get android(): android.widget.Spinner

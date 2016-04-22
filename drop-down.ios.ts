@@ -91,7 +91,6 @@ export class DropDown extends common.DropDown
                 if (data.propertyName === "selectedIndex")
                 {
                     this.selectedIndex = data.value;
-                    this._textField.text = (this.items && this.items.getItem ? this.items.getItem(data.value) : this.items[data.value]);
                 }
             });
         this.ios.inputView = this._listPicker.ios;
@@ -120,6 +119,7 @@ export class DropDown extends common.DropDown
     {
         super._onSelectedIndexPropertyChanged(data);
         this._listPicker.selectedIndex = data.newValue;
+        this._textField.text = (this.items && this.items.getItem ? this.items.getItem(data.newValue) : this.items[data.newValue]);
     }
 }
 
