@@ -134,9 +134,9 @@ export class DropDown extends common.DropDown
     public _onSelectedIndexPropertyChanged(data: dependencyObservable.PropertyChangeData)
     {
         super._onSelectedIndexPropertyChanged(data);
-		if(this.android) {
-			this.android.setSelection(data.newValue);
-		}
+        if (this.android) {
+           this.android.setSelection(data.newValue);
+        }
     }
 
     private _updateSelectedIndexOnItemsPropertyChanged(newItems)
