@@ -119,7 +119,7 @@ export class DropDown extends common.DropDown
     {
         super._onSelectedIndexPropertyChanged(data);
         this._listPicker.selectedIndex = data.newValue;
-        if(typeof (this.items && this.items.getItem ? this.items.getItem(data.newValue) : this.items[data.newValue]) === "object") {
+        if (typeof (this.items && this.items.getItem ? this.items.getItem(data.newValue) : this.items[data.newValue]) === "object") {
             this._textField.text = (this.items && this.items.getItem ? this.items.getItem(data.newValue).DisplayValue : this.items[data.newValue].DisplayValue);
         }
         else {

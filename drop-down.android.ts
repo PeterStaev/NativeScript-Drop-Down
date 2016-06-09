@@ -186,7 +186,7 @@ class DropDownAdapter extends android.widget.BaseAdapter
             && i < this._dropDown.items.length
             )
         {
-            if(typeof (this._dropDown.items.getItem ? this._dropDown.items.getItem(i) : this._dropDown.items[i]) === "object") {
+            if (typeof (this._dropDown.items.getItem ? this._dropDown.items.getItem(i) : this._dropDown.items[i]) === "object") {
                 return this._dropDown.items.getItem ? this._dropDown.items.getItem(i).DisplayValue : this._dropDown.items[i].DisplayValue;
             }
             else {
