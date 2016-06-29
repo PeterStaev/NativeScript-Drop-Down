@@ -1,10 +1,4 @@
-﻿/// <binding BeforeBuild='build' />
-/*
-This file in the main entry point for defining grunt tasks and using grunt plugins.
-Click here to learn more. http://go.microsoft.com/fwlink/?LinkID=513275&clcid=0x409
-*/
-module.exports = function (grunt)
-{
+﻿module.exports = function (grunt) {
     var localConfig = {
         typeScriptSrc: [
             "**/*.ts",
@@ -14,7 +8,7 @@ module.exports = function (grunt)
         ],
         typeScriptDeclarations: [
             "**/*.d.ts",
-            "!_references.d.ts",
+            "!references.d.ts",
             "!node_modules/**/*.*",
             "!sample/**/*.*",
             "!bin/**/*.*"
@@ -49,9 +43,8 @@ module.exports = function (grunt)
         {
             build:
             {
-                src: localConfig.typeScriptSrc
-                , options:
-                {
+                src: localConfig.typeScriptSrc,
+                options: {
                     configuration: grunt.file.readJSON("./tslint.json")
                 }
             }
@@ -65,8 +58,7 @@ module.exports = function (grunt)
                 src: "package.json",
                 dest: localConfig.outDir,
                 options: {
-                    process: function (content, srcPath)
-                    {
+                    process: function (content, srcPath) {
                         var contentAsObject = JSON.parse(content);
                         contentAsObject.devDependencies = undefined;
                         return JSON.stringify(contentAsObject, null, "\t");
@@ -77,8 +69,7 @@ module.exports = function (grunt)
                 src: "README.md",
                 dest: localConfig.outDir,
                 options: {
-                    process: function (content, srcPath)
-                    {
+                    process: function (content, srcPath) {
                         return content.substring(content.indexOf("\n") + 1)
                     }
                 }

@@ -14,13 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
 
-declare module "nativescript-drop-down"
-{
+declare module "nativescript-drop-down" {
     import view = require("ui/core/view");
     import dependencyObservable = require("ui/core/dependency-observable");
 
-    export class DropDown extends view.View
-    {
+    export class DropDown extends view.View {
         public static itemsProperty: dependencyObservable.Property;
         public static selectedIndexProperty: dependencyObservable.Property;
 

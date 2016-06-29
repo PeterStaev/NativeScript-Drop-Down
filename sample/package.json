@@ -10,7 +10,7 @@
 	},
 	"dependencies": {
 		"tns-core-modules": "1.7.1",
-		"nativescript-drop-down": "1.2.5"
+		"nativescript-drop-down": "file:../bin/dist"
 	},
 	"devDependencies": {
 		"nativescript-dev-typescript": "^0.3.1",

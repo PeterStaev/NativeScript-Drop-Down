@@ -26,8 +26,7 @@ global.moduleMerge(common, exports);
 
 const TOOLBAR_HEIGHT = 44;
 
-export class DropDown extends common.DropDown
-{
+export class DropDown extends common.DropDown {
     private _textField: textField.TextField;
     private _listPicker: listPicker.ListPicker;
     private _toolbar: UIToolbar;
@@ -36,8 +35,7 @@ export class DropDown extends common.DropDown
     private _doneTapDelegate: TapHandler;
     private _accessoryViewVisible: boolean;
 
-    constructor()
-    {
+    constructor() {
         super();
 
         let applicationFrame = UIScreen.mainScreen().applicationFrame;
@@ -59,37 +57,30 @@ export class DropDown extends common.DropDown
         this._toolbar.setItemsAnimated(nsArray, false);
     }
 
-    get ios(): UITextField
-    {
+    get ios(): UITextField {
         return this._textField.ios;
     }
 
-    get accessoryViewVisible(): boolean
-    {
+    get accessoryViewVisible(): boolean {
         return this._accessoryViewVisible;
     }
-    set accessoryViewVisible(value: boolean)
-    {
+    set accessoryViewVisible(value: boolean) {
         this._accessoryViewVisible = value;
         this._showHideAccessoryView();
     }
 
-    private _showHideAccessoryView()
-    {
+    private _showHideAccessoryView() {
         this.ios.inputAccessoryView = (this._accessoryViewVisible ? this._toolbar : null);
     }
 
-    public onLoaded()
-    {
+    public onLoaded() {
         super.onLoaded();
 
         this._textField.onLoaded();
         this._listPicker.onLoaded();
         this._listPicker.on(observable.Observable.propertyChangeEvent,
-            (data: observable.PropertyChangeData) =>
-            {
-                if (data.propertyName === "selectedIndex")
-                {
+            (data: observable.PropertyChangeData) => {
+                if (data.propertyName === "selectedIndex") {
                     this.selectedIndex = data.value;
                 }
             });
@@ -97,8 +88,7 @@ export class DropDown extends common.DropDown
         this._showHideAccessoryView();
     }
 
-    public onUnloaded()
-    {
+    public onUnloaded() {
         this.ios.inputView = null;
         this.ios.inputAccessoryView = null;
 
@@ -110,21 +100,18 @@ export class DropDown extends common.DropDown
         super.onUnloaded();
     }
 
-    public _onItemsPropertyChanged(data: dependencyObservable.PropertyChangeData)
-    {
+    public _onItemsPropertyChanged(data: dependencyObservable.PropertyChangeData) {
         this._listPicker.items = data.newValue;
     }
 
-    public _onSelectedIndexPropertyChanged(data: dependencyObservable.PropertyChangeData)
-    {
+    public _onSelectedIndexPropertyChanged(data: dependencyObservable.PropertyChangeData) {
         super._onSelectedIndexPropertyChanged(data);
         this._listPicker.selectedIndex = data.newValue;
         this._textField.text = (this.items && this.items.getItem ? this.items.getItem(data.newValue) : this.items[data.newValue]);
     }
 }
 
-class TapHandler extends NSObject
-{
+class TapHandler extends NSObject {
     public static ObjCExposedMethods =
     {
         "tap": { returns: interop.types.void, params: [] }
@@ -132,44 +119,37 @@ class TapHandler extends NSObject
 
     private _owner: WeakRef<DropDown>;
 
-    public static initWithOwner(owner: WeakRef<DropDown>)
-    {
+    public static initWithOwner(owner: WeakRef<DropDown>) {
         let tapHandler = <TapHandler>TapHandler.new();
         tapHandler._owner = owner;
 
         return tapHandler;
     }
 
-    public tap()
-    {
+    public tap() {
         this._owner.get().ios.resignFirstResponder();
     }
 }
 
 //#region Styling
-export class DropDownStyler implements style.Styler
-{
+export class DropDownStyler implements style.Styler {
     //#region Text Align Prperty
-    private static setTextAlignmentProperty(dropDown: DropDown, newValue: any) 
-    {
+    private static setTextAlignmentProperty(dropDown: DropDown, newValue: any) {
         utils.ios.setTextAlignment(dropDown._nativeView, newValue);
     }
 
-    private static resetTextAlignmentProperty(dropDown: DropDown, nativeValue: any) 
-    {
+    private static resetTextAlignmentProperty(dropDown: DropDown, nativeValue: any) {
         let ios = <utils.ios.TextUIView>dropDown._nativeView;
         ios.textAlignment = nativeValue;
     }
 
-    private static getNativeTextAlignmentValue(dropDown: DropDown): any 
-    {
+    private static getNativeTextAlignmentValue(dropDown: DropDown): any {
         let ios = <utils.ios.TextUIView>dropDown._nativeView;
         return ios.textAlignment;
     }
     //#endregion
 
-    public static registerHandlers()
-    {
+    public static registerHandlers() {
         style.registerHandler(style.textAlignmentProperty
             , new style.StylePropertyChangedHandler(DropDownStyler.setTextAlignmentProperty
                 , DropDownStyler.resetTextAlignmentProperty

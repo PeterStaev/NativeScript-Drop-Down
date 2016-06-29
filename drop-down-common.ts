@@ -21,79 +21,65 @@ import types = require("utils/types");
 
 const DROPDOWN = "DropDown";
 
-function onSelectedIndexPropertyChanged(data: dependencyObservable.PropertyChangeData)
-{
-    let  picker = <DropDown>data.object;
+function onSelectedIndexPropertyChanged(data: dependencyObservable.PropertyChangeData) {
+    let picker = <DropDown>data.object;
     picker._onSelectedIndexPropertyChanged(data);
 }
 
-function onItemsPropertyChanged(data: dependencyObservable.PropertyChangeData)
-{
-    let  picker = <DropDown>data.object;
+function onItemsPropertyChanged(data: dependencyObservable.PropertyChangeData) {
+    let picker = <DropDown>data.object;
     picker._onItemsPropertyChanged(data);
 }
 
-export abstract class DropDown extends view.View
-{
+export abstract class DropDown extends view.View {
     public static itemsProperty = new dependencyObservable.Property(
-        "items"
-        , DROPDOWN
-        , new proxy.PropertyMetadata(
+        "items",
+        DROPDOWN,
+        new proxy.PropertyMetadata(
             undefined,
             dependencyObservable.PropertyMetadataSettings.AffectsLayout,
             onItemsPropertyChanged
-            )
-        );
+        )
+    );
 
     public static selectedIndexProperty = new dependencyObservable.Property(
-        "selectedIndex"
-        , DROPDOWN
-        , new proxy.PropertyMetadata(
+        "selectedIndex",
+        DROPDOWN,
+        new proxy.PropertyMetadata(
             undefined,
             dependencyObservable.PropertyMetadataSettings.AffectsLayout,
             onSelectedIndexPropertyChanged
-            )
-        );
+        )
+    );
 
-    constructor()
-    {
+    constructor() {
         super();
     }
 
-    get items(): any
-    {
+    get items(): any {
         return this._getValue(DropDown.itemsProperty);
     }
-    set items(value: any)
-    {
+    set items(value: any) {
         this._setValue(DropDown.itemsProperty, value);
     }
 
-    get selectedIndex(): number
-    {
+    get selectedIndex(): number {
         return this._getValue(DropDown.selectedIndexProperty);
     }
-    set selectedIndex(value: number)
-    {
+    set selectedIndex(value: number) {
         this._setValue(DropDown.selectedIndexProperty, value);
     }
 
     public abstract _onItemsPropertyChanged(data: dependencyObservable.PropertyChangeData)
 
-    public _onSelectedIndexPropertyChanged(data: dependencyObservable.PropertyChangeData)
-    {
-        let  index = this.selectedIndex;
-        if (types.isUndefined(index))
-        {
+    public _onSelectedIndexPropertyChanged(data: dependencyObservable.PropertyChangeData) {
+        let index = this.selectedIndex;
+        if (types.isUndefined(index)) {
             return;
         }
 
-        if (types.isDefined(this.items))
-        {
-            if (index < 0
-                || index >= this.items.length
-                )
-            {
+        if (types.isDefined(this.items)) {
+            if (index < 0 || index >= this.items.length) {
                 this.selectedIndex = undefined;
                 throw new Error("selectedIndex should be between [0, items.length - 1]");
             }
