@@ -21,6 +21,7 @@ import { Observable, PropertyChangeData } from "data/observable";
 import * as common from "./drop-down-common";
 import * as style from "ui/styling/style";
 import * as utils from "utils/utils";
+import { Font } from "ui/styling/font";
 
 global.moduleMerge(common, exports);
 
@@ -178,6 +179,23 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
 
 //#region Styling
 export class DropDownStyler implements style.Styler {
+    //#region Font
+    private static setFontInternalProperty(dropDown: DropDown, newValue: any, nativeValue?: any) {
+        let ios = <utils.ios.TextUIView>dropDown._nativeView;
+        ios.font = (<Font>newValue).getUIFont(nativeValue);
+    }
+
+    private static resetFontInternalProperty(dropDown: DropDown, nativeValue: any) {
+        let ios = <utils.ios.TextUIView>dropDown._nativeView;
+        ios.font = nativeValue;
+    }
+
+    private static getNativeFontInternalValue(dropDown: DropDown): any {
+        let ios = <utils.ios.TextUIView>dropDown._nativeView;
+        return ios.font;
+    }
+    //#endregion
+
     //#region Text Align Prperty
     private static setTextAlignmentProperty(dropDown: DropDown, newValue: any) {
         utils.ios.setTextAlignment(dropDown._nativeView, newValue);
@@ -241,6 +259,14 @@ export class DropDownStyler implements style.Styler {
     //#endregion
 
     public static registerHandlers() {
+        style.registerHandler(style.fontInternalProperty,
+            new style.StylePropertyChangedHandler(
+                DropDownStyler.setFontInternalProperty,
+                DropDownStyler.resetFontInternalProperty,
+                DropDownStyler.getNativeFontInternalValue
+            ),
+            "DropDown");
+        
         style.registerHandler(style.textAlignmentProperty,
             new style.StylePropertyChangedHandler(
                 DropDownStyler.setTextAlignmentProperty,
