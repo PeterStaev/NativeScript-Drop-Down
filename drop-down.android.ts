@@ -14,19 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
 
-import common = require("./drop-down-common");
-import utils = require("utils/utils");
-import dependencyObservable = require("ui/core/dependency-observable");
-import types = require("utils/types");
-import view = require("ui/core/view");
-import label = require("ui/label");
-import stackLayout = require("ui/layouts/stack-layout");
+import * as common from "./drop-down-common";
+import * as utils from "utils/utils";
+import { PropertyChangeData } from "ui/core/dependency-observable";
+import * as types from "utils/types";
+import { View } from "ui/core/view";
+import { Label } from "ui/label";
+import { StackLayout } from "ui/layouts/stack-layout";
 
 global.moduleMerge(common, exports);
 
 const LABELVIEWID = "spinner-label";
 
-enum RealizedViewType {
+const enum RealizedViewType {
     ItemView,
     DropDownView
 }
@@ -67,7 +67,7 @@ export class DropDown extends common.DropDown {
         return this._android;
     }
 
-    public _onItemsPropertyChanged(data: dependencyObservable.PropertyChangeData) {
+    public _onItemsPropertyChanged(data: PropertyChangeData) {
         if (!this._android || !this._android.getAdapter()) {
             return;
         }
@@ -82,7 +82,7 @@ export class DropDown extends common.DropDown {
         let keys = Object.keys(this._realizedItems);
         let i;
         let length = keys.length;
-        let view: view.View;
+        let view: View;
         let key;
 
         for (i = 0; i < length; i++) {
@@ -93,10 +93,10 @@ export class DropDown extends common.DropDown {
         }
     }
 
-    public _getRealizedView(convertView: android.view.View, realizedViewType: RealizedViewType): view.View {
+    public _getRealizedView(convertView: android.view.View, realizedViewType: RealizedViewType): View {
         if (!convertView) {
-            let view = new label.Label();
-            let layout = new stackLayout.StackLayout();
+            let view = new Label();
+            let layout = new StackLayout();
             let defaultPadding = 4 * utils.layout.getDisplayDensity();
 
             view.id = LABELVIEWID;
@@ -104,16 +104,16 @@ export class DropDown extends common.DropDown {
             if (realizedViewType === RealizedViewType.DropDownView) {
                 layout.paddingTop = layout.paddingBottom = layout.paddingLeft = layout.paddingRight = defaultPadding;
             }
-
+            
             layout.addChild(view);
 
             return layout;
         }
-
+        
         return this._realizedItems[convertView.hashCode()];
     }
 
-    public _onSelectedIndexPropertyChanged(data: dependencyObservable.PropertyChangeData) {
+    public _onSelectedIndexPropertyChanged(data: PropertyChangeData) {
         super._onSelectedIndexPropertyChanged(data);
         if (this.android) {
             this.android.setSelection(data.newValue);
@@ -187,8 +187,18 @@ class DropDownAdapter extends android.widget.BaseAdapter {
                 convertView = view.android;
             }
 
-            view.getViewById<label.Label>(LABELVIEWID).text = this.getItem(index);
+            view.getViewById<Label>(LABELVIEWID).text = this.getItem(index);
             this._dropDown._realizedItems[convertView.hashCode()] = view;
+        }
+
+        switch (realizedViewType) {
+            case RealizedViewType.ItemView:
+                view.color = this._dropDown.color;
+                break;
+
+            case RealizedViewType.DropDownView:
+                view.color = null; // Reset to Default
+                break;
         }
 
         return convertView;

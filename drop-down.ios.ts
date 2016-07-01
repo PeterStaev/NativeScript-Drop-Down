@@ -14,21 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
 
-import textField = require("ui/text-field");
-import listPicker = require("ui/list-picker");
-import dependencyObservable = require("ui/core/dependency-observable");
-import observable = require("data/observable");
-import common = require("./drop-down-common");
-import style = require("ui/styling/style");
-import utils = require("utils/utils");
+import { TextField } from "ui/text-field";
+import { ListPicker } from "ui/list-picker";
+import * as dependencyObservable from "ui/core/dependency-observable";
+import { Observable, PropertyChangeData } from "data/observable";
+import * as common from "./drop-down-common";
+import * as style from "ui/styling/style";
+import * as utils from "utils/utils";
 
 global.moduleMerge(common, exports);
 
 const TOOLBAR_HEIGHT = 44;
 
 export class DropDown extends common.DropDown {
-    private _textField: textField.TextField;
-    private _listPicker: listPicker.ListPicker;
+    private _textField: TextField;
+    private _listPicker: ListPicker;
     private _toolbar: UIToolbar;
     private _flexToolbarSpace: UIBarButtonItem;
     private _doneButton: UIBarButtonItem;
@@ -40,8 +40,8 @@ export class DropDown extends common.DropDown {
 
         let applicationFrame = UIScreen.mainScreen().applicationFrame;
 
-        this._textField = new textField.TextField();
-        this._listPicker = new listPicker.ListPicker();
+        this._textField = new TextField();
+        this._listPicker = new ListPicker();
 
         this._flexToolbarSpace = UIBarButtonItem.alloc().initWithBarButtonSystemItemTargetAction(UIBarButtonSystemItem.UIBarButtonSystemItemFlexibleSpace, null, null);
         this._doneTapDelegate = TapHandler.initWithOwner(new WeakRef(this));
@@ -78,8 +78,8 @@ export class DropDown extends common.DropDown {
 
         this._textField.onLoaded();
         this._listPicker.onLoaded();
-        this._listPicker.on(observable.Observable.propertyChangeEvent,
-            (data: observable.PropertyChangeData) => {
+        this._listPicker.on(Observable.propertyChangeEvent,
+            (data: PropertyChangeData) => {
                 if (data.propertyName === "selectedIndex") {
                     this.selectedIndex = data.value;
                 }
@@ -92,7 +92,7 @@ export class DropDown extends common.DropDown {
         this.ios.inputView = null;
         this.ios.inputAccessoryView = null;
 
-        this._listPicker.off(observable.Observable.propertyChangeEvent);
+        this._listPicker.off(Observable.propertyChangeEvent);
 
         this._textField.onUnloaded();
         this._listPicker.onUnloaded();
@@ -112,8 +112,7 @@ export class DropDown extends common.DropDown {
 }
 
 class TapHandler extends NSObject {
-    public static ObjCExposedMethods =
-    {
+    public static ObjCExposedMethods = {
         "tap": { returns: interop.types.void, params: [] }
     };
 
@@ -149,14 +148,40 @@ export class DropDownStyler implements style.Styler {
     }
     //#endregion
 
-    public static registerHandlers() {
-        style.registerHandler(style.textAlignmentProperty
-            , new style.StylePropertyChangedHandler(DropDownStyler.setTextAlignmentProperty
-                , DropDownStyler.resetTextAlignmentProperty
-                , DropDownStyler.getNativeTextAlignmentValue)
-            , "DropDown");
+    //#region Color Prperty
+    private static setColorProperty(dropDown: DropDown, newValue: any) {
+        let ios = <utils.ios.TextUIView>dropDown._nativeView;
+        ios.textColor = newValue;
     }
 
+    private static resetColorProperty(dropDown: DropDown, nativeValue: any) {
+        let ios = <utils.ios.TextUIView>dropDown._nativeView;
+        ios.textColor = nativeValue;
+    }
+
+    private static getNativeColorValue(dropDown: DropDown): any {
+        let ios = <utils.ios.TextUIView>dropDown._nativeView;
+        return ios.textColor;
+    }
+    //#endregion
+
+    public static registerHandlers() {
+        style.registerHandler(style.textAlignmentProperty,
+            new style.StylePropertyChangedHandler(
+                DropDownStyler.setTextAlignmentProperty,
+                DropDownStyler.resetTextAlignmentProperty,
+                DropDownStyler.getNativeTextAlignmentValue
+            ),
+            "DropDown");
+        
+        style.registerHandler(style.colorProperty,
+            new style.StylePropertyChangedHandler(
+                DropDownStyler.setColorProperty,
+                DropDownStyler.resetColorProperty,
+                DropDownStyler.getNativeColorValue
+            ),
+            "DropDown");
+    }
 }
 DropDownStyler.registerHandlers();
 //#endregion
