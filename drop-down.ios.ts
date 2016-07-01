@@ -28,12 +28,12 @@ const TOOLBAR_HEIGHT = 44;
 
 export class DropDown extends common.DropDown {
     private _textField: TextField;
-    private _listPicker: ListPicker;
     private _toolbar: UIToolbar;
     private _flexToolbarSpace: UIBarButtonItem;
     private _doneButton: UIBarButtonItem;
     private _doneTapDelegate: TapHandler;
     private _accessoryViewVisible: boolean;
+    public _listPicker: ListPicker;
 
     constructor() {
         super();
@@ -43,6 +43,7 @@ export class DropDown extends common.DropDown {
         this._textField = new TextField();
         this._listPicker = new ListPicker();
 
+        (this._listPicker as any)._delegate = DropDownListPickerDelegateImpl.initWithOwner(this);        
         this._flexToolbarSpace = UIBarButtonItem.alloc().initWithBarButtonSystemItemTargetAction(UIBarButtonSystemItem.UIBarButtonSystemItemFlexibleSpace, null, null);
         this._doneTapDelegate = TapHandler.initWithOwner(new WeakRef(this));
         this._doneButton = UIBarButtonItem.alloc().initWithBarButtonSystemItemTargetAction(UIBarButtonSystemItem.UIBarButtonSystemItemDone, this._doneTapDelegate, "tap");
@@ -130,6 +131,51 @@ class TapHandler extends NSObject {
     }
 }
 
+class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDelegate {
+    public static ObjCProtocols = [UIPickerViewDelegate];
+
+    private _owner: WeakRef<DropDown>;
+    
+    public static initWithOwner(owner: DropDown): DropDownListPickerDelegateImpl {
+        let delegate = <DropDownListPickerDelegateImpl>DropDownListPickerDelegateImpl.new();
+        delegate._owner = new WeakRef(owner);
+        return delegate;
+    }
+
+    private _getStringAttributesFromStyle(): NSDictionary {
+        let result = NSMutableDictionary.alloc().init();
+        let owner = this._owner.get();
+
+        if (!owner || !owner.style) {
+            return result;
+        }
+
+        if (owner.style.color) {
+            result.setValueForKey(owner.style.color.ios, NSForegroundColorAttributeName);
+        }        
+
+        return result;
+    }
+
+    public pickerViewAttributedTitleForRowForComponent(pickerView: UIPickerView, row: number, component: number): NSAttributedString {
+        let owner = this._owner.get();
+        let text: string = row.toString();
+
+        if (owner) {
+            text = (owner._listPicker as any)._getItemAsString(row);
+        }
+
+        return NSAttributedString.alloc().initWithStringAttributes(text, this._getStringAttributesFromStyle());
+    }
+
+    public pickerViewDidSelectRowInComponent(pickerView: UIPickerView, row: number, component: number): void {
+        let owner = this._owner.get();
+        if (owner) {
+            owner._listPicker._onPropertyChangedFromNative(ListPicker.selectedIndexProperty, row);
+        }
+    }
+}
+
 //#region Styling
 export class DropDownStyler implements style.Styler {
     //#region Text Align Prperty
@@ -151,17 +197,46 @@ export class DropDownStyler implements style.Styler {
     //#region Color Prperty
     private static setColorProperty(dropDown: DropDown, newValue: any) {
         let ios = <utils.ios.TextUIView>dropDown._nativeView;
+        let pickerView = <UIPickerView>dropDown._listPicker.ios;
+
         ios.textColor = newValue;
+        pickerView.reloadAllComponents();
     }
 
     private static resetColorProperty(dropDown: DropDown, nativeValue: any) {
         let ios = <utils.ios.TextUIView>dropDown._nativeView;
+        let pickerView = <UIPickerView>dropDown._listPicker.ios;
+
         ios.textColor = nativeValue;
+        pickerView.reloadAllComponents();
     }
 
     private static getNativeColorValue(dropDown: DropDown): any {
         let ios = <utils.ios.TextUIView>dropDown._nativeView;
         return ios.textColor;
+    }
+    //#endregion
+
+    //#region Background Color Prperty
+    private static setBackgroundColorProperty(dropDown: DropDown, newValue: any) {
+        let ios = <UITextView>dropDown._nativeView;
+        let pickerView = <UIPickerView>dropDown._listPicker.ios;
+        
+        ios.backgroundColor = newValue;
+        pickerView.backgroundColor = newValue;
+    }
+
+    private static resetBackgroundColorProperty(dropDown: DropDown, nativeValue: any) {
+        let ios = <UITextView>dropDown._nativeView;
+        let pickerView = <UIPickerView>dropDown._listPicker.ios;
+
+        ios.backgroundColor = nativeValue;
+        pickerView.backgroundColor = nativeValue;
+    }
+
+    private static getNativeBackgroundColorValue(dropDown: DropDown): any {
+        let ios = <UITextView>dropDown._nativeView;
+        return ios.backgroundColor;
     }
     //#endregion
 
@@ -179,6 +254,14 @@ export class DropDownStyler implements style.Styler {
                 DropDownStyler.setColorProperty,
                 DropDownStyler.resetColorProperty,
                 DropDownStyler.getNativeColorValue
+            ),
+            "DropDown");
+        
+        style.registerHandler(style.backgroundColorProperty,
+            new style.StylePropertyChangedHandler(
+                DropDownStyler.setBackgroundColorProperty,
+                DropDownStyler.resetBackgroundColorProperty,
+                DropDownStyler.getNativeBackgroundColorValue
             ),
             "DropDown");
     }
