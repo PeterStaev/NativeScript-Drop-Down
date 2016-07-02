@@ -187,16 +187,19 @@ class DropDownAdapter extends android.widget.BaseAdapter {
                 convertView = view.android;
             }
 
-            view.getViewById<Label>(LABELVIEWID).text = this.getItem(index);
+            let label = view.getViewById<Label>(LABELVIEWID);
+            label.text = this.getItem(index);
+            
+            // Copy root styles to view        
+            view.color = this._dropDown.color;
+            view.backgroundColor = this._dropDown.backgroundColor;
+            label.style.textDecoration = this._dropDown.style.textDecoration;
+        
+            if (realizedViewType === RealizedViewType.DropDownView) {
+                view.style.padding = this._dropDown.style.padding;
+            }
+
             this._dropDown._realizedItems[convertView.hashCode()] = view;
-        }
-
-        // Copy root styles to view        
-        view.color = this._dropDown.color;
-        view.backgroundColor = this._dropDown.backgroundColor;
-
-        if (realizedViewType === RealizedViewType.DropDownView) {
-            view.style.padding = this._dropDown.style.padding;
         }
 
         return convertView;

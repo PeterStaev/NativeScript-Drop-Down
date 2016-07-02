@@ -22,6 +22,9 @@ import * as common from "./drop-down-common";
 import * as style from "ui/styling/style";
 import * as utils from "utils/utils";
 import { Font } from "ui/styling/font";
+import { Span } from "text/span";
+import { FormattedString } from "text/formatted-string";
+import * as enums from "ui/enums";
 
 global.moduleMerge(common, exports);
 
@@ -144,30 +147,27 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
         return delegate;
     }
 
-    private _getStringAttributesFromStyle(): NSDictionary {
-        let result = NSMutableDictionary.alloc().init();
-        let owner = this._owner.get();
-
-        if (!owner || !owner.style) {
-            return result;
-        }
-
-        if (owner.style.color) {
-            result.setValueForKey(owner.style.color.ios, NSForegroundColorAttributeName);
-        }        
-
-        return result;
-    }
-
     public pickerViewAttributedTitleForRowForComponent(pickerView: UIPickerView, row: number, component: number): NSAttributedString {
         let owner = this._owner.get();
-        let text: string = row.toString();
+        let span = new Span();
+        let formattedString = new FormattedString();
+        formattedString.spans.push(span);
 
         if (owner) {
-            text = (owner._listPicker as any)._getItemAsString(row);
+            span.text = (owner._listPicker as any)._getItemAsString(row);
+            span.foregroundColor = owner.style.color;
+            switch (owner.style.textDecoration) {
+                case enums.TextDecoration.underline:
+                    span.underline = 1;
+                    break;
+
+                case enums.TextDecoration.lineThrough:
+                    span.strikethrough = 1;
+                    break;
+            }
         }
 
-        return NSAttributedString.alloc().initWithStringAttributes(text, this._getStringAttributesFromStyle());
+        return (formattedString as any)._formattedText;
     }
 
     public pickerViewDidSelectRowInComponent(pickerView: UIPickerView, row: number, component: number): void {
@@ -210,6 +210,18 @@ export class DropDownStyler implements style.Styler {
     private static getNativeTextAlignmentValue(dropDown: DropDown): any {
         let ios = <utils.ios.TextUIView>dropDown._nativeView;
         return ios.textAlignment;
+    }
+    //#endregion
+
+    //#region  Text Decoration 
+    private static setTextDecorationProperty(dropDown: DropDown, newValue: any) {
+        dropDown._textField.style.textDecoration = newValue;
+        utils.ios.setTextDecorationAndTransform(dropDown._textField, newValue, dropDown.style.textTransform);
+    }
+
+    private static resetTextDecorationProperty(dropDown: DropDown, nativeValue: any) {
+        dropDown._textField.style.textDecoration = enums.TextDecoration.none;
+        utils.ios.setTextDecorationAndTransform(dropDown._textField, enums.TextDecoration.none, dropDown.style.textTransform);
     }
     //#endregion
 
@@ -298,6 +310,13 @@ export class DropDownStyler implements style.Styler {
                 DropDownStyler.setTextAlignmentProperty,
                 DropDownStyler.resetTextAlignmentProperty,
                 DropDownStyler.getNativeTextAlignmentValue
+            ),
+            "DropDown");
+        
+        style.registerHandler(style.textDecorationProperty,
+            new style.StylePropertyChangedHandler(
+                DropDownStyler.setTextDecorationProperty,
+                DropDownStyler.resetTextDecorationProperty
             ),
             "DropDown");
         
