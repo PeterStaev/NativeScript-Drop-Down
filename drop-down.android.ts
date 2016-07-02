@@ -26,7 +26,7 @@ global.moduleMerge(common, exports);
 
 const LABELVIEWID = "spinner-label";
 
-const enum RealizedViewType {
+enum RealizedViewType {
     ItemView,
     DropDownView
 }
@@ -34,7 +34,7 @@ const enum RealizedViewType {
 export class DropDown extends common.DropDown {
     private _android: android.widget.Spinner;
     private _androidViewId: number;
-    public _realizedItems = {};
+    public _realizedItems = [{}, {}];
 
     public _createUI() {
         this._android = new android.widget.Spinner(this._context);
@@ -78,21 +78,11 @@ export class DropDown extends common.DropDown {
     public _onDetached(force?: boolean) {
         super._onDetached(force);
 
-        // clear the cache
-        let keys = Object.keys(this._realizedItems);
-        let i;
-        let length = keys.length;
-        let view: View;
-        let key;
-
-        for (i = 0; i < length; i++) {
-            key = keys[i];
-            view = this._realizedItems[key];
-            view.parent._removeView(view);
-            delete this._realizedItems[key];
-        }
+        this._clearCache(RealizedViewType.DropDownView);
+        this._clearCache(RealizedViewType.ItemView);
     }
 
+    
     public _getRealizedView(convertView: android.view.View, realizedViewType: RealizedViewType): View {
         if (!convertView) {
             let view = new Label();
@@ -110,11 +100,12 @@ export class DropDown extends common.DropDown {
             return layout;
         }
         
-        return this._realizedItems[convertView.hashCode()];
+        return this._realizedItems[realizedViewType][convertView.hashCode()];
     }
 
     public _onSelectedIndexPropertyChanged(data: PropertyChangeData) {
         super._onSelectedIndexPropertyChanged(data);
+        this._clearCache(RealizedViewType.DropDownView);
         if (this.android) {
             this.android.setSelection(data.newValue);
         }
@@ -131,6 +122,22 @@ export class DropDown extends common.DropDown {
         }
         else if (types.isUndefined(this.selectedIndex) || this.selectedIndex >= newItemsCount) {
             this.selectedIndex = 0;
+        }
+    }
+
+    private _clearCache(realizedViewType: RealizedViewType) {
+        let items = this._realizedItems[realizedViewType];
+        let keys = Object.keys(items);
+        let i;
+        let length = keys.length;
+        let view: View;
+        let key;
+
+        for (i = 0; i < length; i++) {
+            key = keys[i];
+            view = items[key];
+            view.parent._removeView(view);
+            delete items[key];
         }
     }
 }
@@ -200,7 +207,7 @@ class DropDownAdapter extends android.widget.BaseAdapter {
                 view.opacity = this._dropDown.opacity;
             }
 
-            this._dropDown._realizedItems[convertView.hashCode()] = view;
+            this._dropDown._realizedItems[realizedViewType][convertView.hashCode()] = view;
         }
 
         return convertView;
