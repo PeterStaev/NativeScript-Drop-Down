@@ -197,6 +197,7 @@ class DropDownAdapter extends android.widget.BaseAdapter {
         
             if (realizedViewType === RealizedViewType.DropDownView) {
                 view.style.padding = this._dropDown.style.padding;
+                view.opacity = this._dropDown.opacity;
             }
 
             this._dropDown._realizedItems[convertView.hashCode()] = view;
