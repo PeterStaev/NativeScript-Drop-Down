@@ -28,12 +28,13 @@ global.moduleMerge(common, exports);
 const TOOLBAR_HEIGHT = 44;
 
 export class DropDown extends common.DropDown {
-    private _textField: TextField;
     private _toolbar: UIToolbar;
     private _flexToolbarSpace: UIBarButtonItem;
     private _doneButton: UIBarButtonItem;
     private _doneTapDelegate: TapHandler;
     private _accessoryViewVisible: boolean;
+    
+    public _textField: TextField;
     public _listPicker: ListPicker;
 
     constructor() {
@@ -196,7 +197,7 @@ export class DropDownStyler implements style.Styler {
     }
     //#endregion
 
-    //#region Text Align Prperty
+    //#region Text Align
     private static setTextAlignmentProperty(dropDown: DropDown, newValue: any) {
         utils.ios.setTextAlignment(dropDown._nativeView, newValue);
     }
@@ -212,7 +213,7 @@ export class DropDownStyler implements style.Styler {
     }
     //#endregion
 
-    //#region Color Prperty
+    //#region Color
     private static setColorProperty(dropDown: DropDown, newValue: any) {
         let ios = <utils.ios.TextUIView>dropDown._nativeView;
         let pickerView = <UIPickerView>dropDown._listPicker.ios;
@@ -235,7 +236,7 @@ export class DropDownStyler implements style.Styler {
     }
     //#endregion
 
-    //#region Background Color Prperty
+    //#region Background Color
     private static setBackgroundColorProperty(dropDown: DropDown, newValue: any) {
         let ios = <UITextView>dropDown._nativeView;
         let pickerView = <UIPickerView>dropDown._listPicker.ios;
@@ -255,6 +256,31 @@ export class DropDownStyler implements style.Styler {
     private static getNativeBackgroundColorValue(dropDown: DropDown): any {
         let ios = <UITextView>dropDown._nativeView;
         return ios.backgroundColor;
+    }
+    //#endregion
+
+    //#region Padding     
+    private static setPaddingProperty(dropDown: DropDown, newValue: UIEdgeInsets) {
+        DropDownStyler.setPadding(dropDown, newValue);
+    }
+
+    private static resetPaddingProperty(dropDown: DropDown, nativeValue: UIEdgeInsets) {
+        DropDownStyler.setPadding(dropDown, nativeValue);
+    }
+
+    private static getPaddingProperty(dropDown: DropDown): UIEdgeInsets {
+        let styles = dropDown.style;
+        if (styles) {
+            return UIEdgeInsetsFromString(`{${styles.paddingTop},${styles.paddingLeft},${styles.paddingBottom},${styles.paddingRight}}`);
+        }
+        return UIEdgeInsetsZero;
+    }  
+
+    private static setPadding(dropDown: DropDown, newValue: UIEdgeInsets) {
+        dropDown._textField.style.paddingTop = newValue.top;
+        dropDown._textField.style.paddingRight = newValue.right;
+        dropDown._textField.style.paddingBottom = newValue.bottom;
+        dropDown._textField.style.paddingLeft = newValue.left;
     }
     //#endregion
 
@@ -288,6 +314,13 @@ export class DropDownStyler implements style.Styler {
                 DropDownStyler.setBackgroundColorProperty,
                 DropDownStyler.resetBackgroundColorProperty,
                 DropDownStyler.getNativeBackgroundColorValue
+            ),
+            "DropDown");
+        style.registerHandler(style.nativePaddingsProperty,
+            new style.StylePropertyChangedHandler(
+                DropDownStyler.setPaddingProperty,
+                DropDownStyler.resetPaddingProperty,
+                DropDownStyler.getPaddingProperty
             ),
             "DropDown");
     }
