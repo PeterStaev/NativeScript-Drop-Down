@@ -207,6 +207,7 @@ This enables you to do things like:
 ```TypeScript
 dd.selectedIndex = itemSource.getIndex("FL");
 ```
+
 2. You can get the backend value of what the user selected using:
 ```TypeScript
 let selectedValue = itemSource.getValue(dd.selectedIndex);
