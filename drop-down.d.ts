@@ -15,12 +15,12 @@ limitations under the License.
 ***************************************************************************** */
 
 declare module "nativescript-drop-down" {
-    import view = require("ui/core/view");
-    import dependencyObservable = require("ui/core/dependency-observable");
+    import { View } from "ui/core/view";
+    import { Property } from "ui/core/dependency-observable";
 
-    export class DropDown extends view.View {
-        public static itemsProperty: dependencyObservable.Property;
-        public static selectedIndexProperty: dependencyObservable.Property;
+    export class DropDown extends View {
+        public static itemsProperty: Property;
+        public static selectedIndexProperty: Property;
 
         items: any;
         selectedIndex: number;
@@ -28,5 +28,7 @@ declare module "nativescript-drop-down" {
 
         ios: UITextField;
         android: android.widget.Spinner;
+
+        public open();
     }
 }

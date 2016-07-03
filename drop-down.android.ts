@@ -97,6 +97,10 @@ export class DropDown extends common.DropDown {
         
         return this._realizedItems[realizedViewType][convertView.hashCode()];
     }
+    
+    public open() {
+        this._android.performClick();
+    }
 
     public _onSelectedIndexPropertyChanged(data: PropertyChangeData) {
         super._onSelectedIndexPropertyChanged(data);

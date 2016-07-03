@@ -106,6 +106,10 @@ export class DropDown extends common.DropDown {
         super.onUnloaded();
     }
 
+    public open() {
+        this._textField.focus();
+    }
+
     public _onItemsPropertyChanged(data: dependencyObservable.PropertyChangeData) {
         this._listPicker.items = data.newValue;
     }

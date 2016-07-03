@@ -41,6 +41,9 @@ Gets or sets the selected index of the DropDown.
 * **accessoryViewVisible** - *boolean* (Default: true)  
 Gets/sets whether there will be an accessory view (toolbar with Done button) under iOS. Valid only when running on iOS.
 
+### Methods 
+* **open()** - Opens the drop down. 
+
 ## Example
 ```XML
 <!-- test-page.xml -->

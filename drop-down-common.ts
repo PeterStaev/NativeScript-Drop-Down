@@ -14,44 +14,47 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
 
-import proxy = require("ui/core/proxy");
-import dependencyObservable = require("ui/core/dependency-observable");
-import view = require("ui/core/view");
-import types = require("utils/types");
+import { PropertyMetadata } from "ui/core/proxy";
+import { Property, PropertyChangeData, PropertyMetadataSettings } from "ui/core/dependency-observable";
+import { View } from "ui/core/view";
+import * as types from "utils/types";
+import * as definition from "nativescript-drop-down";
 
 const DROPDOWN = "DropDown";
 
-function onSelectedIndexPropertyChanged(data: dependencyObservable.PropertyChangeData) {
+function onSelectedIndexPropertyChanged(data: PropertyChangeData) {
     let picker = <DropDown>data.object;
     picker._onSelectedIndexPropertyChanged(data);
 }
 
-function onItemsPropertyChanged(data: dependencyObservable.PropertyChangeData) {
+function onItemsPropertyChanged(data: PropertyChangeData) {
     let picker = <DropDown>data.object;
     picker._onItemsPropertyChanged(data);
 }
 
-export abstract class DropDown extends view.View {
-    public static itemsProperty = new dependencyObservable.Property(
+export abstract class DropDown extends View implements definition.DropDown {
+    public static itemsProperty = new Property(
         "items",
         DROPDOWN,
-        new proxy.PropertyMetadata(
+        new PropertyMetadata(
             undefined,
-            dependencyObservable.PropertyMetadataSettings.AffectsLayout,
+            PropertyMetadataSettings.AffectsLayout,
             onItemsPropertyChanged
         )
     );
 
-    public static selectedIndexProperty = new dependencyObservable.Property(
+    public static selectedIndexProperty = new Property(
         "selectedIndex",
         DROPDOWN,
-        new proxy.PropertyMetadata(
+        new PropertyMetadata(
             undefined,
-            dependencyObservable.PropertyMetadataSettings.AffectsLayout,
+            PropertyMetadataSettings.AffectsLayout,
             onSelectedIndexPropertyChanged
         )
     );
 
+    public accessoryViewVisible;
+    
     constructor() {
         super();
     }
@@ -70,9 +73,10 @@ export abstract class DropDown extends view.View {
         this._setValue(DropDown.selectedIndexProperty, value);
     }
 
-    public abstract _onItemsPropertyChanged(data: dependencyObservable.PropertyChangeData)
+    public abstract open();
+    public abstract _onItemsPropertyChanged(data: PropertyChangeData);
 
-    public _onSelectedIndexPropertyChanged(data: dependencyObservable.PropertyChangeData) {
+    public _onSelectedIndexPropertyChanged(data: PropertyChangeData) {
         let index = this.selectedIndex;
         if (types.isUndefined(index)) {
             return;
