@@ -38,11 +38,15 @@ Gets or sets the items collection of the DropDown. The items property can be set
 * **selectedIndex** - *Number*  
 Gets or sets the selected index of the DropDown.
 
+* **hint** - *String*  
+Gets or sets the hint for the DropDown.
+
 * **accessoryViewVisible** - *boolean* (Default: true)  
 Gets/sets whether there will be an accessory view (toolbar with Done button) under iOS. Valid only when running on iOS.
 
 ### Methods 
-* **open()** - Opens the drop down. 
+* **open(): void**  
+Opens the drop down. 
 
 ## Example
 ```XML
@@ -64,15 +68,13 @@ import pages = require("ui/page");
 
 var viewModel: observable.Observable;
 
-export function pageLoaded(args: observable.EventData) 
-{
+export function pageLoaded(args: observable.EventData) {
     var page = <pages.Page>args.object;
     var items = new observableArray.ObservableArray();
 
     viewModel = new observable.Observable();
 
-    for (var loop = 0; loop < 20; loop++)
-    {
+    for (var loop = 0; loop < 20; loop++) {
         items.push("Item " + loop.toString());
     }
 
