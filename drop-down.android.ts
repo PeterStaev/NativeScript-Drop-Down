@@ -15,7 +15,6 @@ limitations under the License.
 ***************************************************************************** */
 
 import * as common from "./drop-down-common";
-import * as utils from "utils/utils";
 import { PropertyChangeData } from "ui/core/dependency-observable";
 import * as types from "utils/types";
 import { View } from "ui/core/view";
@@ -37,6 +36,7 @@ export class DropDown extends common.DropDown {
     public _realizedItems = [{}, {}];
 
     public _createUI() {
+        this.style.padding = "5";
         this._android = new android.widget.Spinner(this._context);
 
         if (!this._androidViewId) {
@@ -87,14 +87,9 @@ export class DropDown extends common.DropDown {
         if (!convertView) {
             let view = new Label();
             let layout = new StackLayout();
-            let defaultPadding = 4 * utils.layout.getDisplayDensity();
 
             view.id = LABELVIEWID;
 
-            if (realizedViewType === RealizedViewType.DropDownView) {
-                layout.paddingTop = layout.paddingBottom = layout.paddingLeft = layout.paddingRight = defaultPadding;
-            }
-            
             layout.addChild(view);
 
             return layout;
@@ -201,9 +196,9 @@ class DropDownAdapter extends android.widget.BaseAdapter {
             view.color = this._dropDown.color;
             view.backgroundColor = this._dropDown.backgroundColor;
             label.style.textDecoration = this._dropDown.style.textDecoration;
-        
+            view.style.padding = this._dropDown.style.padding;
+
             if (realizedViewType === RealizedViewType.DropDownView) {
-                view.style.padding = this._dropDown.style.padding;
                 view.opacity = this._dropDown.opacity;
             }
 

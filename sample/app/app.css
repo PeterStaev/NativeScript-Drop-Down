@@ -1,16 +1,11 @@
-.title {
-    font-size: 30;
-    horizontal-align: center;
-    margin:20;
-}
-
-button {
-    font-size: 42;
-    horizontal-align: center;
-}
-
-.message {
-    font-size: 20;
-    color: #284848;
-    horizontal-align: center;
+#dd
+{
+    padding: 5;
+    background-color: red;
+    color: yellow;
+    font-size: 25;
+    font-weight: bold;
+    font-style: italic;
+    text-align: center;
+    opacity: 0.5;
 }
