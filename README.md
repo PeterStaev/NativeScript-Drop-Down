@@ -201,7 +201,7 @@ let itemSource = new ValueList([{ ValueMember: "FL", DisplayMember:"Florida" }, 
 dd.items = itemSource;
 ```
 
-This enables you to do things like:
+This enables you to do things like:  
 1.If you want to select an item in the DropDown by its backend value (for example FL), you can do this with:
 ```TypeScript
 dd.selectedIndex = itemSource.getIndex("FL");
