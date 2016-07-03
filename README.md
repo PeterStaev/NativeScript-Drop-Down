@@ -203,12 +203,12 @@ dd.items = itemSource;
 
 This enables you to do things like:
 
-1. If you want to select an item in the DropDown by its backend value (for example FL), you can do this with:
+1.  If you want to select an item in the DropDown by its backend value (for example FL), you can do this with:
 ```TypeScript
 dd.selectedIndex = itemSource.getIndex("FL");
 ```
 
-2. You can get the backend value of what the user selected using:
+2.  You can get the backend value of what the user selected using:
 ```TypeScript
 let selectedValue = itemSource.getValue(dd.selectedIndex);
 ```
