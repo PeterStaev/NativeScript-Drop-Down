@@ -114,6 +114,10 @@ export class DropDown extends common.DropDown {
         this._listPicker.items = data.newValue;
     }
 
+    public _onHintPropertyChanged(data: dependencyObservable.PropertyChangeData) {
+        this._textField.hint = data.newValue;
+    }
+
     public _onSelectedIndexPropertyChanged(data: dependencyObservable.PropertyChangeData) {
         super._onSelectedIndexPropertyChanged(data);
         this._listPicker.selectedIndex = data.newValue;

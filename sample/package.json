@@ -8,6 +8,10 @@
 			"version": "1.7.1"
 		}
 	},
+	"scripts": {
+		"android": "npm uninstall nativescript-drop-down && tns deploy android", 
+		"ios": "npm uninstall nativescript-drop-down && tns deploy ios"
+	},
 	"dependencies": {
 		"tns-core-modules": "1.7.1",
 		"nativescript-drop-down": "file:../bin/dist"

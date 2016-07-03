@@ -20,7 +20,7 @@ import { View } from "ui/core/view";
 import * as types from "utils/types";
 import * as definition from "nativescript-drop-down";
 
-const DROPDOWN = "DropDown";
+export const DROPDOWN = "DropDown";
 
 function onSelectedIndexPropertyChanged(data: PropertyChangeData) {
     let picker = <DropDown>data.object;
@@ -31,6 +31,12 @@ function onItemsPropertyChanged(data: PropertyChangeData) {
     let picker = <DropDown>data.object;
     picker._onItemsPropertyChanged(data);
 }
+
+function onHintPropertyChanged(data: PropertyChangeData) {
+    let picker = <DropDown>data.object;
+    picker._onHintPropertyChanged(data);
+}
+
 
 export abstract class DropDown extends View implements definition.DropDown {
     public static itemsProperty = new Property(
@@ -50,6 +56,16 @@ export abstract class DropDown extends View implements definition.DropDown {
             undefined,
             PropertyMetadataSettings.AffectsLayout,
             onSelectedIndexPropertyChanged
+        )
+    );
+
+    public static hintProperty = new Property(
+        "hint",
+        DROPDOWN,
+        new PropertyMetadata(
+            "",
+            PropertyMetadataSettings.AffectsLayout,
+            onHintPropertyChanged
         )
     );
 
@@ -73,20 +89,27 @@ export abstract class DropDown extends View implements definition.DropDown {
         this._setValue(DropDown.selectedIndexProperty, value);
     }
 
+    get hint(): string {
+        return this._getValue(DropDown.hintProperty);
+    }
+    set hint(value: string) {
+        this._setValue(DropDown.hintProperty, value);
+    }
+
     public abstract open();
     public abstract _onItemsPropertyChanged(data: PropertyChangeData);
+    public abstract _onHintPropertyChanged(data: PropertyChangeData);
 
     public _onSelectedIndexPropertyChanged(data: PropertyChangeData) {
         let index = this.selectedIndex;
+
         if (types.isUndefined(index)) {
             return;
         }
 
-        if (types.isDefined(this.items)) {
-            if (index < 0 || index >= this.items.length) {
-                this.selectedIndex = undefined;
-                throw new Error("selectedIndex should be between [0, items.length - 1]");
-            }
+        if (index < 0 || index >= this.items.length) {
+            this.selectedIndex = undefined;
+            throw new Error("selectedIndex should be between [0, items.length - 1]");
         }
     }
 }

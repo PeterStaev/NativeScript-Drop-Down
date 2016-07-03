@@ -16,10 +16,12 @@ limitations under the License.
 
 import * as common from "./drop-down-common";
 import { PropertyChangeData } from "ui/core/dependency-observable";
-import * as types from "utils/types";
 import { View } from "ui/core/view";
 import { Label } from "ui/label";
 import { StackLayout } from "ui/layouts/stack-layout";
+import { Color } from "color";
+import * as enums from "ui/enums";
+import * as types from "utils/types";
 
 global.moduleMerge(common, exports);
 
@@ -31,12 +33,12 @@ enum RealizedViewType {
 }
 
 export class DropDown extends common.DropDown {
+
     private _android: android.widget.Spinner;
     private _androidViewId: number;
     public _realizedItems = [{}, {}];
 
     public _createUI() {
-        this.style.padding = "5";
         this._android = new android.widget.Spinner(this._context);
 
         if (!this._androidViewId) {
@@ -50,21 +52,32 @@ export class DropDown extends common.DropDown {
         this.android.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener({
             onItemSelected(parent: any, convertView: android.view.View, index: number, id: number) {
                 let owner = that.get();
-
-                owner.selectedIndex = index;
+                owner._selectedIndexInternal = index;
             },
             onNothingSelected() { /* Currently Not Needed */ }
         }));
 
         // When used in templates the selectedIndex changed event is fired before the native widget is init.
         // So here we must set the value (if any)    
-        if (this.selectedIndex !== null && this.selectedIndex !== undefined) {
+        if (!types.isNullOrUndefined(this.selectedIndex)) {
             this.android.setSelection(this.selectedIndex);
         }
     }
 
     get android(): android.widget.Spinner {
         return this._android;
+    }
+
+
+    set _selectedIndexInternal(value: number) {
+        this.selectedIndex = (value === 0 ? undefined : value - 1);
+        if (this.android) {
+            this.android.setSelection(value);
+        }
+    }
+    
+    public open() {
+        this._android.performClick();
     }
 
     public _onItemsPropertyChanged(data: PropertyChangeData) {
@@ -81,7 +94,6 @@ export class DropDown extends common.DropDown {
         this._clearCache(RealizedViewType.DropDownView);
         this._clearCache(RealizedViewType.ItemView);
     }
-
     
     public _getRealizedView(convertView: android.view.View, realizedViewType: RealizedViewType): View {
         if (!convertView) {
@@ -97,17 +109,15 @@ export class DropDown extends common.DropDown {
         
         return this._realizedItems[realizedViewType][convertView.hashCode()];
     }
-    
-    public open() {
-        this._android.performClick();
-    }
 
     public _onSelectedIndexPropertyChanged(data: PropertyChangeData) {
         super._onSelectedIndexPropertyChanged(data);
         this._clearCache(RealizedViewType.DropDownView);
-        if (this.android) {
-            this.android.setSelection(data.newValue);
-        }
+        this._selectedIndexInternal = (types.isNullOrUndefined(data.newValue) ? 0 : data.newValue + 1);
+    }
+
+    public _onHintPropertyChanged(data: PropertyChangeData) {
+        (<DropDownAdapter>this.android.getAdapter()).notifyDataSetChanged();
     }
 
     private _updateSelectedIndexOnItemsPropertyChanged(newItems) {
@@ -116,11 +126,8 @@ export class DropDown extends common.DropDown {
             newItemsCount = newItems.length;
         }
 
-        if (newItemsCount === 0) {
+        if (newItemsCount === 0 || this.selectedIndex >= newItemsCount) {
             this.selectedIndex = undefined;
-        }
-        else if (types.isUndefined(this.selectedIndex) || this.selectedIndex >= newItemsCount) {
-            this.selectedIndex = 0;
         }
     }
 
@@ -152,13 +159,23 @@ class DropDownAdapter extends android.widget.BaseAdapter {
         return global.__native(this);
     }
 
+    public isEnabled(i: number) {
+        return i !== 0;
+    }    
+
     public getCount() {
-        return this._dropDown && this._dropDown.items ? this._dropDown.items.length : 0;
+        return (this._dropDown && this._dropDown.items ? this._dropDown.items.length : 0) + 1; // +1 for the hint
     }
 
     public getItem(i: number) {
-        if (this._dropDown && this._dropDown.items && i < this._dropDown.items.length) {
-            return this._dropDown.items.getItem ? this._dropDown.items.getItem(i) : this._dropDown.items[i];
+       
+        if (i === 0) {
+            return this._dropDown.hint;
+        }
+        
+        let realIndex = i - 1;
+        if (this._dropDown && this._dropDown.items && realIndex < this._dropDown.items.length) {
+            return this._dropDown.items.getItem ? this._dropDown.items.getItem(realIndex) : this._dropDown.items[realIndex];
         }
 
         return null;
@@ -195,17 +212,23 @@ class DropDownAdapter extends android.widget.BaseAdapter {
 
             let label = view.getViewById<Label>(LABELVIEWID);
             label.text = this.getItem(index);
-            
+        
             // Copy root styles to view        
             view.color = this._dropDown.color;
             view.backgroundColor = this._dropDown.backgroundColor;
             label.style.textDecoration = this._dropDown.style.textDecoration;
             view.style.padding = this._dropDown.style.padding;
+            view.visibility = enums.Visibility.visible;
 
             if (realizedViewType === RealizedViewType.DropDownView) {
                 view.opacity = this._dropDown.opacity;
             }
-
+            
+            // Hint View styles
+            if (index === 0) { 
+                view.color = new Color(255, 148, 150, 148);
+            }
+            
             this._dropDown._realizedItems[realizedViewType][convertView.hashCode()] = view;
         }
 

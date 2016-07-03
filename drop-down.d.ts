@@ -21,9 +21,11 @@ declare module "nativescript-drop-down" {
     export class DropDown extends View {
         public static itemsProperty: Property;
         public static selectedIndexProperty: Property;
+        public static hintProperty: Property;
 
         items: any;
         selectedIndex: number;
+        hint: string;
         accessoryViewVisible: boolean; /* iOS ONLY! */
 
         ios: UITextField;
