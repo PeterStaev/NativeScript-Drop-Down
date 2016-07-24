@@ -117,6 +117,9 @@ export class DropDown extends common.DropDown {
     }
 
     public _onHintPropertyChanged(data: PropertyChangeData) {
+        if (!this._android || !this._android.getAdapter()) {
+            return;
+        }
         (<DropDownAdapter>this.android.getAdapter()).notifyDataSetChanged();
     }
 
