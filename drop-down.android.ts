@@ -20,7 +20,6 @@ import { View } from "ui/core/view";
 import { Label } from "ui/label";
 import { StackLayout } from "ui/layouts/stack-layout";
 import { Color } from "color";
-import * as enums from "ui/enums";
 import * as types from "utils/types";
 
 global.moduleMerge(common, exports);
@@ -58,9 +57,9 @@ export class DropDown extends common.DropDown {
         }));
 
         // When used in templates the selectedIndex changed event is fired before the native widget is init.
-        // So here we must set the value (if any)    
+        // So here we must set the inital value (if any)
         if (!types.isNullOrUndefined(this.selectedIndex)) {
-            this.android.setSelection(this.selectedIndex);
+            this.android.setSelection(this.selectedIndex + 1); // +1 for the hint first element
         }
     }
 
@@ -221,7 +220,8 @@ class DropDownAdapter extends android.widget.BaseAdapter {
             view.backgroundColor = this._dropDown.backgroundColor;
             label.style.textDecoration = this._dropDown.style.textDecoration;
             view.style.padding = this._dropDown.style.padding;
-            view.visibility = enums.Visibility.visible;
+            view.style.fontSize = this._dropDown.style.fontSize;
+            view.height = this._dropDown.height;
 
             if (realizedViewType === RealizedViewType.DropDownView) {
                 view.opacity = this._dropDown.opacity;
@@ -230,6 +230,14 @@ class DropDownAdapter extends android.widget.BaseAdapter {
             // Hint View styles
             if (index === 0) { 
                 view.color = new Color(255, 148, 150, 148);
+
+                // HACK: if there is no hint defined, make the view in the drop down virtually invisible.
+                if (realizedViewType === RealizedViewType.DropDownView && types.isNullOrUndefined(this._dropDown.hint)) {
+                    view.height = 1;
+                    view.style.fontSize = 0;
+                    view.style.padding = "0";
+                }
+                // END HACK
             }
             
             this._dropDown._realizedItems[realizedViewType][convertView.hashCode()] = view;
