@@ -31,6 +31,7 @@
                     module: "commonjs",
                     declaration: false,
                     noImplicitAny: false,
+                    noEmitHelpers: true,
                     removeComments: true,
                     sourceMap: false,
                     noLib: false,
