@@ -49,15 +49,15 @@ export class DropDown extends common.DropDown {
         this._listPicker = new ListPicker();
 
         (this._listPicker as any)._delegate = DropDownListPickerDelegateImpl.initWithOwner(this);        
-        this._flexToolbarSpace = UIBarButtonItem.alloc().initWithBarButtonSystemItemTargetAction(UIBarButtonSystemItem.UIBarButtonSystemItemFlexibleSpace, null, null);
+        this._flexToolbarSpace = UIBarButtonItem.alloc().initWithBarButtonSystemItemTargetAction(UIBarButtonSystemItem.FlexibleSpace, null, null);
         this._doneTapDelegate = TapHandler.initWithOwner(new WeakRef(this));
-        this._doneButton = UIBarButtonItem.alloc().initWithBarButtonSystemItemTargetAction(UIBarButtonSystemItem.UIBarButtonSystemItemDone, this._doneTapDelegate, "tap");
+        this._doneButton = UIBarButtonItem.alloc().initWithBarButtonSystemItemTargetAction(UIBarButtonSystemItem.Done, this._doneTapDelegate, "tap");
 
         this._accessoryViewVisible = true;
         this._toolbar = UIToolbar.alloc().initWithFrame(CGRectMake(0, 0, applicationFrame.size.width, TOOLBAR_HEIGHT));
-        this._toolbar.autoresizingMask = UIViewAutoresizing.UIViewAutoresizingFlexibleWidth;
+        this._toolbar.autoresizingMask = UIViewAutoresizing.FlexibleWidth;
 
-        let nsArray = NSMutableArray.alloc().init();
+        let nsArray = NSMutableArray.alloc<UIBarButtonItem>().init();
         nsArray.addObject(this._flexToolbarSpace);
         nsArray.addObject(this._doneButton);
         this._toolbar.setItemsAnimated(nsArray, false);
@@ -190,33 +190,33 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
 export class DropDownStyler implements style.Styler {
     //#region Font
     private static setFontInternalProperty(dropDown: DropDown, newValue: any, nativeValue?: any) {
-        let ios = <utils.ios.TextUIView>dropDown._nativeView;
+        let ios = dropDown.ios;
         ios.font = (<Font>newValue).getUIFont(nativeValue);
     }
 
     private static resetFontInternalProperty(dropDown: DropDown, nativeValue: any) {
-        let ios = <utils.ios.TextUIView>dropDown._nativeView;
+        let ios = dropDown.ios;
         ios.font = nativeValue;
     }
 
     private static getNativeFontInternalValue(dropDown: DropDown): any {
-        let ios = <utils.ios.TextUIView>dropDown._nativeView;
+        let ios = dropDown.ios;
         return ios.font;
     }
     //#endregion
 
     //#region Text Align
     private static setTextAlignmentProperty(dropDown: DropDown, newValue: any) {
-        utils.ios.setTextAlignment(dropDown._nativeView, newValue);
+        utils.ios.setTextAlignment(dropDown.ios, newValue);
     }
 
     private static resetTextAlignmentProperty(dropDown: DropDown, nativeValue: any) {
-        let ios = <utils.ios.TextUIView>dropDown._nativeView;
+        let ios = dropDown.ios;
         ios.textAlignment = nativeValue;
     }
 
     private static getNativeTextAlignmentValue(dropDown: DropDown): any {
-        let ios = <utils.ios.TextUIView>dropDown._nativeView;
+        let ios = dropDown.ios;
         return ios.textAlignment;
     }
     //#endregion
@@ -224,18 +224,18 @@ export class DropDownStyler implements style.Styler {
     //#region  Text Decoration 
     private static setTextDecorationProperty(dropDown: DropDown, newValue: any) {
         dropDown._textField.style.textDecoration = newValue;
-        utils.ios.setTextDecorationAndTransform(dropDown._textField, newValue, dropDown.style.textTransform);
+        (<any>dropDown._textField.style)._updateTextDecoration();
     }
 
     private static resetTextDecorationProperty(dropDown: DropDown, nativeValue: any) {
         dropDown._textField.style.textDecoration = enums.TextDecoration.none;
-        utils.ios.setTextDecorationAndTransform(dropDown._textField, enums.TextDecoration.none, dropDown.style.textTransform);
+        dropDown._textField.style._updateTextDecoration();
     }
     //#endregion
 
     //#region Color
     private static setColorProperty(dropDown: DropDown, newValue: any) {
-        let ios = <utils.ios.TextUIView>dropDown._nativeView;
+        let ios = dropDown.ios;
         let pickerView = <UIPickerView>dropDown._listPicker.ios;
 
         ios.textColor = newValue;
@@ -243,7 +243,7 @@ export class DropDownStyler implements style.Styler {
     }
 
     private static resetColorProperty(dropDown: DropDown, nativeValue: any) {
-        let ios = <utils.ios.TextUIView>dropDown._nativeView;
+        let ios = dropDown.ios;
         let pickerView = <UIPickerView>dropDown._listPicker.ios;
 
         ios.textColor = nativeValue;
@@ -251,14 +251,14 @@ export class DropDownStyler implements style.Styler {
     }
 
     private static getNativeColorValue(dropDown: DropDown): any {
-        let ios = <utils.ios.TextUIView>dropDown._nativeView;
+        let ios = dropDown.ios;
         return ios.textColor;
     }
     //#endregion
 
     //#region Background Color
     private static setBackgroundColorProperty(dropDown: DropDown, newValue: any) {
-        let ios = <UITextView>dropDown._nativeView;
+        let ios = dropDown.ios;
         let pickerView = <UIPickerView>dropDown._listPicker.ios;
         
         ios.backgroundColor = newValue;
@@ -266,7 +266,7 @@ export class DropDownStyler implements style.Styler {
     }
 
     private static resetBackgroundColorProperty(dropDown: DropDown, nativeValue: any) {
-        let ios = <UITextView>dropDown._nativeView;
+        let ios = dropDown.ios;
         let pickerView = <UIPickerView>dropDown._listPicker.ios;
 
         ios.backgroundColor = nativeValue;
@@ -274,7 +274,7 @@ export class DropDownStyler implements style.Styler {
     }
 
     private static getNativeBackgroundColorValue(dropDown: DropDown): any {
-        let ios = <UITextView>dropDown._nativeView;
+        let ios = dropDown.ios;
         return ios.backgroundColor;
     }
     //#endregion
