@@ -13,7 +13,7 @@
             "!sample/**/*.*",
             "!bin/**/*.*"
         ],
-        outDir: "bin/dist/"
+        outDir: "dist/package/"
     }
 
     grunt.initConfig({
@@ -37,7 +37,7 @@
                     removeComments: true,
                     sourceMap: false,
                     noLib: false,
-                    outDir: "dist",
+                    outDir: "package",
                     isolatedModules: false
                 }
             }
