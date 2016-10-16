@@ -74,7 +74,7 @@ export class DropDown extends common.DropDown {
             this.android.setSelection(value);
         }
     }
-    
+
     public open() {
         this._android.performClick();
     }
@@ -88,12 +88,10 @@ export class DropDown extends common.DropDown {
     }
 
     public _onDetached(force?: boolean) {
-        super._onDetached(force);
-
         this._clearCache(RealizedViewType.DropDownView);
         this._clearCache(RealizedViewType.ItemView);
     }
-    
+
     public _getRealizedView(convertView: android.view.View, realizedViewType: RealizedViewType): View {
         if (!convertView) {
             let view = new Label();
@@ -105,7 +103,7 @@ export class DropDown extends common.DropDown {
 
             return layout;
         }
-        
+
         return this._realizedItems[realizedViewType][convertView.hashCode()];
     }
 
@@ -163,18 +161,18 @@ class DropDownAdapter extends android.widget.BaseAdapter {
 
     public isEnabled(i: number) {
         return i !== 0;
-    }    
+    }
 
     public getCount() {
         return (this._dropDown && this._dropDown.items ? this._dropDown.items.length : 0) + 1; // +1 for the hint
     }
 
     public getItem(i: number) {
-       
+
         if (i === 0) {
             return this._dropDown.hint;
         }
-        
+
         let realIndex = i - 1;
         if (this._dropDown && this._dropDown.items && realIndex < this._dropDown.items.length) {
             return this._dropDown.items.getItem ? this._dropDown.items.getItem(realIndex) : this._dropDown.items[realIndex];
@@ -214,8 +212,8 @@ class DropDownAdapter extends android.widget.BaseAdapter {
 
             let label = view.getViewById<Label>(LABELVIEWID);
             label.text = this.getItem(index);
-        
-            // Copy root styles to view        
+
+            // Copy root styles to view
             view.color = this._dropDown.color;
             view.backgroundColor = this._dropDown.backgroundColor;
             label.style.textDecoration = this._dropDown.style.textDecoration;
@@ -226,9 +224,9 @@ class DropDownAdapter extends android.widget.BaseAdapter {
             if (realizedViewType === RealizedViewType.DropDownView) {
                 view.opacity = this._dropDown.opacity;
             }
-            
+
             // Hint View styles
-            if (index === 0) { 
+            if (index === 0) {
                 view.color = new Color(255, 148, 150, 148);
 
                 // HACK: if there is no hint defined, make the view in the drop down virtually invisible.
@@ -239,7 +237,7 @@ class DropDownAdapter extends android.widget.BaseAdapter {
                 }
                 // END HACK
             }
-            
+
             this._dropDown._realizedItems[realizedViewType][convertView.hashCode()] = view;
         }
 

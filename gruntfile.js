@@ -13,7 +13,7 @@
             "!sample/**/*.*",
             "!bin/**/*.*"
         ],
-        outDir: "bin/dist/"
+        outDir: "dist/package/"
     }
 
     grunt.initConfig({
@@ -31,12 +31,14 @@
                     module: "commonjs",
                     declaration: false,
                     noImplicitAny: false,
+                    experimentalDecorators: true,
+                    emitDecoratorMetadata: true,
                     noEmitHelpers: true,
                     removeComments: true,
                     sourceMap: false,
                     noLib: false,
-                    outDir: "dist",
-                    isolatedModules: true
+                    outDir: "package",
+                    isolatedModules: false
                 }
             }
         },
