@@ -26,18 +26,7 @@
             build: {
                 src: localConfig.typeScriptSrc,
                 outDir: localConfig.outDir,
-                options: {
-                    target: "es5",
-                    module: "commonjs",
-                    declaration: false,
-                    noImplicitAny: false,
-                    noEmitHelpers: true,
-                    removeComments: true,
-                    sourceMap: false,
-                    noLib: false,
-                    outDir: "dist",
-                    isolatedModules: true
-                }
+                tsconfig: true
             }
         },
         tslint:
