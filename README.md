@@ -1,6 +1,7 @@
 # NativeScript DropDown widget 
 [![Build Status](https://travis-ci.org/PeterStaev/NativeScript-Drop-Down.svg?branch=master)](https://travis-ci.org/PeterStaev/NativeScript-Drop-Down)
 [![npm downloads](https://img.shields.io/npm/dm/nativescript-drop-down.svg)](https://www.npmjs.com/package/nativescript-drop-down)
+[![npm downloads](https://img.shields.io/npm/dt/nativescript-drop-down.svg)](https://www.npmjs.com/package/nativescript-drop-down)
 [![npm](https://img.shields.io/npm/v/nativescript-drop-down.svg)](https://www.npmjs.com/package/nativescript-drop-down)
 
 A NativeScript DropDown widget. The DropDown displays items from which the user can select one. For iOS it wraps up a [UITextField](https://developer.apple.com/library/prerelease/ios/documentation/UIKit/Reference/UITextField_Class/index.html) with an `inputView` set to an [UIPickerView](https://developer.apple.com/library/prerelease/ios/documentation/UIKit/Reference/UIPickerView_Class/index.html) which displays the items. For Android it wraps up the [Spinner](http://developer.android.com/reference/android/widget/Spinner.html) widget.
