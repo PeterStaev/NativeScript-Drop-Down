@@ -43,7 +43,7 @@ export class DropDown extends common.DropDown {
     constructor() {
         super();
 
-        let applicationFrame = UIScreen.mainScreen().applicationFrame;
+        let applicationFrame = utils.ios.getter(UIScreen, UIScreen.mainScreen).applicationFrame;
 
         this._textField = new TextField();
         this._listPicker = new ListPicker();
