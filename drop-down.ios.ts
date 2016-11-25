@@ -37,7 +37,7 @@ export class DropDown extends common.DropDown {
     private _doneButton: UIBarButtonItem;
     private _doneTapDelegate: TapHandler;
     private _accessoryViewVisible: boolean;
-    
+
     public _textField: TextField;
     public _listPicker: ListPicker;
 
@@ -48,14 +48,9 @@ export class DropDown extends common.DropDown {
 
         this._textField = new TextField();
         this._listPicker = new ListPicker();
-        this._textField.on("tap", () => {
-            this.notify({
-                eventName: common.DropDown.openedEvent,
-                object: this
-            });
-        });
 
         (this._listPicker as any)._delegate = DropDownListPickerDelegateImpl.initWithOwner(this);        
+        (this._textField as any)._delegate = DropDownTextFieldDelegateImpl.initWithOwner(this);        
         this._flexToolbarSpace = UIBarButtonItem.alloc().initWithBarButtonSystemItemTargetAction(UIBarButtonSystemItem.FlexibleSpace, null, null);
         this._doneTapDelegate = TapHandler.initWithOwner(new WeakRef(this));
         this._doneButton = UIBarButtonItem.alloc().initWithBarButtonSystemItemTargetAction(UIBarButtonSystemItem.Done, this._doneTapDelegate, "tap");
@@ -99,6 +94,7 @@ export class DropDown extends common.DropDown {
             });
         this.ios.inputView = this._listPicker.ios;
         this._showHideAccessoryView();
+        
     }
 
     public onUnloaded() {
@@ -149,6 +145,27 @@ class TapHandler extends NSObject {
     public tap() {
         this._owner.get().ios.resignFirstResponder();
     }
+}
+
+class DropDownTextFieldDelegateImpl extends NSObject implements UITextFieldDelegate {
+   public static ObjCProtocols = [UITextFieldDelegate];
+
+    private _owner: WeakRef<DropDown>;
+    
+    public static initWithOwner(owner: DropDown): DropDownTextFieldDelegateImpl {
+        let delegate = <DropDownTextFieldDelegateImpl>DropDownTextFieldDelegateImpl.new();
+        delegate._owner = new WeakRef(owner);
+        return delegate;
+    }
+
+    public textFieldDidBeginEditing(textField: UITextField) {
+        let owner = this._owner.get();
+
+        owner.notify({
+            eventName: common.DropDown.openedEvent,
+            object: owner
+        });
+    } 
 }
 
 class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDelegate {
