@@ -37,8 +37,10 @@ function onHintPropertyChanged(data: PropertyChangeData) {
     picker._onHintPropertyChanged(data);
 }
 
-
 export abstract class DropDown extends View implements definition.DropDown {
+    public static openedEvent = "opened";
+    public static selectedIndexChangedEvent = "selectedIndexChanged";
+    
     public static itemsProperty = new Property(
         "items",
         DROPDOWN,

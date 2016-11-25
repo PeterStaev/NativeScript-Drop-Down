@@ -25,6 +25,7 @@ import { Font } from "ui/styling/font";
 import { Span } from "text/span";
 import { FormattedString } from "text/formatted-string";
 import * as enums from "ui/enums";
+import { SelectedIndexChangedEventData } from "nativescript-drop-down";
 
 global.moduleMerge(common, exports);
 
@@ -47,6 +48,12 @@ export class DropDown extends common.DropDown {
 
         this._textField = new TextField();
         this._listPicker = new ListPicker();
+        this._textField.on("tap", () => {
+            this.notify({
+                eventName: common.DropDown.openedEvent,
+                object: this
+            });
+        });
 
         (this._listPicker as any)._delegate = DropDownListPickerDelegateImpl.initWithOwner(this);        
         this._flexToolbarSpace = UIBarButtonItem.alloc().initWithBarButtonSystemItemTargetAction(UIBarButtonSystemItem.FlexibleSpace, null, null);
@@ -181,7 +188,18 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
     public pickerViewDidSelectRowInComponent(pickerView: UIPickerView, row: number, component: number): void {
         let owner = this._owner.get();
         if (owner) {
+            let oldIndex = owner.selectedIndex;
+
             owner._listPicker._onPropertyChangedFromNative(ListPicker.selectedIndexProperty, row);
+
+            if (row !== oldIndex) {
+                owner.notify(<SelectedIndexChangedEventData>{
+                    eventName: common.DropDown.selectedIndexChangedEvent,
+                    object: owner,
+                    oldIndex: oldIndex,
+                    newIndex: row
+                });
+            }
         }
     }
 }
