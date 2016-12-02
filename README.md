@@ -21,7 +21,20 @@ You need to add `xmlns:dd="nativescript-drop-down"` to your page tag, and then s
 
 ## API
 
+### Events
+* **opened**  
+Triggered when the DropDown is opened. 
+
+* **selectedIndexChanged**  
+Triggered when the user changes the selection in the DropDown 
+
 ### Static Properties
+* **openedEvent** - *String*  
+String value used when hooking to opened event.
+
+* **selectedIndexChangedEvent** - *String*  
+String value used when hooking to selectedIndexChanged event.
+
 * **itemsProperty** - *[Property](http://docs.nativescript.org/api-reference/classes/_ui_core_dependency_observable_.property.html)*  
 Represents the observable property backing the items property of each DropDown instance.
 
@@ -59,7 +72,9 @@ Opens the drop down.
 <!-- test-page.xml -->
 <Page xmlns="http://schemas.nativescript.org/tns.xsd" loaded="pageLoaded" xmlns:dd="nativescript-drop-down">
   <GridLayout rows="auto, auto, *" columns="auto, *">
-    <dd:DropDown items="{{ items }}" selectedIndex="{{ selectedIndex }}" row="0" colSpan="2" />
+    <dd:DropDown items="{{ items }}" selectedIndex="{{ selectedIndex }}" 
+                 opened="dropDownOpened" selectedIndexChanged="dropDownSelectedIndexChanged"
+                 row="0" colSpan="2" />
     <Label text="Selected Index:" row="1" col="0" fontSize="18" verticalAlignment="bottom"/>
     <TextField text="{{ selectedIndex }}" row="1" col="1" />
   </GridLayout>
@@ -71,6 +86,7 @@ Opens the drop down.
 import observable = require("data/observable");
 import observableArray = require("data/observable-array");
 import pages = require("ui/page");
+import { SelectedIndexChangedEventData } from "nativescript-drop-down";
 
 var viewModel: observable.Observable;
 
@@ -89,24 +105,45 @@ export function pageLoaded(args: observable.EventData) {
 
     page.bindingContext = viewModel;
 }
+
+export function dropDownOpened(args: EventData) {
+    console.log("Drop Down opened");
+}
+
+export function dropDownSelectedIndexChanged(args: SelectedIndexChangedEventData) {
+    console.log(`Drop Down selected index changed from ${args.oldIndex} to ${args.newIndex}`);
+}
 ```
 
 ## Angular 2 Example
 
 ```TypeScript
 // main.ts
-import {nativeScriptBootstrap} from "nativescript-angular/application";
-import {AppComponent} from "./app.component";
-import {registerElement} from "nativescript-angular/element-registry";
+import { platformNativeScriptDynamic, NativeScriptModule } from "nativescript-angular/platform";
+import { NgModule } from "@angular/core";
+import { AppComponent } from "./app.component";
+import { registerElement } from "nativescript-angular/element-registry";
+
 registerElement("DropDown", () => require("nativescript-drop-down/drop-down").DropDown);
-nativeScriptBootstrap(AppComponent);
+
+@NgModule({
+    declarations: [AppComponent],
+    bootstrap: [AppComponent],
+    imports: [NativeScriptModule],
+})
+class AppComponentModule {}
+
+platformNativeScriptDynamic().bootstrapModule(AppComponentModule);
 ```
 
 ```HTML
 <!-- app.component.html -->
 <StackLayout>
     <GridLayout rows="auto, auto, *" columns="auto, *">
-        <DropDown #dd backroundColor="red" [items]="items" [selectedIndex]="selectedIndex" (selectedIndexChange)="onchange(dd.selectedIndex)" row="0" colSpan="2"></DropDown>
+        <DropDown #dd backroundColor="red" [items]="items" [selectedIndex]="selectedIndex" 
+                  (selectedIndexChanged)="onchange($event)" (opened)="onopen()"
+                  row="0" colSpan="2">
+        </DropDown>
         <Label text="Selected Index:" row="1" col="0" fontSize="18" verticalAlignment="bottom"></Label>
         <TextField [text]="selected" row="1" col="1" ></TextField>
     </GridLayout>
@@ -115,8 +152,8 @@ nativeScriptBootstrap(AppComponent);
 
 ```TypeScript
 // app.component.ts
-import {Component, OnInit, OnChanges} from "@angular/core";
-import {ObservableArray} from "data/observable-array";
+import { Component } from "@angular/core";
+import { SelectedIndexChangedEventData } from "nativescript-drop-down";
 
 @Component({
     selector: "my-app",
@@ -133,8 +170,12 @@ export class AppComponent {
         }
     }
 
-    public onchange(selectedi){
-        console.log("selected index " + selectedi);
+    public onchange(args: SelectedIndexChangedEventData) {
+        console.log(`Drop Down selected index changed from ${args.oldIndex} to ${args.newIndex}`);
+    }
+
+    public onopen() {
+        console.log("Drop Down opened.");
     }
 }
 ```

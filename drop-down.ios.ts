@@ -25,6 +25,7 @@ import { Font } from "ui/styling/font";
 import { Span } from "text/span";
 import { FormattedString } from "text/formatted-string";
 import * as enums from "ui/enums";
+import { SelectedIndexChangedEventData } from "nativescript-drop-down";
 
 global.moduleMerge(common, exports);
 
@@ -36,7 +37,7 @@ export class DropDown extends common.DropDown {
     private _doneButton: UIBarButtonItem;
     private _doneTapDelegate: TapHandler;
     private _accessoryViewVisible: boolean;
-    
+
     public _textField: TextField;
     public _listPicker: ListPicker;
 
@@ -49,6 +50,7 @@ export class DropDown extends common.DropDown {
         this._listPicker = new ListPicker();
 
         (this._listPicker as any)._delegate = DropDownListPickerDelegateImpl.initWithOwner(this);        
+        (this._textField as any)._delegate = DropDownTextFieldDelegateImpl.initWithOwner(this);        
         this._flexToolbarSpace = UIBarButtonItem.alloc().initWithBarButtonSystemItemTargetAction(UIBarButtonSystemItem.FlexibleSpace, null, null);
         this._doneTapDelegate = TapHandler.initWithOwner(new WeakRef(this));
         this._doneButton = UIBarButtonItem.alloc().initWithBarButtonSystemItemTargetAction(UIBarButtonSystemItem.Done, this._doneTapDelegate, "tap");
@@ -92,6 +94,7 @@ export class DropDown extends common.DropDown {
             });
         this.ios.inputView = this._listPicker.ios;
         this._showHideAccessoryView();
+        
     }
 
     public onUnloaded() {
@@ -144,6 +147,27 @@ class TapHandler extends NSObject {
     }
 }
 
+class DropDownTextFieldDelegateImpl extends NSObject implements UITextFieldDelegate {
+   public static ObjCProtocols = [UITextFieldDelegate];
+
+    private _owner: WeakRef<DropDown>;
+    
+    public static initWithOwner(owner: DropDown): DropDownTextFieldDelegateImpl {
+        let delegate = <DropDownTextFieldDelegateImpl>DropDownTextFieldDelegateImpl.new();
+        delegate._owner = new WeakRef(owner);
+        return delegate;
+    }
+
+    public textFieldDidBeginEditing(textField: UITextField) {
+        let owner = this._owner.get();
+
+        owner.notify({
+            eventName: common.DropDown.openedEvent,
+            object: owner
+        });
+    } 
+}
+
 class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDelegate {
     public static ObjCProtocols = [UIPickerViewDelegate];
 
@@ -181,7 +205,18 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
     public pickerViewDidSelectRowInComponent(pickerView: UIPickerView, row: number, component: number): void {
         let owner = this._owner.get();
         if (owner) {
+            let oldIndex = owner.selectedIndex;
+
             owner._listPicker._onPropertyChangedFromNative(ListPicker.selectedIndexProperty, row);
+
+            if (row !== oldIndex) {
+                owner.notify(<SelectedIndexChangedEventData>{
+                    eventName: common.DropDown.selectedIndexChangedEvent,
+                    object: owner,
+                    oldIndex: oldIndex,
+                    newIndex: row
+                });
+            }
         }
     }
 }

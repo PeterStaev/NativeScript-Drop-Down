@@ -21,6 +21,7 @@ import { Label } from "ui/label";
 import { StackLayout } from "ui/layouts/stack-layout";
 import { Color } from "color";
 import * as types from "utils/types";
+import { SelectedIndexChangedEventData } from "nativescript-drop-down";
 
 global.moduleMerge(common, exports);
 
@@ -50,10 +51,36 @@ export class DropDown extends common.DropDown {
         let that = new WeakRef(this);
         this.android.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener({
             onItemSelected(parent: any, convertView: android.view.View, index: number, id: number) {
-                let owner = that.get();
+                let owner = that.get(),
+                    oldIndex = owner.selectedIndex,
+                    newIndex = (index === 0 ? undefined : index - 1);
+                
                 owner._selectedIndexInternal = index;
+
+                if (newIndex !== oldIndex) {
+                    owner.notify(<SelectedIndexChangedEventData>{
+                        eventName: common.DropDown.selectedIndexChangedEvent,
+                        object: owner,
+                        oldIndex: oldIndex,
+                        newIndex: newIndex
+                    });
+                }                
             },
             onNothingSelected() { /* Currently Not Needed */ }
+        }));
+        
+        this.android.setOnTouchListener(new android.view.View.OnTouchListener({
+            onTouch(v: android.view.View, event: android.view.MotionEvent) {
+                if (event.getAction() === android.view.MotionEvent.ACTION_DOWN) {
+                    let owner = that.get();
+
+                    owner.notify({
+                        eventName: common.DropDown.openedEvent,
+                        object: owner
+                    });
+                }
+                return false;                
+            }
         }));
 
         // When used in templates the selectedIndex changed event is fired before the native widget is init.
