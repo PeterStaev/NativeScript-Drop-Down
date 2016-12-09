@@ -17,7 +17,7 @@ export function pageLoaded(args: EventData) {
 
     viewModel.set("items", items);
     viewModel.set("hint", "My Hint");
-    viewModel.set("selectedIndex", 15);
+    // viewModel.set("selectedIndex", 15);
 
     page.bindingContext = viewModel;
 }

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
 
-import { TextField } from "ui/text-field";
+import { Label } from "ui/label";
 import { ListPicker } from "ui/list-picker";
 import * as dependencyObservable from "ui/core/dependency-observable";
 import { Observable, PropertyChangeData } from "data/observable";
@@ -38,7 +38,7 @@ export class DropDown extends common.DropDown {
     private _doneTapDelegate: TapHandler;
     private _accessoryViewVisible: boolean;
 
-    public _textField: TextField;
+    public _label: DropDownLabelWrapper;
     public _listPicker: ListPicker;
 
     constructor() {
@@ -46,11 +46,10 @@ export class DropDown extends common.DropDown {
 
         let applicationFrame = utils.ios.getter(UIScreen, UIScreen.mainScreen).applicationFrame;
 
-        this._textField = new TextField();
+        this._label = new DropDownLabelWrapper(this);
         this._listPicker = new ListPicker();
 
-        (this._listPicker as any)._delegate = DropDownListPickerDelegateImpl.initWithOwner(this);        
-        (this._textField as any)._delegate = DropDownTextFieldDelegateImpl.initWithOwner(this);        
+        (this._listPicker as any)._delegate = DropDownListPickerDelegateImpl.initWithOwner(this);       
         this._flexToolbarSpace = UIBarButtonItem.alloc().initWithBarButtonSystemItemTargetAction(UIBarButtonSystemItem.FlexibleSpace, null, null);
         this._doneTapDelegate = TapHandler.initWithOwner(new WeakRef(this));
         this._doneButton = UIBarButtonItem.alloc().initWithBarButtonSystemItemTargetAction(UIBarButtonSystemItem.Done, this._doneTapDelegate, "tap");
@@ -65,8 +64,8 @@ export class DropDown extends common.DropDown {
         this._toolbar.setItemsAnimated(nsArray, false);
     }
 
-    get ios(): UITextField {
-        return this._textField.ios;
+    get ios(): UILabel {
+        return this._label.ios;
     }
 
     get accessoryViewVisible(): boolean {
@@ -84,7 +83,7 @@ export class DropDown extends common.DropDown {
     public onLoaded() {
         super.onLoaded();
 
-        this._textField.onLoaded();
+        this._label.onLoaded();
         this._listPicker.onLoaded();
         this._listPicker.on(Observable.propertyChangeEvent,
             (data: PropertyChangeData) => {
@@ -103,14 +102,14 @@ export class DropDown extends common.DropDown {
 
         this._listPicker.off(Observable.propertyChangeEvent);
 
-        this._textField.onUnloaded();
+        this._label.onUnloaded();
         this._listPicker.onUnloaded();
 
         super.onUnloaded();
     }
 
     public open() {
-        this._textField.focus();
+        this._label.focus();
     }
 
     public _onItemsPropertyChanged(data: dependencyObservable.PropertyChangeData) {
@@ -118,13 +117,13 @@ export class DropDown extends common.DropDown {
     }
 
     public _onHintPropertyChanged(data: dependencyObservable.PropertyChangeData) {
-        this._textField.hint = data.newValue;
+       // TODO: this._textField.hint = data.newValue;
     }
 
     public _onSelectedIndexPropertyChanged(data: dependencyObservable.PropertyChangeData) {
         super._onSelectedIndexPropertyChanged(data);
         this._listPicker.selectedIndex = data.newValue;
-        this._textField.text = (this.items && this.items.getItem ? this.items.getItem(data.newValue) : this.items[data.newValue]);
+        this._label.text = (this.items && this.items.getItem ? this.items.getItem(data.newValue) : this.items[data.newValue]);
     }
 }
 
@@ -145,27 +144,6 @@ class TapHandler extends NSObject {
     public tap() {
         this._owner.get().ios.resignFirstResponder();
     }
-}
-
-class DropDownTextFieldDelegateImpl extends NSObject implements UITextFieldDelegate {
-   public static ObjCProtocols = [UITextFieldDelegate];
-
-    private _owner: WeakRef<DropDown>;
-    
-    public static initWithOwner(owner: DropDown): DropDownTextFieldDelegateImpl {
-        let delegate = <DropDownTextFieldDelegateImpl>DropDownTextFieldDelegateImpl.new();
-        delegate._owner = new WeakRef(owner);
-        return delegate;
-    }
-
-    public textFieldDidBeginEditing(textField: UITextField) {
-        let owner = this._owner.get();
-
-        owner.notify({
-            eventName: common.DropDown.openedEvent,
-            object: owner
-        });
-    } 
 }
 
 class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDelegate {
@@ -221,6 +199,85 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
     }
 }
 
+class DropDownLabelWrapper extends Label {
+    private _ios: UILabel;
+
+    constructor(dropDown: DropDown) {
+        super();
+
+        this._ios = DropDownLabel.initWithOwner(dropDown);
+        this._ios.userInteractionEnabled = true;
+    }
+}
+
+class DropDownLabel extends TNSLabel {
+    private _inputView: UIView;
+    private _inputAccessoryView: UIView;
+    private _isOpened: boolean = false;
+    private _owner: WeakRef<DropDown>;
+    
+    public static initWithOwner(owner: DropDown): DropDownLabel {
+        let label = <DropDownLabel>DropDownLabel.new();
+        label._owner = new WeakRef(owner);
+        return label;
+    }
+
+    get inputView(): UIView {
+        return this._inputView;
+    }
+    set inputView(value: UIView) {
+        this._inputView = value;
+    }
+
+    get inputAccessoryView(): UIView {
+        return this._inputAccessoryView;
+    }
+    set inputAccessoryView(value: UIView) {
+        this._inputAccessoryView = value;
+    }
+
+    get canBecomeFirstResponder(): boolean {
+        return true;
+    }
+
+    get canResignFirstResponder(): boolean {
+        return true;
+    }
+
+    public becomeFirstResponder(): boolean {
+        let result = super.becomeFirstResponder();
+        
+        if (result) {
+            if (!this._isOpened) {
+                let owner = this._owner.get();
+
+                owner.notify({
+                    eventName: common.DropDown.openedEvent,
+                    object: owner
+                });
+            }
+
+            this._isOpened = true;
+        }
+
+        return result;
+    }
+    
+    public resignFirstResponder(): boolean {
+        let result = super.resignFirstResponder();
+
+        if (result) {
+            this._isOpened = false;
+        }
+        
+        return result;
+    }
+
+    public touchesEndedWithEvent(touches: NSSet<UITouch>, event: UIEvent) {
+        this.becomeFirstResponder();
+    }
+}    
+
 //#region Styling
 export class DropDownStyler implements style.Styler {
     //#region Font
@@ -258,13 +315,13 @@ export class DropDownStyler implements style.Styler {
 
     //#region  Text Decoration 
     private static setTextDecorationProperty(dropDown: DropDown, newValue: any) {
-        dropDown._textField.style.textDecoration = newValue;
-        (<any>dropDown._textField.style)._updateTextDecoration();
+        dropDown._label.style.textDecoration = newValue;
+        (<any>dropDown._label.style)._updateTextDecoration();
     }
 
     private static resetTextDecorationProperty(dropDown: DropDown, nativeValue: any) {
-        dropDown._textField.style.textDecoration = enums.TextDecoration.none;
-        dropDown._textField.style._updateTextDecoration();
+        dropDown._label.style.textDecoration = enums.TextDecoration.none;
+        dropDown._label.style._updateTextDecoration();
     }
     //#endregion
 
@@ -332,10 +389,10 @@ export class DropDownStyler implements style.Styler {
     }  
 
     private static setPadding(dropDown: DropDown, newValue: UIEdgeInsets) {
-        dropDown._textField.style.paddingTop = newValue.top;
-        dropDown._textField.style.paddingRight = newValue.right;
-        dropDown._textField.style.paddingBottom = newValue.bottom;
-        dropDown._textField.style.paddingLeft = newValue.left;
+        dropDown._label.style.paddingTop = newValue.top;
+        dropDown._label.style.paddingRight = newValue.right;
+        dropDown._label.style.paddingBottom = newValue.bottom;
+        dropDown._label.style.paddingLeft = newValue.left;
     }
     //#endregion
 

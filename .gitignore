@@ -54,3 +54,4 @@ node_modules
 *.tmp.*
 platforms
 sample/lib
+*.log
