@@ -116,7 +116,14 @@ export class DropDown extends common.DropDown {
     }
 
     public _onItemsPropertyChanged(data: dependencyObservable.PropertyChangeData) {
+        let isNothingSelected: boolean = types.isNullOrUndefined(this.selectedIndex);
+
         this._listPicker.items = data.newValue;
+
+        // HACK: This is needed, because in the listpicker module Telerik automatically selects the first item if the current selectedIndex is undefined.         
+        if (isNothingSelected) {
+            this.selectedIndex = null;
+        }
     }
 
     public _onHintPropertyChanged(data: dependencyObservable.PropertyChangeData) {
@@ -218,6 +225,7 @@ class DropDownLabelWrapper extends Label {
     public onLoaded() {
         super.onLoaded();
         this.internalColor = this.color;
+        this.text = "";
     }
 
     get text(): string {
