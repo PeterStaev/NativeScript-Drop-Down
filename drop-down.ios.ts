@@ -24,12 +24,15 @@ import * as utils from "utils/utils";
 import { Font } from "ui/styling/font";
 import { Span } from "text/span";
 import { FormattedString } from "text/formatted-string";
+import { Color } from "color";
 import * as enums from "ui/enums";
+import * as types from "utils/types";
 import { SelectedIndexChangedEventData } from "nativescript-drop-down";
 
 global.moduleMerge(common, exports);
 
 const TOOLBAR_HEIGHT = 44;
+const HINT_COLOR = new Color("#3904041E");
 
 export class DropDown extends common.DropDown {
     private _toolbar: UIToolbar;
@@ -109,7 +112,7 @@ export class DropDown extends common.DropDown {
     }
 
     public open() {
-        this._label.focus();
+        this._label.ios.becomeFirstResponder();
     }
 
     public _onItemsPropertyChanged(data: dependencyObservable.PropertyChangeData) {
@@ -117,7 +120,7 @@ export class DropDown extends common.DropDown {
     }
 
     public _onHintPropertyChanged(data: dependencyObservable.PropertyChangeData) {
-       // TODO: this._textField.hint = data.newValue;
+       this._label.hint = data.newValue;
     }
 
     public _onSelectedIndexPropertyChanged(data: dependencyObservable.PropertyChangeData) {
@@ -201,6 +204,9 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
 
 class DropDownLabelWrapper extends Label {
     private _ios: UILabel;
+    private _hint: string = "";
+    private _hasText: boolean = true;
+    private _internalColor: Color;
 
     constructor(dropDown: DropDown) {
         super();
@@ -208,17 +214,58 @@ class DropDownLabelWrapper extends Label {
         this._ios = DropDownLabel.initWithOwner(dropDown);
         this._ios.userInteractionEnabled = true;
     }
+
+    public onLoaded() {
+        super.onLoaded();
+        this.internalColor = this.color;
+    }
+
+    get text(): string {
+        return this._ios.text;
+    }
+    set text(value: string) {
+        let actualText = value || this._hint || "";
+
+        this._hasText = !types.isNullOrUndefined(value);
+        this._ios.text = (actualText === "" ? " " : actualText); // HACK: If empty use <space> so the label does not collapse
+        
+        this._refreshColor();
+    }
+
+    get hint(): string {
+        return this._hint;
+    }
+    set hint(value: string) {
+        this._hint = value;
+
+        if (!this._hasText) {
+            this._ios.text = value;
+        }
+    }
+
+    get internalColor(): Color {
+        return this._internalColor;
+    }
+    set internalColor(value: Color) {
+        this._internalColor = value;
+        this._refreshColor();
+    }
+
+    private _refreshColor() {
+        this.color = (this._hasText ? this._internalColor : HINT_COLOR);
+    }
 }
 
 class DropDownLabel extends TNSLabel {
     private _inputView: UIView;
     private _inputAccessoryView: UIView;
-    private _isOpened: boolean = false;
+    private _isInputViewOpened: boolean;
     private _owner: WeakRef<DropDown>;
     
     public static initWithOwner(owner: DropDown): DropDownLabel {
         let label = <DropDownLabel>DropDownLabel.new();
         label._owner = new WeakRef(owner);
+        label._isInputViewOpened = false;
         return label;
     }
 
@@ -248,7 +295,7 @@ class DropDownLabel extends TNSLabel {
         let result = super.becomeFirstResponder();
         
         if (result) {
-            if (!this._isOpened) {
+            if (!this._isInputViewOpened) {
                 let owner = this._owner.get();
 
                 owner.notify({
@@ -257,7 +304,7 @@ class DropDownLabel extends TNSLabel {
                 });
             }
 
-            this._isOpened = true;
+            this._isInputViewOpened = true;
         }
 
         return result;
@@ -267,7 +314,7 @@ class DropDownLabel extends TNSLabel {
         let result = super.resignFirstResponder();
 
         if (result) {
-            this._isOpened = false;
+            this._isInputViewOpened = false;
         }
         
         return result;
@@ -327,24 +374,24 @@ export class DropDownStyler implements style.Styler {
 
     //#region Color
     private static setColorProperty(dropDown: DropDown, newValue: any) {
-        let ios = dropDown.ios;
-        let pickerView = <UIPickerView>dropDown._listPicker.ios;
+        let dropDownLabel = dropDown._label,
+            pickerView = <UIPickerView>dropDown._listPicker.ios;
 
-        ios.textColor = newValue;
+        dropDownLabel.internalColor = utils.ios.getColor(newValue);
         pickerView.reloadAllComponents();
     }
 
     private static resetColorProperty(dropDown: DropDown, nativeValue: any) {
-        let ios = dropDown.ios;
-        let pickerView = <UIPickerView>dropDown._listPicker.ios;
+        let dropDownLabel = dropDown._label,
+            pickerView = <UIPickerView>dropDown._listPicker.ios;
 
-        ios.textColor = nativeValue;
+        dropDownLabel.internalColor = utils.ios.getColor(nativeValue);
         pickerView.reloadAllComponents();
     }
 
     private static getNativeColorValue(dropDown: DropDown): any {
-        let ios = dropDown.ios;
-        return ios.textColor;
+        let dropDownLabel = dropDown._label;
+        return dropDownLabel.internalColor ? dropDownLabel.internalColor.ios : dropDownLabel.ios.textColor;
     }
     //#endregion
 
@@ -395,7 +442,7 @@ export class DropDownStyler implements style.Styler {
         dropDown._label.style.paddingLeft = newValue.left;
     }
     //#endregion
-
+  
     public static registerHandlers() {
         style.registerHandler(style.fontInternalProperty,
             new style.StylePropertyChangedHandler(
