@@ -45,7 +45,7 @@ Represents the observable property backing the selectedIndex property of each Dr
 Represents the observable property backing the hint property of each DropDown instance.
 
 ### Instance Properties
-* **ios** - *[UITextField](https://developer.apple.com/library/prerelease/ios/documentation/UIKit/Reference/UITextField_Class/index.html)*  
+* **ios** - *[UILabel](https://developer.apple.com/reference/uikit/uilabel)*  
 Gets the native iOS view that represents the user interface for this component. Valid only when running on iOS.
 
 * **android** - *[android.widget.Spinner](http://developer.android.com/reference/android/widget/Spinner.html)*  
