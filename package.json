@@ -1,9 +1,11 @@
 {
   "name": "nativescript-drop-down",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "A NativeScript DropDown widget.",
   "main": "drop-down",
+  "typings": "drop-down.d.ts",
   "nativescript": {
+    "category": "Interface",
     "platforms": {
       "ios": "2.3.0",
       "android": "2.3.0"

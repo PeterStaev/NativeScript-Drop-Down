@@ -53,5 +53,5 @@ obj
 node_modules
 *.tmp.*
 platforms
-sample/lib
+demo/lib
 *.log

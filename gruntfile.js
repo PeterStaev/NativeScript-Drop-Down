@@ -3,14 +3,14 @@
         typeScriptSrc: [
             "**/*.ts",
             "!node_modules/**/*.*",
-            "!sample/**/*.*",
+            "!demo/**/*.*",
             "!bin/**/*.*"
         ],
         typeScriptDeclarations: [
             "**/*.d.ts",
             "!references.d.ts",
             "!node_modules/**/*.*",
-            "!sample/**/*.*",
+            "!demo/**/*.*",
             "!bin/**/*.*"
         ],
         outDir: "bin/dist/"
