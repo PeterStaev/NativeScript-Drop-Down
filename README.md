@@ -188,6 +188,8 @@ set to either Array of objects or a custom object that implements `getItem(index
 So you can achieve this by implementing the following helper class:
 
 ```TypeScript
+import * as types from "utils/types";
+
 export interface IValueItem {
     ValueMember: any
     DisplayMember: any
@@ -207,6 +209,10 @@ export class ValueList {
     }
 
     public getText(index: number): string {
+        if (types.isNullOrUndefined(index)) {
+            return null;
+        }
+        
         if (index < 0 || index >= this._array.length) {
             return "";
         }
@@ -215,7 +221,7 @@ export class ValueList {
     }
 
     public getValue(index: number) {
-        if (index < 0 || index >= this._array.length) {
+        if (types.isNullOrUndefined(index) || index < 0 || index >= this._array.length) {
             return null;
         }
 
