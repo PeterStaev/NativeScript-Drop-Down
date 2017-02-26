@@ -21,6 +21,7 @@ import { Label } from "ui/label";
 import { StackLayout } from "ui/layouts/stack-layout";
 import { Color } from "color";
 import * as types from "utils/types";
+import * as enums from "ui/enums";
 import { SelectedIndexChangedEventData } from "nativescript-drop-down";
 
 global.moduleMerge(common, exports);
@@ -126,6 +127,7 @@ export class DropDown extends common.DropDown {
             let view = new Label();
             let layout = new StackLayout();
 
+            layout.style.horizontalAlignment = enums.HorizontalAlignment.stretch;           
             view.id = LABELVIEWID;
 
             layout.addChild(view);
