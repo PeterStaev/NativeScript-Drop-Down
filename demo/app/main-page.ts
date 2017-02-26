@@ -17,7 +17,7 @@ export function pageLoaded(args: EventData) {
 
     viewModel.set("items", items);
     viewModel.set("hint", "My Hint");
-    viewModel.set("selectedIndex", 15);
+    viewModel.set("selectedIndex", 1);    
 
     page.bindingContext = viewModel;
 }
@@ -28,4 +28,11 @@ export function dropDownOpened(args: EventData) {
 
 export function dropDownSelectedIndexChanged(args: SelectedIndexChangedEventData) {
     console.log(`Drop Down selected index changed from ${args.oldIndex} to ${args.newIndex}`);
+}
+
+export function changeStyles() {
+    console.log("set")
+    viewModel.set("backgroundColor", "blue");
+    viewModel.set("color", "green");
+    viewModel.set("cssClass", "changed-styles");
 }

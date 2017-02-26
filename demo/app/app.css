@@ -9,6 +9,10 @@
     text-align: center;
     opacity: 0.5;
 }
+.changed-styles {
+    text-decoration: underline !important;
+}
+
 StackLayout {
-        horizontal-align: center;
+    horizontal-align: center;
 }

@@ -22,6 +22,7 @@ import { StackLayout } from "ui/layouts/stack-layout";
 import { Color } from "color";
 import * as types from "utils/types";
 import * as enums from "ui/enums";
+import * as style from "ui/styling/style";
 import { SelectedIndexChangedEventData } from "nativescript-drop-down";
 
 global.moduleMerge(common, exports);
@@ -151,6 +152,35 @@ export class DropDown extends common.DropDown {
         (<DropDownAdapter>this.android.getAdapter()).notifyDataSetChanged();
     }
 
+    public _propagatePropertyToRealizedViews(property: string, value: any, isIncludeHintIn = true) {
+        let realizedItems = this._realizedItems;
+        for (let item of realizedItems) {
+            for (let key in item) {
+                if (isIncludeHintIn || !item[key].isHintViewIn) {
+                    item[key][property] = value;
+                }    
+            }
+        }        
+    }
+
+    public _propagateStylePropertyToRealizedViews(property: string, value: any, isIncludeHintIn = true) {
+        let realizedItems = this._realizedItems;
+        for (let item of realizedItems) {
+            for (let key in item) {
+                let view = item[key];
+                if (isIncludeHintIn || !view.isHintViewIn) {
+                    if (property === "textDecoration") {
+                        let label: Label = view.getViewById(LABELVIEWID);
+                        label.style[property] = value;
+                    }
+                    else {
+                        view.style[property] = value;
+                    }    
+                }    
+            }
+        }        
+    }
+
     private _updateSelectedIndexOnItemsPropertyChanged(newItems) {
         let newItemsCount = 0;
         if (newItems && newItems.length) {
@@ -255,11 +285,14 @@ class DropDownAdapter extends android.widget.BaseAdapter {
             if (realizedViewType === RealizedViewType.DropDownView) {
                 view.opacity = this._dropDown.opacity;
             }
+
+            (view as any).isHintViewIn = false;
             
             // Hint View styles
             if (index === 0) { 
                 view.color = new Color(255, 148, 150, 148);
-
+                (view as any).isHintViewIn = true;
+                
                 // HACK: if there is no hint defined, make the view in the drop down virtually invisible.
                 if (realizedViewType === RealizedViewType.DropDownView
                     && (types.isNullOrUndefined(this._dropDown.hint) || this._dropDown.hint === "")) {
@@ -276,3 +309,71 @@ class DropDownAdapter extends android.widget.BaseAdapter {
         return convertView;
     }
 }
+
+//#region Styling
+export class DropDownStyler implements style.Styler {
+    //#region  Text Decoration
+    private static setTextDecorationProperty(dropDown: DropDown, newValue: any) {
+        dropDown._propagateStylePropertyToRealizedViews("textDecoration", newValue);
+    }
+
+    private static resetTextDecorationProperty(dropDown: DropDown, nativeValue: any) {
+        dropDown._propagateStylePropertyToRealizedViews("textDecoration", nativeValue);
+    }
+    //#endregion
+
+    //#region Color
+    private static setColorProperty(dropDown: DropDown, newValue: number) {
+        dropDown._propagatePropertyToRealizedViews("color", new Color(newValue), false);
+    }
+
+    private static resetColorProperty(dropDown: DropDown, nativeValue: number) {
+        dropDown._propagatePropertyToRealizedViews("color", new Color(nativeValue), false);
+    }
+
+    private static getNativeColorValue(dropDown: DropDown): number {
+        return dropDown.color.android;
+    }
+    //#endregion
+
+    //#region Background Color
+    private static setBackgroundColorProperty(dropDown: DropDown, newValue: number) {
+        dropDown._propagatePropertyToRealizedViews("backgroundColor", new Color(newValue));
+    }
+
+    private static resetBackgroundColorProperty(dropDown: DropDown, nativeValue: number) {
+        dropDown._propagatePropertyToRealizedViews("backgroundColor", new Color(nativeValue));
+    }
+
+    private static getNativeBackgroundColorValue(dropDown: DropDown): number {
+        return dropDown.backgroundColor.android;
+    }
+    //#endregion
+  
+    public static registerHandlers() {
+        style.registerHandler(style.textDecorationProperty,
+            new style.StylePropertyChangedHandler(
+                DropDownStyler.setTextDecorationProperty,
+                DropDownStyler.resetTextDecorationProperty
+            ),
+            common.DROPDOWN);
+        
+        style.registerHandler(style.colorProperty,
+            new style.StylePropertyChangedHandler(
+                DropDownStyler.setColorProperty,
+                DropDownStyler.resetColorProperty,
+                DropDownStyler.getNativeColorValue
+            ),
+            common.DROPDOWN);
+        
+        style.registerHandler(style.backgroundColorProperty,
+            new style.StylePropertyChangedHandler(
+                DropDownStyler.setBackgroundColorProperty,
+                DropDownStyler.resetBackgroundColorProperty,
+                DropDownStyler.getNativeBackgroundColorValue
+            ),
+            common.DROPDOWN);
+    }
+}
+DropDownStyler.registerHandlers();
+//#endregion
