@@ -261,7 +261,8 @@ class DropDownAdapter extends android.widget.BaseAdapter {
                 view.color = new Color(255, 148, 150, 148);
 
                 // HACK: if there is no hint defined, make the view in the drop down virtually invisible.
-                if (realizedViewType === RealizedViewType.DropDownView && types.isNullOrUndefined(this._dropDown.hint)) {
+                if (realizedViewType === RealizedViewType.DropDownView
+                    && (types.isNullOrUndefined(this._dropDown.hint) || this._dropDown.hint === "")) {
                     view.height = 1;
                     view.style.fontSize = 0;
                     view.style.padding = "0";
