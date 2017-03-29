@@ -5,13 +5,17 @@
   "main": "drop-down",
   "typings": "drop-down.d.ts",
   "nativescript": {
-    "category": "Interface",
     "platforms": {
       "ios": "3.0.0",
       "android": "3.0.0"
     }
   },
-
+ "plugin": {
+      "nan": "true",
+      "pan": "true",
+      "core3": "true",
+      "category": "Interface"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/PeterStaev/NativeScript-Drop-Down"
@@ -35,7 +39,6 @@
     "grunt": "1.0.1",
     "grunt-contrib-copy": "1.0.0",
     "grunt-contrib-clean": "1.0.0",
-    "grunt-ts": "6.0.0-beta.15", 
     "grunt-tslint": "4.0.1",
     "grunt-exec": "2.0.0"
   }
