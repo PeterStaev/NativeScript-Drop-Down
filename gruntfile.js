@@ -22,17 +22,8 @@
                 src: [localConfig.outDir]
             }
         },
-        ts: {
+        tslint: {
             build: {
-                src: localConfig.typeScriptSrc,
-                outDir: localConfig.outDir,
-                tsconfig: true
-            }
-        },
-        tslint:
-        {
-            build:
-            {
                 src: localConfig.typeScriptSrc,
                 options: {
                     configuration: grunt.file.readJSON("./tslint.json")
@@ -66,6 +57,9 @@
             }
         },
         exec: {
+            tsCompile: {
+                cmd: "node ./node_modules/typescript/bin/tsc --project tsconfig.json --outDir " + localConfig.outDir
+            },
             npm_publish: {
                 cmd: "npm publish",
                 cwd: localConfig.outDir
@@ -73,7 +67,6 @@
         }
     });
 
-    grunt.loadNpmTasks("grunt-ts");
     grunt.loadNpmTasks("grunt-tslint");
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-contrib-clean");
@@ -82,7 +75,7 @@
     grunt.registerTask("build", [
         "tslint:build",
         "clean:build",
-        "ts:build",
+        "exec:tsCompile",
         "copy"
     ]);
     grunt.registerTask("publish", [

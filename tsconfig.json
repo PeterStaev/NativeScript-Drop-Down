@@ -3,17 +3,21 @@
         "noEmitOnError": true,
         "noEmitHelpers": true,
         "sourceMap": false,
-        "noLib": true,
         "removeComments": true,
         "declaration": false,
         "experimentalDecorators": true,
         "target": "es5",
         "module": "commonjs",
         "outDir": "bin/dist",
-        "lib": [
-            "es2016"
-        ]
-    }, 
+        "lib": ["es6", "dom"],
+        "baseUrl": ".",
+        "paths": {
+            "*": [
+            "./node_modules/tns-core-modules/*",
+            "./node_modules/*"
+            ]
+        }
+    },
     "exclude": [
         "node_modules", 
         "demo", 
