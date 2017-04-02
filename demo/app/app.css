@@ -5,13 +5,15 @@
     font-size: 25;
     font-weight: bold;
     font-style: italic;
-    /*text-align: center;*/
-    /*text-decoration: underline;*/
+    text-align: center;
+    text-decoration: underline;
 }
 .changed-styles {
-    text-decoration: underline;
+    font-size: 15;
+    text-decoration: line-through;
     background-color: blue;
     color: green;
+    text-align: right;
 }
 
 StackLayout {

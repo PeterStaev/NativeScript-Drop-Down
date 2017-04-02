@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
 
-import { TextBase } from "ui/text-base";
+import { View } from "ui/core/view";
 import { Property } from "ui/core/dependency-observable";
 import { EventData } from "data/observable";
 
@@ -23,7 +23,7 @@ export interface SelectedIndexChangedEventData extends EventData {
     newIndex: number;
 }
 
-export class DropDown extends TextBase {
+export class DropDown extends View {
     public static openedEvent: string;
     public static selectedIndexChangedEvent: string;
 

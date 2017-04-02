@@ -62,7 +62,6 @@
         }
     });
 
-    grunt.loadNpmTasks("grunt-tslint");
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-exec");

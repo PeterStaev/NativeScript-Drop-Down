@@ -4,7 +4,7 @@
                  backgroundColor="{{ backgroundColor }}" color="{{ color }}" class="{{ cssClass }}"
                  opened="dropDownOpened" selectedIndexChanged="dropDownSelectedIndexChanged" 
                  row="0" colSpan="2" />-->
-    <dd:DropDown1 id="dd" hint="{{ hint }}" items="{{ items }}" selectedIndex="{{ selectedIndex }}" 
+    <dd:DropDown id="dd" hint="{{ hint }}" items="{{ items }}" selectedIndex="{{ selectedIndex }}" 
                  opened="dropDownOpened" selectedIndexChanged="dropDownSelectedIndexChanged" class="{{ cssClass }}"
                  row="0" colSpan="2" />                 
     <Label text="Selected Index:" row="1" col="0" fontSize="18" verticalAlignment="bottom"/>

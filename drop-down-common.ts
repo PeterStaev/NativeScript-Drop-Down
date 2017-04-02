@@ -16,12 +16,11 @@ limitations under the License.
 
 import { CoercibleProperty, Property, PropertyChangeData, View } from "ui/core/view";
 import { ItemsSource } from "ui/list-picker";
-import { TextBase } from "ui/text-base";
 import { DropDown as DropDownDefinition } from ".";
 
-export * from "ui/text-base";
+export * from "ui/core/view";
 
-export abstract class DropDownBase extends TextBase implements DropDownDefinition {
+export abstract class DropDownBase extends View implements DropDownDefinition {
     public static openedEvent = "opened";
     public static selectedIndexChangedEvent = "selectedIndexChanged";
     

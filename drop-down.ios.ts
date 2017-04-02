@@ -27,7 +27,8 @@ import {
     DropDownBase,
     hintProperty,
     itemsProperty,
-    selectedIndexProperty
+    selectedIndexProperty,
+    View
 } from "./drop-down-common";
 
 export * from "./drop-down-common";
@@ -41,7 +42,7 @@ const mangleExclude = [
     "TapHandler"
 ];
 
-export class DropDown1 extends TextBase {
+export class DropDown1 extends View {
     private _label: Label;
 
     constructor() {
@@ -80,14 +81,6 @@ export class DropDown extends DropDownBase {
 
     constructor() {
         super();
-
-        this.style.on("backgroundColorChange", this._onBackgroundColorChange, this);
-        this.style.on("colorChange", this._onColorChange, this);
-        this.style.on("paddingTopChange", this._onStylePropertyForLabelChange, this);
-        this.style.on("paddingRightChange", this._onStylePropertyForLabelChange, this);
-        this.style.on("paddingBottomChange", this._onStylePropertyForLabelChange, this);
-        this.style.on("paddingLeftChange", this._onStylePropertyForLabelChange, this);
-        this.style.on("textDecorationChange", this._onStylePropertyForLabelChange, this);
         
         const applicationFrame = utils.ios.getter(UIScreen, UIScreen.mainScreen).applicationFrame;
 
@@ -130,14 +123,40 @@ export class DropDown extends DropDownBase {
 
         this._label.onLoaded();
         this._listPicker.onLoaded();
+        this.ios.inputView = this._listPicker.ios;
+        this._showHideAccessoryView();
+
         this._listPicker.on(Observable.propertyChangeEvent,
             (data: PropertyChangeData) => {
                 if (data.propertyName === "selectedIndex") {
                     this.selectedIndex = data.value;
                 }
             });
-        this.ios.inputView = this._listPicker.ios;
-        this._showHideAccessoryView();
+
+        this.style.on("backgroundColorChange", this._onBackgroundColorChange, this);
+        this.style.on("colorChange", this._onColorChange, this);
+
+        this.style.on("paddingTopChange", this._copyOwnerStylePropertyToLabel, this);
+        this.style.on("paddingRightChange", this._copyOwnerStylePropertyToLabel, this);
+        this.style.on("paddingBottomChange", this._copyOwnerStylePropertyToLabel, this);
+        this.style.on("paddingLeftChange", this._copyOwnerStylePropertyToLabel, this);
+
+        this.style.on("fontInternalChange", this._copyOwnerStylePropertyToLabel, this);
+        this.style.on("textDecorationChange", this._copyOwnerStylePropertyToLabel, this);
+        this.style.on("textAlignmentChange", this._copyOwnerStylePropertyToLabel, this);
+
+        // Copy current style to label.style props        
+        const styleProperties = [
+            "color",
+            "backgroundColor",
+            "padding",
+            "fontInternal",
+            "textDecorations",
+            "texAlignment"
+        ];
+        for (const prop of styleProperties) {
+            this._label.style[prop] = this.style[prop];
+        }
     }
 
     public onUnloaded() {
@@ -145,14 +164,19 @@ export class DropDown extends DropDownBase {
         this.ios.inputAccessoryView = null;
 
         this._listPicker.off(Observable.propertyChangeEvent);
+
         this.style.off("backgroundColorChange");
         this.style.off("colorChange");
+
         this.style.off("paddingTopChange");
         this.style.off("paddingRightChange");
         this.style.off("paddingBottomChange");
         this.style.off("paddingLeftChange");
+
+        this.style.off("fontInternalChange");
         this.style.off("textDecorationChange");
-        
+        this.style.off("textAlignmentChange");
+
         this._label.onUnloaded();
         this._listPicker.onUnloaded();
 
@@ -211,8 +235,9 @@ export class DropDown extends DropDownBase {
         pickerView.reloadAllComponents();
     }
 
-    private _onStylePropertyForLabelChange(data: PropertyChangeData) {
-        this._label[data.propertyName] = data.value;
+    private _copyOwnerStylePropertyToLabel(data: PropertyChangeData) {
+        console.log(data.propertyName, data.value);
+        this._label.style[data.propertyName] = data.value;
     }
 }
 

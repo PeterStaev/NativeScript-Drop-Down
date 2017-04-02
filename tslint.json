@@ -18,6 +18,9 @@
       }
     ],
     "switch-default": false,
-    "max-classes-per-file": [false]
+    "max-classes-per-file": [false],
+    "no-console": [
+      false
+    ]
   }
 }
