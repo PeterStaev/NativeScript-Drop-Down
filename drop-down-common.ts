@@ -1,5 +1,5 @@
 /*! *****************************************************************************
-Copyright (c) 2015 Tangra Inc.
+Copyright (c) 2017 Tangra Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,104 +14,67 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
 
-import { PropertyMetadata } from "ui/core/proxy";
-import { Property, PropertyChangeData, PropertyMetadataSettings } from "ui/core/dependency-observable";
-import { View } from "ui/core/view";
-import * as types from "utils/types";
-import * as definition from "nativescript-drop-down";
+import { CoercibleProperty, Property, PropertyChangeData, View } from "ui/core/view";
+import { ItemsSource } from "ui/list-picker";
+import { TextBase } from "ui/text-base";
+import { DropDown as DropDownDefinition } from ".";
 
-export const DROPDOWN = "DropDown";
+export * from "ui/text-base";
 
-function onSelectedIndexPropertyChanged(data: PropertyChangeData) {
-    let picker = <DropDown>data.object;
-    picker._onSelectedIndexPropertyChanged(data);
-}
-
-function onItemsPropertyChanged(data: PropertyChangeData) {
-    let picker = <DropDown>data.object;
-    picker._onItemsPropertyChanged(data);
-}
-
-function onHintPropertyChanged(data: PropertyChangeData) {
-    let picker = <DropDown>data.object;
-    picker._onHintPropertyChanged(data);
-}
-
-export abstract class DropDown extends View implements definition.DropDown {
+export abstract class DropDownBase extends TextBase implements DropDownDefinition {
     public static openedEvent = "opened";
     public static selectedIndexChangedEvent = "selectedIndexChanged";
     
-    public static itemsProperty = new Property(
-        "items",
-        DROPDOWN,
-        new PropertyMetadata(
-            undefined,
-            PropertyMetadataSettings.AffectsLayout,
-            onItemsPropertyChanged
-        )
-    );
-
-    public static selectedIndexProperty = new Property(
-        "selectedIndex",
-        DROPDOWN,
-        new PropertyMetadata(
-            undefined,
-            PropertyMetadataSettings.AffectsLayout,
-            onSelectedIndexPropertyChanged
-        )
-    );
-
-    public static hintProperty = new Property(
-        "hint",
-        DROPDOWN,
-        new PropertyMetadata(
-            "",
-            PropertyMetadataSettings.AffectsLayout,
-            onHintPropertyChanged
-        )
-    );
-
-    public accessoryViewVisible;
-    
-    constructor() {
-        super();
-    }
-
-    get items(): any {
-        return this._getValue(DropDown.itemsProperty);
-    }
-    set items(value: any) {
-        this._setValue(DropDown.itemsProperty, value);
-    }
-
-    get selectedIndex(): number {
-        return this._getValue(DropDown.selectedIndexProperty);
-    }
-    set selectedIndex(value: number) {
-        this._setValue(DropDown.selectedIndexProperty, value);
-    }
-
-    get hint(): string {
-        return this._getValue(DropDown.hintProperty);
-    }
-    set hint(value: string) {
-        this._setValue(DropDown.hintProperty, value);
-    }
+    public hint: string;    
+    public selectedIndex: number;    
+    public items: any[] | ItemsSource;
+    public accessoryViewVisible: boolean;
+    public isItemsSourceIn: boolean;
 
     public abstract open();
-    public abstract _onItemsPropertyChanged(data: PropertyChangeData);
-    public abstract _onHintPropertyChanged(data: PropertyChangeData);
-
-    public _onSelectedIndexPropertyChanged(data: PropertyChangeData) {
-        let index = this.selectedIndex;
-
-        if (types.isUndefined(index)) {
-            return;
-        }
-
-        if (index < 0 || index >= this.items.length) {
-            this.selectedIndex = undefined;
-            throw new Error("selectedIndex should be between [0, items.length - 1]");
-        }
-    }
 }
+
+export const selectedIndexProperty = new CoercibleProperty<DropDownBase, number>({
+    name: "selectedIndex",
+    defaultValue: null,
+    valueConverter: (v) => {
+        if (v === undefined || v === null) {
+            return null;
+        }
+
+        return parseInt(v, 10);
+    },
+    coerceValue: (target, value) => {
+        const items = target.items;
+        if (items) {
+            const max = items.length - 1;
+            if (value < 0) {
+                value = 0;
+            }
+            if (value > max) {
+                value = max;
+            }
+        }
+        else {
+            value = undefined;
+        }
+
+        return value;
+    }
+});
+selectedIndexProperty.register(DropDownBase);
+
+export const itemsProperty = new Property<DropDownBase, any[] | ItemsSource>({
+    name: "items",
+    valueChanged: (target, oldValue, newValue) => {
+        const getItem = newValue && (newValue as ItemsSource).getItem;
+        target.isItemsSourceIn = typeof getItem === "function";
+    }
+});
+itemsProperty.register(DropDownBase);
+
+export const hintProperty = new Property<DropDownBase, string>({
+    name: "hint",
+    defaultValue: ""
+});
+hintProperty.register(DropDownBase);

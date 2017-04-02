@@ -6,8 +6,8 @@
   "typings": "drop-down.d.ts",
   "nativescript": {
     "platforms": {
-      "ios": "3.0.0",
-      "android": "3.0.0"
+      "ios": "3.0.0-rc.1",
+      "android": "3.0.0-rc.1"
     }
   },
  "plugin": {
@@ -39,7 +39,6 @@
     "grunt": "1.0.1",
     "grunt-contrib-copy": "1.0.0",
     "grunt-contrib-clean": "1.0.0",
-    "grunt-tslint": "4.0.1",
     "grunt-exec": "2.0.0"
   }
 

@@ -17,7 +17,8 @@ export function pageLoaded(args: EventData) {
 
     viewModel.set("items", items);
     viewModel.set("hint", "My Hint");
-    viewModel.set("selectedIndex", 1);    
+    viewModel.set("selectedIndex", null);    
+    viewModel.set("cssClass", "empty");
 
     page.bindingContext = viewModel;
 }
@@ -31,8 +32,5 @@ export function dropDownSelectedIndexChanged(args: SelectedIndexChangedEventData
 }
 
 export function changeStyles() {
-    console.log("set")
-    viewModel.set("backgroundColor", "blue");
-    viewModel.set("color", "green");
     viewModel.set("cssClass", "changed-styles");
 }

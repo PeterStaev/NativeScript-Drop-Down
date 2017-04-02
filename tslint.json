@@ -17,6 +17,7 @@
         "singleline": "never"
       }
     ],
-    "switch-default": false
+    "switch-default": false,
+    "max-classes-per-file": [false]
   }
 }

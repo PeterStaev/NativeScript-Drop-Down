@@ -1,16 +1,17 @@
-#dd
-{
-    padding: 5;
+.empty {
+    padding: 15;
     background-color: red;
     color: yellow;
     font-size: 25;
     font-weight: bold;
     font-style: italic;
-    text-align: center;
-    opacity: 0.5;
+    /*text-align: center;*/
+    /*text-decoration: underline;*/
 }
 .changed-styles {
-    text-decoration: underline !important;
+    text-decoration: underline;
+    background-color: blue;
+    color: green;
 }
 
 StackLayout {
