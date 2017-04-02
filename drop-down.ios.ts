@@ -19,6 +19,7 @@ import { Observable, PropertyChangeData } from "data/observable";
 import { Label } from "ui/label";
 import { ItemsSource, ListPicker } from "ui/list-picker";
 import { Font } from "ui/styling/font";
+import { TextBase } from "ui/text-base";
 import * as types from "utils/types";
 import * as utils from "utils/utils";
 import { SelectedIndexChangedEventData } from ".";
@@ -39,6 +40,33 @@ const mangleExclude = [
     "TNSDropDownLabel",
     "TapHandler"
 ];
+
+export class DropDown1 extends TextBase {
+    private _label: Label;
+
+    constructor() {
+        super();
+        this._label = new Label();
+        this._label.text = "Testing Style Change";
+    }
+
+    public onLoaded() {
+        super.onLoaded();
+        this._label.onLoaded();
+    }   
+    
+    public onUnloaded() {
+        this._label.onUnloaded();
+        super.onUnloaded();
+    }
+    get nativeView() {
+        return this._label.ios;
+    }
+
+    get ios() {
+        return this.nativeView;
+    }
+}
 
 export class DropDown extends DropDownBase {
     public _listPicker: ListPicker;
