@@ -21,6 +21,11 @@
     "max-classes-per-file": [false],
     "no-console": [
       false
-    ]
+    ],
+    "ordered-imports": [
+      true,
+      {"named-imports-order": "lowercase-last"}
+    ],
+    "no-unused-variable": [true]
   }
 }

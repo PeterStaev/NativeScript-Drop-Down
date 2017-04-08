@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
 
-import { CoercibleProperty, Property, PropertyChangeData, View } from "ui/core/view";
+import { CoercibleProperty, Property, View } from "ui/core/view";
 import { ItemsSource } from "ui/list-picker";
+import * as types from "utils/types";
 import { DropDown as DropDownDefinition } from ".";
 
 export * from "ui/core/view";
@@ -31,6 +32,21 @@ export abstract class DropDownBase extends View implements DropDownDefinition {
     public isItemsSourceIn: boolean;
 
     public abstract open();
+
+    public _getItemAsString(index: number) {
+        const items = this.items;
+
+        if (!items) {
+            return " ";
+        }
+
+        if (types.isNullOrUndefined(index)) {
+            return null;
+        }
+
+        const item = this.isItemsSourceIn ? (this.items as ItemsSource).getItem(index) : this.items[index];
+        return (item === undefined || item === null) ? index + "" : item + "";        
+    }
 }
 
 export const selectedIndexProperty = new CoercibleProperty<DropDownBase, number>({

@@ -18,13 +18,7 @@
                     "${workspaceRoot}"
                 ],
                 "severity": "warning",
-                "pattern": {
-                    "regexp": "^(\\S.*)\\[(\\d+), (\\d+)\\]:\\s+(.*)$",
-                    "file": 1,
-                    "line": 2,
-                    "column": 3,
-                    "message": 4
-                }
+                "pattern": "$tslint4"
             }]
 		}	
 	]

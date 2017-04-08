@@ -3,22 +3,24 @@ import { ObservableArray } from "data/observable-array";
 import pages = require("ui/page");
 import { SelectedIndexChangedEventData } from "nativescript-drop-down";
 
-var viewModel: Observable;
+let viewModel: Observable;
 
 export function pageLoaded(args: EventData) {
-    var page = <pages.Page>args.object;
-    var items = new ObservableArray();
+    const page = args.object as pages.Page;
+    const items = new ObservableArray();
 
     viewModel = new Observable();
 
-    for (var loop = 0; loop < 200; loop++) {
+    for (let loop = 0; loop < 200; loop++) {
         items.push("Item " + loop.toString());
     }
 
     viewModel.set("items", items);
     viewModel.set("hint", "My Hint");
     viewModel.set("selectedIndex", 15);    
-    viewModel.set("cssClass", "empty");
+    viewModel.set("cssClass", "default");
+
+    setTimeout(() => viewModel.set("selectedIndex", null), 2000);
 
     page.bindingContext = viewModel;
 }

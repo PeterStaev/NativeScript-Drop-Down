@@ -36,8 +36,8 @@ export class DropDown extends View {
     hint: string;
     accessoryViewVisible: boolean; /* iOS ONLY! */
 
-    ios: UILabel;
-    android: android.widget.Spinner;
+    ios: any; /* UILabel */
+    android: any; /*android.widget.Spinner */
 
     public on(eventNames: string, callback: (data: EventData) => void, thisArg?: any);       
     public on(event: "opened", callback: (args: EventData) => void, thisArg?: any); 

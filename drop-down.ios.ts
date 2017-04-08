@@ -15,20 +15,35 @@ limitations under the License.
 ***************************************************************************** */
 
 import { Color } from "color";
-import { Observable, PropertyChangeData } from "data/observable";
 import { Label } from "ui/label";
-import { ItemsSource, ListPicker } from "ui/list-picker";
+import { ItemsSource } from "ui/list-picker";
 import { Font } from "ui/styling/font";
-import { TextBase } from "ui/text-base";
+import {
+    TextAlignment,
+    TextDecoration,
+    TextTransform,
+    letterSpacingProperty,
+    textAlignmentProperty,
+    textDecorationProperty,
+    textTransformProperty
+} from "ui/text-base";
 import * as types from "utils/types";
 import * as utils from "utils/utils";
 import { SelectedIndexChangedEventData } from ".";
 import {
     DropDownBase,
+    Length,
+    backgroundColorProperty,
+    colorProperty,
+    fontInternalProperty,
     hintProperty,
     itemsProperty,
-    selectedIndexProperty,
-    View
+    layout,
+    paddingBottomProperty,
+    paddingLeftProperty,
+    paddingRightProperty,
+    paddingTopProperty,
+    selectedIndexProperty
 } from "./drop-down-common";
 
 export * from "./drop-down-common";
@@ -36,58 +51,35 @@ export * from "./drop-down-common";
 const TOOLBAR_HEIGHT = 44;
 const HINT_COLOR = new Color("#3904041E");
 
-const mangleExclude = [
+export const mangleExclude = [
+    "DropDownListDataSource",
     "DropDownListPickerDelegateImpl",
     "TNSDropDownLabel",
     "TapHandler"
 ];
 
-export class DropDown1 extends View {
-    private _label: Label;
-
-    constructor() {
-        super();
-        this._label = new Label();
-        this._label.text = "Testing Style Change";
-    }
-
-    public onLoaded() {
-        super.onLoaded();
-        this._label.onLoaded();
-    }   
-    
-    public onUnloaded() {
-        this._label.onUnloaded();
-        super.onUnloaded();
-    }
-    get nativeView() {
-        return this._label.ios;
-    }
-
-    get ios() {
-        return this.nativeView;
-    }
-}
-
 export class DropDown extends DropDownBase {
-    public _listPicker: ListPicker;
+    public _listPicker: UIPickerView;
+    private _dropDownDelegate: DropDownListPickerDelegateImpl;
+    private _dropDownDataSource: DropDownListDataSource;
 
     private _toolbar: UIToolbar;
     private _flexToolbarSpace: UIBarButtonItem;
     private _doneButton: UIBarButtonItem;
     private _doneTapDelegate: TapHandler;
     private _accessoryViewVisible: boolean;
-    private _label: DropDownLabel;
 
     constructor() {
         super();
         
         const applicationFrame = utils.ios.getter(UIScreen, UIScreen.mainScreen).applicationFrame;
 
-        this._label = new DropDownLabel(new WeakRef(this));        
-        this._listPicker = new ListPicker();
+        this.nativeView = TNSDropDownLabel.initWithOwner(new WeakRef(this));
+        this.nativeView.userInteractionEnabled = true;
+        this._listPicker = UIPickerView.alloc().init();
 
-        (this._listPicker as any)._delegate = DropDownListPickerDelegateImpl.initWithOwner(new WeakRef(this));       
+        this._dropDownDelegate = DropDownListPickerDelegateImpl.initWithOwner(new WeakRef(this));
+        this._dropDownDataSource = DropDownListDataSource.initWithOwner(new WeakRef(this));
         this._flexToolbarSpace = UIBarButtonItem.alloc().initWithBarButtonSystemItemTargetAction(UIBarButtonSystemItem.FlexibleSpace, null, null);
         this._doneTapDelegate = TapHandler.initWithOwner(new WeakRef(this));
         this._doneButton = UIBarButtonItem.alloc().initWithBarButtonSystemItemTargetAction(UIBarButtonSystemItem.Done, this._doneTapDelegate, "tap");
@@ -101,13 +93,9 @@ export class DropDown extends DropDownBase {
         nsArray.addObject(this._doneButton);
         this._toolbar.setItemsAnimated(nsArray, false);
     }
-
-    get nativeView(): TNSDropDownLabel {
-        return this.ios;
-    }
     
     get ios(): TNSDropDownLabel {
-        return this._label.ios;
+        return this.nativeView;
     }
 
     get accessoryViewVisible(): boolean {
@@ -121,86 +109,47 @@ export class DropDown extends DropDownBase {
     public onLoaded() {
         super.onLoaded();
 
-        this._label.onLoaded();
-        this._listPicker.onLoaded();
-        this.ios.inputView = this._listPicker.ios;
+        this._listPicker.delegate = this._dropDownDelegate;
+        this._listPicker.dataSource = this._dropDownDataSource;
+
+        this.ios.inputView = this._listPicker;
         this._showHideAccessoryView();
-
-        this._listPicker.on(Observable.propertyChangeEvent,
-            (data: PropertyChangeData) => {
-                if (data.propertyName === "selectedIndex") {
-                    this.selectedIndex = data.value;
-                }
-            });
-
-        this.style.on("backgroundColorChange", this._onBackgroundColorChange, this);
-        this.style.on("colorChange", this._onColorChange, this);
-
-        this.style.on("paddingTopChange", this._copyOwnerStylePropertyToLabel, this);
-        this.style.on("paddingRightChange", this._copyOwnerStylePropertyToLabel, this);
-        this.style.on("paddingBottomChange", this._copyOwnerStylePropertyToLabel, this);
-        this.style.on("paddingLeftChange", this._copyOwnerStylePropertyToLabel, this);
-
-        this.style.on("fontInternalChange", this._copyOwnerStylePropertyToLabel, this);
-        this.style.on("textDecorationChange", this._copyOwnerStylePropertyToLabel, this);
-        this.style.on("textAlignmentChange", this._copyOwnerStylePropertyToLabel, this);
-
-        // Copy current style to label.style props        
-        const styleProperties = [
-            "color",
-            "backgroundColor",
-            "padding",
-            "fontInternal",
-            "textDecorations",
-            "texAlignment"
-        ];
-        for (const prop of styleProperties) {
-            this._label.style[prop] = this.style[prop];
-        }
     }
 
     public onUnloaded() {
         this.ios.inputView = null;
         this.ios.inputAccessoryView = null;
 
-        this._listPicker.off(Observable.propertyChangeEvent);
+        this._listPicker.delegate = null;
+        this._listPicker.dataSource = null;
 
-        this.style.off("backgroundColorChange");
-        this.style.off("colorChange");
-
-        this.style.off("paddingTopChange");
-        this.style.off("paddingRightChange");
-        this.style.off("paddingBottomChange");
-        this.style.off("paddingLeftChange");
-
-        this.style.off("fontInternalChange");
-        this.style.off("textDecorationChange");
-        this.style.off("textAlignmentChange");
-
-        this._label.onUnloaded();
-        this._listPicker.onUnloaded();
+        this._doneTapDelegate = null;
+        this._dropDownDelegate = null;
+        this._dropDownDataSource = null;
 
         super.onUnloaded();
     }
 
     public open() {
-        this._label.ios.becomeFirstResponder();
+        this.ios.becomeFirstResponder();
     }
 
     public [selectedIndexProperty.getDefault](): number {
         return null;
     }
     public [selectedIndexProperty.setNative](value: number) {
-        this._listPicker.selectedIndex = value;
+        if (value >= 0) {
+            this._listPicker.selectRowInComponentAnimated(value, 0, true);
+        }
 
-        this._label.text = (this._listPicker as any)._getItemAsString(value);
+        this.ios.setText(this._getItemAsString(value));
     }
 
     public [itemsProperty.getDefault](): any[] {
         return null;
     }
     public [itemsProperty.setNative](value: any[] | ItemsSource) {
-        this._listPicker.items = value;
+        this._listPicker.reloadAllComponents();
 
         // Coerce selected index after we have set items to native view.
         selectedIndexProperty.coerce(this);
@@ -210,34 +159,152 @@ export class DropDown extends DropDownBase {
         return "";
     }
     public [hintProperty.setNative](value: string) {
-        this._label.hint = value;
+        this.ios.hint = value;
+    }
+
+    public [colorProperty.getDefault](): UIColor {
+        return this.nativeView.color;
+    }
+    public [colorProperty.setNative](value: Color | UIColor) {
+        const color = value instanceof Color ? value.ios : value;
+
+        this.nativeView.color = color;
+        this._listPicker.tintColor = color;
+        this._listPicker.reloadAllComponents();
+    }
+
+    public [backgroundColorProperty.getDefault](): UIColor {
+        return this.nativeView.backgroundColor;
+    }
+    public [backgroundColorProperty.setNative](value: Color | UIColor) {
+        const color = value instanceof Color ? value.ios : value;
+
+        this.nativeView.backgroundColor = color;
+        this._listPicker.backgroundColor = color;
+        this._listPicker.reloadAllComponents();
+    }
+
+    public [fontInternalProperty.getDefault](): UIFont {
+        return this.nativeView.font;
+    }
+    public [fontInternalProperty.setNative](value: Font | UIFont) {
+        const font = value instanceof Font ? value.getUIFont(this.nativeView.font) : value;
+        this.nativeView.font = font;
+    }
+
+    public [textAlignmentProperty.setNative](value: TextAlignment) {
+        switch (value) {
+            case "left":
+                this.nativeView.textAlignment = NSTextAlignment.Left;
+                break;
+
+            case "center":
+                this.nativeView.textAlignment = NSTextAlignment.Center;
+                break;
+
+            case "right":
+                this.nativeView.textAlignment = NSTextAlignment.Right;
+                break;
+        }
+    }
+
+    public [textDecorationProperty.setNative](value: TextDecoration) {
+        this._setTextAttributes();
+    }
+
+    public [textTransformProperty.setNative](value: TextTransform) {
+        this._setTextAttributes();
+    }
+
+    public [letterSpacingProperty.setNative](value: number) {
+        this._setTextAttributes();
+    }
+
+    public [paddingTopProperty.setNative](value: Length) {
+        this._setPadding({ top: layout.toDeviceIndependentPixels(this.effectivePaddingTop) });
+    }
+
+    public [paddingRightProperty.setNative](value: Length) {
+        this._setPadding({ right: layout.toDeviceIndependentPixels(this.effectivePaddingRight) });
+    }
+
+    public [paddingBottomProperty.setNative](value: Length) {
+        this._setPadding({ bottom: layout.toDeviceIndependentPixels(this.effectivePaddingBottom) });
+    }
+
+    public [paddingLeftProperty.setNative](value: Length) {
+        this._setPadding({ left: layout.toDeviceIndependentPixels(this.effectivePaddingLeft) });
+    }
+
+    public _setTextAttributes() {
+        const style = this.style;
+        const attributes = new Map<string, any>();
+
+        switch (style.textDecoration) {
+            case "none":
+                break;
+
+            case "underline":
+                attributes.set(NSUnderlineStyleAttributeName, NSUnderlineStyle.StyleSingle);
+                break;
+
+            case "line-through":
+                attributes.set(NSStrikethroughStyleAttributeName, NSUnderlineStyle.StyleSingle);
+                break;
+                
+            case "underline line-through":
+                attributes.set(NSUnderlineStyleAttributeName, NSUnderlineStyle.StyleSingle);
+                attributes.set(NSStrikethroughStyleAttributeName, NSUnderlineStyle.StyleSingle);
+                break;
+        }
+
+        if (style.letterSpacing !== 0) {
+            attributes.set(NSKernAttributeName, style.letterSpacing * this.nativeView.font.pointSize);
+        }
+
+        if (style.color && attributes.size > 0) {
+            attributes.set(NSForegroundColorAttributeName, style.color.ios);
+        }
+
+        const text: string = types.isNullOrUndefined(this.nativeView.text) ? "" : this.nativeView.text.toString();
+        let sourceString: string;
+        switch (style.textTransform) {
+            case "uppercase":
+                sourceString = NSString.stringWithString(text).uppercaseString;
+                break;
+
+            case "lowercase":
+                sourceString = NSString.stringWithString(text).lowercaseString;
+                break;
+
+            case "capitalize":
+                sourceString = NSString.stringWithString(text).capitalizedString;
+                break;
+
+            default:
+                sourceString = text;
+        }
+
+        if (attributes.size > 0) {
+            const result = NSMutableAttributedString.alloc().initWithString(sourceString);
+            result.setAttributesRange(attributes as any, { location: 0, length: sourceString.length });
+            this.nativeView.attributedText = result;
+        }
+        else {
+            // Clear attributedText or text won't be affected.
+            this.nativeView.attributedText = undefined;
+            this.nativeView.text = sourceString;
+        }
     }
     
+    private _setPadding(newPadding: { top?: number, right?: number, bottom?: number, left?: number }) {
+        const nativeView = this.nativeView;
+        const padding = nativeView.padding;
+        nativeView.padding = Object.assign(padding, newPadding);
+    }
+
     private _showHideAccessoryView() {
         this.ios.inputAccessoryView = (this._accessoryViewVisible ? this._toolbar : null);
-    }
-
-    private _onColorChange(data: PropertyChangeData) {
-        const color = data.value;
-        const pickerView: UIPickerView = this._listPicker.ios;
-
-        this._label.color = color;
-        this._listPicker.color = color;
-        pickerView.reloadAllComponents();
-    }
-
-    private _onBackgroundColorChange(data: PropertyChangeData) {
-        const color = data.value;
-        const pickerView: UIPickerView = this._listPicker.ios;
-
-        this._label.backgroundColor = color;
-        this._listPicker.backgroundColor = color;
-        pickerView.reloadAllComponents();
-    }
-
-    private _copyOwnerStylePropertyToLabel(data: PropertyChangeData) {
-        console.log(data.propertyName, data.value);
-        this._label.style[data.propertyName] = data.value;
     }
 }
 
@@ -260,6 +327,29 @@ class TapHandler extends NSObject {
     }
 }
 
+class DropDownListDataSource extends NSObject implements UIPickerViewDataSource {
+    public static ObjCProtocols = [UIPickerViewDataSource];
+
+    public static initWithOwner(owner: WeakRef<DropDown>): DropDownListDataSource {
+        const dataSource = DropDownListDataSource.new() as DropDownListDataSource;
+
+        dataSource._owner = owner;
+
+        return dataSource;
+    }
+
+    private _owner: WeakRef<DropDown>;
+
+    public numberOfComponentsInPickerView(pickerView: UIPickerView) {
+        return 1;
+    }
+
+    public pickerViewNumberOfRowsInComponent(pickerView: UIPickerView, component: number) {
+        const owner = this._owner.get();
+        return (owner && owner.items) ? owner.items.length : 0;
+    }
+}
+
 class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDelegate {
     public static ObjCProtocols = [UIPickerViewDelegate];
     
@@ -272,7 +362,7 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
     }
 
     private _owner: WeakRef<DropDown>;
-
+    
     public pickerViewViewForRowForComponentReusingView(pickerView: UIPickerView, row: number, component: number, view: UIView): UIView {
         // NOTE: Currently iOS sends the reusedView always as null, so no reusing is possible
         const owner = this._owner.get();
@@ -280,7 +370,7 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
         const label = new Label();
         const labelStyle = label.style;
 
-        label.text = (owner._listPicker as any)._getItemAsString(row);
+        label.text = owner._getItemAsString(row);
 
         // Copy Styles        
         labelStyle.color = style.color;
@@ -297,7 +387,6 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
         if (owner) {
             const oldIndex = owner.selectedIndex;
 
-            owner._listPicker.selectedIndex = row;
             owner.selectedIndex = row;
             if (row !== oldIndex) {
                 owner.notify({
@@ -311,71 +400,13 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
     }
 }
 
-class DropDownLabel extends Label {
-    public nativeView: TNSDropDownLabel;
-
-    private _hint: string = "";
-    private _hasText: boolean = true;
-    private _internalColor: Color;
-    
-    constructor(owner: WeakRef<DropDown>) {
-        super();
-
-        this.nativeView = TNSDropDownLabel.initWithOwner(owner);
-        this.nativeView.userInteractionEnabled = true;
-    }
-
-    public onLoaded() {
-        super.onLoaded();
-        this.text = null;
-    }
-
-    get ios(): TNSDropDownLabel {
-        return this.nativeView;
-    }
-    
-    get text(): string {
-        return this.nativeView.text;
-    }
-    set text(value: string) {
-        const actualText = value || this._hint || "";
-
-        this._hasText = !types.isNullOrUndefined(value);
-        this.nativeView.text = (actualText === "" ? " " : actualText); // HACK: If empty use <space> so the label does not collapse
-        
-        this._refreshColor();
-    }
-
-    get hint(): string {
-        return this._hint;
-    }
-    set hint(value: string) {
-        this._hint = value;
-
-        if (!this._hasText) {
-            this.nativeView.text = value;
-        }
-    }
-
-    get color(): Color {
-        return this._internalColor;
-    }
-    set color(value: Color) {
-        this._internalColor = value;
-        this._refreshColor();
-    }
-
-    private _refreshColor() {
-        this.ios.textColor = (this._hasText && this._internalColor ? this._internalColor : HINT_COLOR).ios;
-    }
-}
-
 class TNSDropDownLabel extends TNSLabel {
     public static initWithOwner(owner: WeakRef<DropDown>): TNSDropDownLabel {
         const label = TNSDropDownLabel.new() as TNSDropDownLabel;
 
         label._owner = owner;
         label._isInputViewOpened = false;
+        label.color = utils.ios.getter(UIColor, UIColor.blackColor);
         
         return label;
     }
@@ -384,6 +415,9 @@ class TNSDropDownLabel extends TNSLabel {
     private _inputAccessoryView: UIView;
     private _isInputViewOpened: boolean;
     private _owner: WeakRef<DropDown>;
+    private _hint: string;
+    private _hasText: boolean;
+    private _internalColor: UIColor;
     
     get inputView(): UIView {
         return this._inputView;
@@ -405,6 +439,38 @@ class TNSDropDownLabel extends TNSLabel {
 
     get canResignFirstResponder(): boolean {
         return true;
+    }
+
+    get hint(): string {
+        return this._hint;
+    }
+    set hint(value: string) {
+        this._hint = value;
+
+        if (!this._hasText) {
+            this.text = value;
+        }
+    }
+
+    get color(): UIColor {
+        return this._internalColor;
+    }
+    set color(value: UIColor) {
+        this._internalColor = value;
+        this._refreshColor();
+    }
+    
+    public setText(value: string) {
+        const actualText = value || this._hint || "";
+
+        this._hasText = !types.isNullOrUndefined(value);
+        this.text = (actualText === "" ? " " : actualText); // HACK: If empty use <space> so the label does not collapse
+        
+        this._refreshColor();
+
+        if (this._hasText) {
+            this._owner.get()._setTextAttributes();
+        }
     }
 
     public becomeFirstResponder(): boolean {
@@ -439,4 +505,8 @@ class TNSDropDownLabel extends TNSLabel {
     public touchesEndedWithEvent(touches: NSSet<UITouch>, event: _UIEvent) {
         this.becomeFirstResponder();
     }
+
+    private _refreshColor() {
+        this.textColor = (this._hasText && this._internalColor ? this._internalColor : HINT_COLOR.ios);
+    }    
 }
