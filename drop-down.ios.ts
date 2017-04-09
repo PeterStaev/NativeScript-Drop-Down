@@ -60,6 +60,8 @@ export const mangleExclude = [
 
 export class DropDown extends DropDownBase {
     public _listPicker: UIPickerView;
+    public nativeView: TNSDropDownLabel;
+    
     private _dropDownDelegate: DropDownListPickerDelegateImpl;
     private _dropDownDataSource: DropDownListDataSource;
 
@@ -262,8 +264,8 @@ export class DropDown extends DropDownBase {
             attributes.set(NSKernAttributeName, style.letterSpacing * this.nativeView.font.pointSize);
         }
 
-        if (style.color && attributes.size > 0) {
-            attributes.set(NSForegroundColorAttributeName, style.color.ios);
+        if (this.nativeView.textColor && attributes.size > 0) {
+            attributes.set(NSForegroundColorAttributeName, this.nativeView.textColor);
         }
 
         const text: string = types.isNullOrUndefined(this.nativeView.text) ? "" : this.nativeView.text.toString();
@@ -407,7 +409,7 @@ class TNSDropDownLabel extends TNSLabel {
         label._owner = owner;
         label._isInputViewOpened = false;
         label.color = utils.ios.getter(UIColor, UIColor.blackColor);
-        
+
         return label;
     }
 
@@ -468,9 +470,7 @@ class TNSDropDownLabel extends TNSLabel {
         
         this._refreshColor();
 
-        if (this._hasText) {
-            this._owner.get()._setTextAttributes();
-        }
+        this._owner.get()._setTextAttributes();
     }
 
     public becomeFirstResponder(): boolean {
