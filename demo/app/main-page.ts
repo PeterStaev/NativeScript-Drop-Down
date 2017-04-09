@@ -19,7 +19,7 @@ export function pageLoaded(args: EventData) {
     page.bindingContext = viewModel;
 
     for (let loop = 0; loop < 200; loop++) {
-        items.push({ ValueMember: `I${loop}`, DisplayMember: `Item ${loop}`});
+        items.push({ value: `I${loop}`, display: `Item ${loop}`});
     }
 }
 

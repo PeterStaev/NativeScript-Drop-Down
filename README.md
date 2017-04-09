@@ -194,8 +194,8 @@ Then you can set the `items` property of the DropDown to an instance of ValueLis
 ```TypeScript
 let dd = page.getViewById<DropDown>("dd");
 let itemSource = new ValueList<string>([
-    { ValueMember: "FL", DisplayMember:"Florida" }, 
-    { ValueMember: "MI", DisplayMember:"Michigan" }
+    { value: "FL", display: "Florida" }, 
+    { value: "MI", display: "Michigan" }
 ]);
 dd.items = itemSource;
 ```

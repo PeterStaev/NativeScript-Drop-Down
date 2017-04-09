@@ -1,16 +1,11 @@
 ﻿module.exports = function (grunt) {
     var localConfig = {
-        typeScriptSrc: [
-            "**/*.ts",
-            "!node_modules/**/*.*",
-            "!demo/**/*.*",
-            "!bin/**/*.*"
-        ],
         typeScriptDeclarations: [
             "**/*.d.ts",
             "!references.d.ts",
             "!node_modules/**/*.*",
             "!demo/**/*.*",
+            "!demo-ng/**/*.*",
             "!bin/**/*.*"
         ],
         outDir: "bin/dist/"

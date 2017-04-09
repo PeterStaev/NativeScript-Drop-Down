@@ -450,6 +450,7 @@ class TNSDropDownLabel extends TNSLabel {
 
         if (!this._hasText) {
             this.text = value;
+            this._owner.get()._setTextAttributes();
         }
     }
 

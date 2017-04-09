@@ -24,8 +24,8 @@ export interface SelectedIndexChangedEventData extends EventData {
 }
 
 export interface ValueItem<T> {
-    ValueMember: T;
-    DisplayMember: string;
+    value: T;
+    display: string;
 }
 
 export class DropDown extends View {
@@ -52,7 +52,7 @@ export class DropDown extends View {
 }
 
 export class ValueList<T> extends ObservableArray<ValueItem<T>> {
-    public getText(index: number): string;
+    public getDisplay(index: number): string;
     public getValue(index: number): T;
     public getIndex(value: T): number;   
 }

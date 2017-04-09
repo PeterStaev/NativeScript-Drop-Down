@@ -15,7 +15,7 @@ export class DropDownComponent implements OnInit {
     public ngOnInit() {
         this.items = new ValueList<string>();
         for (let loop = 0; loop < 200; loop++) {
-            this.items.push({ ValueMember: `I${loop}`, DisplayMember: `Item ${loop}`});
+            this.items.push({ value: `I${loop}`, display: `Item ${loop}`});
         }
     }
 

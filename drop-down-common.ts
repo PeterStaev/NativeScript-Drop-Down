@@ -46,7 +46,7 @@ export abstract class DropDownBase extends View implements DropDownDefinition {
         }
 
         if (this.isValueListIn) {
-            return (items as ValueList<any>).getText(index);
+            return (items as ValueList<any>).getDisplay(index);
         }
 
         const item = this.isItemsSourceIn ? (this.items as ItemsSource).getItem(index) : this.items[index];
@@ -57,7 +57,7 @@ export abstract class DropDownBase extends View implements DropDownDefinition {
 export class ValueList<T> extends ObservableArray<ValueItem<T>> implements ValueListDefinition<T> {
     private _array: Array<ValueItem<T>>;
 
-    public getText(index: number): string {
+    public getDisplay(index: number): string {
         if (types.isNullOrUndefined(index)) {
             return null;
         }
@@ -66,7 +66,7 @@ export class ValueList<T> extends ObservableArray<ValueItem<T>> implements Value
             return "";
         }
 
-        return this._array[index].DisplayMember;
+        return this._array[index].display;
     }
 
     public getValue(index: number): T {
@@ -74,7 +74,7 @@ export class ValueList<T> extends ObservableArray<ValueItem<T>> implements Value
             return null;
         }
 
-        return this._array[index].ValueMember;
+        return this._array[index].value;
     }
 
     public getIndex(value: T): number {
@@ -124,10 +124,10 @@ export const itemsProperty = new Property<DropDownBase, any[] | ItemsSource>({
     name: "items",
     valueChanged: (target, oldValue, newValue) => {
         const getItem = newValue && (newValue as ItemsSource).getItem;
-        const getText = newValue && (newValue as ValueList<any>).getText;
+        const getDisplay = newValue && (newValue as ValueList<any>).getDisplay;
 
         target.isItemsSourceIn = typeof getItem === "function";
-        target.isValueListIn = typeof getText === "function";
+        target.isValueListIn = typeof getDisplay === "function";
     }
 });
 itemsProperty.register(DropDownBase);
