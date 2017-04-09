@@ -1,15 +1,15 @@
 {
   "nativescript": {
-    "id": "net.tangrainc.dropdownsample",
-    "tns-android": {
-      "version": "2.5.0"
-    },
+    "id": "com.tangrainc.dropdownsample",
     "tns-ios": {
+      "version": "3.0.0-rc.1"
+    },
+    "tns-android": {
       "version": "3.0.0-rc.1"
     }
   },
   "scripts": {
-    "android": "npm uninstall nativescript-drop-down && tns run android",
+    "android": "npm uninstall nativescript-drop-down && tns platform remove android && tns platform add android@rc && tns run android",
     "ios": "npm uninstall nativescript-drop-down && tns run ios --emulator",
     "debug-ios": "npm uninstall nativescript-drop-down && tns debug ios --emulator"
   },

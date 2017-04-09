@@ -1,378 +1,386 @@
-// /*! *****************************************************************************
-// Copyright (c) 2015 Tangra Inc.
+/*! *****************************************************************************
+Copyright (c) 2017 Tangra Inc.
 
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-//     http://www.apache.org/licenses/LICENSE-2.0
+    http://www.apache.org/licenses/LICENSE-2.0
 
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-// ***************************************************************************** */
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+***************************************************************************** */
 
-// import * as common from "./drop-down-common";
-// import { PropertyChangeData } from "ui/core/dependency-observable";
-// import { View } from "ui/core/view";
-// import { Label } from "ui/label";
-// import { StackLayout } from "ui/layouts/stack-layout";
-// import { Color } from "color";
-// import * as types from "utils/types";
-// import * as enums from "ui/enums";
-// import * as style from "ui/styling/style";
-// import { SelectedIndexChangedEventData } from "nativescript-drop-down";
+import { Color } from "color";
+import { View } from "ui/core/view";
+import { Label } from "ui/label";
+import { StackLayout } from "ui/layouts/stack-layout";
+import { ItemsSource } from "ui/list-picker";
+import { Font } from "ui/styling/font";
+import {
+    TextAlignment,
+    TextDecoration,
+    fontInternalProperty,
+    fontSizeProperty,
+    textAlignmentProperty,
+    textDecorationProperty
+} from "ui/text-base";
+import * as types from "utils/types";
+import { SelectedIndexChangedEventData } from ".";
+import {
+    DropDownBase,
+    backgroundColorProperty,
+    colorProperty,
+    hintProperty,
+    itemsProperty,
+    selectedIndexProperty
+} from "./drop-down-common";
 
-// global.moduleMerge(common, exports);
+export * from "./drop-down-common";
 
-// const LABELVIEWID = "spinner-label";
+const LABELVIEWID = "spinner-label";
 
-// enum RealizedViewType {
-//     ItemView,
-//     DropDownView
-// }
+const enum RealizedViewType {
+    ItemView,
+    DropDownView
+}
 
-// export class DropDown extends common.DropDown {
-
-//     private _android: android.widget.Spinner;
-//     private _androidViewId: number;
-//     public _realizedItems = [{}, {}];
-
-//     public _createUI() {
-//         this._android = new android.widget.Spinner(this._context);
-
-//         if (!this._androidViewId) {
-//             this._androidViewId = android.view.View.generateViewId();
-//         }
-//         this._android.setId(this._androidViewId);
-
-//         this.android.setAdapter(new DropDownAdapter(this));
-
-//         let that = new WeakRef(this);
-//         this.android.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener({
-//             onItemSelected(parent: any, convertView: android.view.View, index: number, id: number) {
-//                 let owner = that.get(),
-//                     oldIndex = owner.selectedIndex,
-//                     newIndex = (index === 0 ? undefined : index - 1);
-                
-//                 owner._selectedIndexInternal = index;
-
-//                 if (newIndex !== oldIndex) {
-//                     owner.notify(<SelectedIndexChangedEventData>{
-//                         eventName: common.DropDown.selectedIndexChangedEvent,
-//                         object: owner,
-//                         oldIndex: oldIndex,
-//                         newIndex: newIndex
-//                     });
-//                 }                
-//             },
-//             onNothingSelected() { /* Currently Not Needed */ }
-//         }));
-        
-//         this.android.setOnTouchListener(new android.view.View.OnTouchListener({
-//             onTouch(v: android.view.View, event: android.view.MotionEvent) {
-//                 if (event.getAction() === android.view.MotionEvent.ACTION_DOWN) {
-//                     let owner = that.get();
-
-//                     owner.notify({
-//                         eventName: common.DropDown.openedEvent,
-//                         object: owner
-//                     });
-//                 }
-//                 return false;                
-//             }
-//         }));
-
-//         // When used in templates the selectedIndex changed event is fired before the native widget is init.
-//         // So here we must set the inital value (if any)
-//         if (!types.isNullOrUndefined(this.selectedIndex)) {
-//             this.android.setSelection(this.selectedIndex + 1); // +1 for the hint first element
-//         }
-//     }
-
-//     get android(): android.widget.Spinner {
-//         return this._android;
-//     }
-
-//     set _selectedIndexInternal(value: number) {
-//         this.selectedIndex = (value === 0 ? undefined : value - 1);
-//         if (this.android) {
-//             this.android.setSelection(value);
-//         }
-//     }
+export class DropDown extends DropDownBase {
+    public nativeView: android.widget.Spinner;
+    public _realizedItems = [{}, {}];
     
-//     public open() {
-//         this._android.performClick();
-//     }
+    private _androidViewId: number;
 
-//     public _onItemsPropertyChanged(data: PropertyChangeData) {
-//         if (!this._android || !this._android.getAdapter()) {
-//             return;
-//         }
-//         this._updateSelectedIndexOnItemsPropertyChanged(data.newValue);
-//         (<DropDownAdapter>this.android.getAdapter()).notifyDataSetChanged();
-//     }
+    public createNativeView() {
+        const spinner = new android.widget.Spinner(this._context);
 
-//     public _onDetached(force?: boolean) {
-//         super._onDetached(force);
+        if (!this._androidViewId) {
+            this._androidViewId = android.view.View.generateViewId();
+        }
+        spinner.setId(this._androidViewId);
 
-//         this._clearCache(RealizedViewType.DropDownView);
-//         this._clearCache(RealizedViewType.ItemView);
-//     }
+        const adapter = new DropDownAdapter(new WeakRef(this));
+        spinner.setAdapter(adapter);
+        (spinner as any).adapter = adapter;
+
+        const itemSelectedListener = new DropDownItemSelectedListener(new WeakRef(this));
+        spinner.setOnItemSelectedListener(itemSelectedListener);
+        (spinner as any).itemSelectedListener = itemSelectedListener;
+        
+        const touchListener = new DropDownTouchListener(new WeakRef(this));
+        spinner.setOnTouchListener(touchListener);
+        (spinner as any).touchListener = touchListener;
+
+        // When used in templates the selectedIndex changed event is fired before the native widget is init.
+        // So here we must set the inital value (if any)
+        if (!types.isNullOrUndefined(this.selectedIndex)) {
+            this.android.setSelection(this.selectedIndex + 1); // +1 for the hint first element
+        }
+
+        return spinner;
+    }
+
+    public initNativeView() {
+        super.initNativeView();
+
+        const nativeView = this.nativeView as any;
+        nativeView.adapter.owner = new WeakRef(this);
+        nativeView.itemSelectedListener.owner = new WeakRef(this);
+        nativeView.touchListener.owner = new WeakRef(this);
+    }
+
+    public disposeNativeView() {
+        const nativeView = this.nativeView as any;
+        nativeView.adapter.owner = null;
+        nativeView.itemSelectedListener.owner = null;
+        nativeView.touchListener.owner = null;
+
+        this._clearCache(RealizedViewType.DropDownView);
+        this._clearCache(RealizedViewType.ItemView);
+        
+        super.disposeNativeView();
+    }
     
-//     public _getRealizedView(convertView: android.view.View, realizedViewType: RealizedViewType): View {
-//         if (!convertView) {
-//             let view = new Label();
-//             let layout = new StackLayout();
+    get android(): android.widget.Spinner {
+        return this.nativeView;
+    }
+    
+    public open() {
+        this.nativeView.performClick();
+    }
 
-//             layout.style.horizontalAlignment = enums.HorizontalAlignment.stretch;           
-//             view.id = LABELVIEWID;
-
-//             layout.addChild(view);
-
-//             return layout;
-//         }
+    public [selectedIndexProperty.getDefault](): number {
+        return null;
+    }
+    public [selectedIndexProperty.setNative](value: number) {
+        this._clearCache(RealizedViewType.DropDownView);
         
-//         return this._realizedItems[realizedViewType][convertView.hashCode()];
-//     }
+        const actualIndex = (types.isNullOrUndefined(value) ? 0 : value + 1);
+        this.nativeView.setSelection(actualIndex);
+    }
 
-//     public _onSelectedIndexPropertyChanged(data: PropertyChangeData) {
-//         super._onSelectedIndexPropertyChanged(data);
-//         this._clearCache(RealizedViewType.DropDownView);
-//         this._selectedIndexInternal = (types.isNullOrUndefined(data.newValue) ? 0 : data.newValue + 1);
-//     }
+    public [itemsProperty.getDefault](): any[] {
+        return null;
+    }
+    public [itemsProperty.setNative](value: any[] | ItemsSource) {
+        this._updateSelectedIndexOnItemsPropertyChanged(value);
+        (this.android.getAdapter() as DropDownAdapter).notifyDataSetChanged();
 
-//     public _onHintPropertyChanged(data: PropertyChangeData) {
-//         if (!this._android || !this._android.getAdapter()) {
-//             return;
-//         }
-//         (<DropDownAdapter>this.android.getAdapter()).notifyDataSetChanged();
-//     }
+        // Coerce selected index after we have set items to native view.
+        selectedIndexProperty.coerce(this);
+    }
 
-//     public _propagatePropertyToRealizedViews(property: string, value: any, isIncludeHintIn = true) {
-//         let realizedItems = this._realizedItems;
-//         for (let item of realizedItems) {
-//             for (let key in item) {
-//                 if (isIncludeHintIn || !item[key].isHintViewIn) {
-//                     item[key][property] = value;
-//                 }    
-//             }
-//         }        
-//     }
+    public [hintProperty.getDefault](): string {
+        return "";
+    }
+    public [hintProperty.setNative](value: string) {
+        (this.android.getAdapter() as DropDownAdapter).notifyDataSetChanged();
+    }
+    
+    public [textDecorationProperty.getDefault](): TextDecoration {
+        return "none";
+    }
+    public [textDecorationProperty.setNative](value: TextDecoration) {
+        this._propagateStylePropertyToRealizedViews("textDecoration", value, true);
+    }
+    
+    public [textAlignmentProperty.getDefault](): TextAlignment {
+        return "left";
+    }
+    public [textAlignmentProperty.setNative](value: TextAlignment) {
+        this._propagateStylePropertyToRealizedViews("textAlignment", value, true);
+    }
 
-//     public _propagateStylePropertyToRealizedViews(property: string, value: any, isIncludeHintIn = true) {
-//         let realizedItems = this._realizedItems;
-//         for (let item of realizedItems) {
-//             for (let key in item) {
-//                 let view = item[key];
-//                 if (isIncludeHintIn || !view.isHintViewIn) {
-//                     if (property === "textDecoration") {
-//                         let label: Label = view.getViewById(LABELVIEWID);
-//                         label.style[property] = value;
-//                     }
-//                     else {
-//                         view.style[property] = value;
-//                     }    
-//                 }    
-//             }
-//         }        
-//     }
+    public [fontInternalProperty.setNative](value: Font | android.graphics.Typeface) {
+        this._propagateStylePropertyToRealizedViews("fontInternal", value, true);
+    }
 
-//     private _updateSelectedIndexOnItemsPropertyChanged(newItems) {
-//         let newItemsCount = 0;
-//         if (newItems && newItems.length) {
-//             newItemsCount = newItems.length;
-//         }
+    public [fontSizeProperty.setNative](value: number | { nativeSize: number }) {
+        if (!types.isNullOrUndefined(value)) {
+            this._propagateStylePropertyToRealizedViews("fontSize", value, true);
+        }    
+    }
+    
+    public [backgroundColorProperty.setNative](value: Color | number) {
+        this._propagateStylePropertyToRealizedViews("backgroundColor", value, true);
+    }
 
-//         if (newItemsCount === 0 || this.selectedIndex >= newItemsCount) {
-//             this.selectedIndex = undefined;
-//         }
-//     }
+    public [colorProperty.setNative](value: Color | number) {
+        if (!types.isNullOrUndefined(value)) {
+            this._propagateStylePropertyToRealizedViews("color", value, false);
+        }
+    }
 
-//     private _clearCache(realizedViewType: RealizedViewType) {
-//         let items = this._realizedItems[realizedViewType];
-//         let keys = Object.keys(items);
-//         let i;
-//         let length = keys.length;
-//         let view: View;
-//         let key;
+    public _getRealizedView(convertView: android.view.View, realizedViewType: RealizedViewType): View {
+        if (!convertView) {
+            const view = new Label();
+            const layout = new StackLayout();
 
-//         for (i = 0; i < length; i++) {
-//             key = keys[i];
-//             view = items[key];
-//             view.parent._removeView(view);
-//             delete items[key];
-//         }
-//     }
-// }
+            layout.style.horizontalAlignment = "stretch";           
+            view.id = LABELVIEWID;
 
-// class DropDownAdapter extends android.widget.BaseAdapter {
-//     private _dropDown: DropDown;
+            layout.addChild(view);
 
-//     constructor(dropDown: DropDown) {
-//         super();
-
-//         this._dropDown = dropDown;
-
-//         return global.__native(this);
-//     }
-
-//     public isEnabled(i: number) {
-//         return i !== 0;
-//     }    
-
-//     public getCount() {
-//         return (this._dropDown && this._dropDown.items ? this._dropDown.items.length : 0) + 1; // +1 for the hint
-//     }
-
-//     public getItem(i: number) {
-       
-//         if (i === 0) {
-//             return this._dropDown.hint;
-//         }
+            return layout;
+        }
         
-//         let realIndex = i - 1;
-//         if (this._dropDown && this._dropDown.items && realIndex < this._dropDown.items.length) {
-//             return this._dropDown.items.getItem ? this._dropDown.items.getItem(realIndex) : this._dropDown.items[realIndex];
-//         }
+        return this._realizedItems[realizedViewType][convertView.hashCode()];
+    }
 
-//         return null;
-//     }
+    private _propagateStylePropertyToRealizedViews(property: string, value: any, isIncludeHintIn = true) {
+        const realizedItems = this._realizedItems;
+        for (const item of realizedItems) {
+            // tslint:disable-next-line:forin
+            for (const key in item) {
+                const view = item[key];
+                if (isIncludeHintIn || !view.isHintViewIn) {
+                    if (property === "textAlignment" || property === "textDecoration"
+                        || property === "fontInternal" || property === "fontSize"
+                        || property === "color") {
+                        const label: Label = view.getViewById(LABELVIEWID);
+                        label.style[property] = value;
+                    }
+                    else {
+                        view.style[property] = value;
+                    }    
+                }    
+            }
+        }        
+    }
 
-//     public getItemId(i: number) {
-//         return long(i);
-//     }
+    private _updateSelectedIndexOnItemsPropertyChanged(newItems: any[] | ItemsSource) {
+        let newItemsCount = 0;
+        if (newItems && newItems.length) {
+            newItemsCount = newItems.length;
+        }
 
-//     public hasStableIds(): boolean {
-//         return true;
-//     }
+        if (newItemsCount === 0 || this.selectedIndex >= newItemsCount) {
+            this.selectedIndex = null;
+        }
+    }
 
-//     public getView(index: number, convertView: android.view.View, parent: android.view.ViewGroup): android.view.View {
-//         return this._generateView(index, convertView, parent, RealizedViewType.ItemView);
-//     }
+    private _clearCache(realizedViewType: RealizedViewType) {
+        const items = this._realizedItems[realizedViewType];
+        const keys = Object.keys(items);
 
-//     public getDropDownView(index: number, convertView: android.view.View, parent: android.view.ViewGroup): android.view.View {
-//         return this._generateView(index, convertView, parent, RealizedViewType.DropDownView);
-//     }
+        for (const key of keys) {
+            const view = items[key];
+            if (view.parent) {
+                view.parent._removeView(view);
+            }    
+        }
+    }
+}
 
-//     private _generateView(index: number, convertView: android.view.View, parent: android.view.ViewGroup, realizedViewType: RealizedViewType): android.view.View {
-//         if (!this._dropDown) {
-//             return null;
-//         }
+class DropDownAdapter extends android.widget.BaseAdapter implements android.widget.ISpinnerAdapter {
+    constructor(private owner: WeakRef<DropDown>) {
+        super();
 
-//         let view = this._dropDown._getRealizedView(convertView, realizedViewType);
+        return global.__native(this);
+    }
 
-//         if (view) {
-//             if (!view.parent) {
-//                 this._dropDown._addView(view);
-//                 convertView = view.android;
-//             }
+    public isEnabled(i: number) {
+        return i !== 0;
+    }
 
-//             let label = view.getViewById<Label>(LABELVIEWID);
-//             label.text = this.getItem(index);
+    public getCount() {
+        const owner = this.owner.get();
+        return (owner && owner.items ? owner.items.length : 0) + 1; // +1 for the hint
+    }
+
+    public getItem(i: number) {
+        const owner = this.owner.get();
+
+        if (i === 0) {
+            return owner.hint;
+        }
+    
+        const realIndex = i - 1;
+        return owner._getItemAsString(realIndex);
+    }
+
+    public getItemId(i: number) {
+        return long(i);
+    }
+
+    public hasStableIds(): boolean {
+        return true;
+    }
+
+    public getView(index: number, convertView: android.view.View, parent: android.view.ViewGroup): android.view.View {
+        return this._generateView(index, convertView, parent, RealizedViewType.ItemView);
+    }
+
+    public getDropDownView(index: number, convertView: android.view.View, parent: android.view.ViewGroup): android.view.View {
+        return this._generateView(index, convertView, parent, RealizedViewType.DropDownView);
+    }
+
+    private _generateView(index: number, convertView: android.view.View, parent: android.view.ViewGroup, realizedViewType: RealizedViewType): android.view.View {
+        const owner = this.owner.get();
+
+        if (!owner) {
+            return null;
+        }
+
+        const view = owner._getRealizedView(convertView, realizedViewType);
+
+        if (view) {
+            if (!view.parent) {
+                owner._addView(view);
+                convertView = view.android;
+            }
+
+            const label = view.getViewById<Label>(LABELVIEWID);
+            label.text = this.getItem(index);
+    
+            // Copy root styles to view        
+            label.style.color = owner.style.color;
+            label.style.textDecoration = owner.style.textDecoration;
+            label.style.textAlignment = owner.style.textAlignment;
+            label.style.fontInternal = owner.style.fontInternal;
+            label.style.fontSize = owner.style.fontSize;
+            view.style.backgroundColor = owner.style.backgroundColor;
+            view.style.padding = owner.style.padding;
+            view.style.height = owner.style.height;
+
+            if (realizedViewType === RealizedViewType.DropDownView) {
+                view.style.opacity = owner.style.opacity;
+            }
+
+            (view as any).isHintViewIn = false;
         
-//             // Copy root styles to view        
-//             view.color = this._dropDown.color;
-//             view.backgroundColor = this._dropDown.backgroundColor;
-//             label.style.textDecoration = this._dropDown.style.textDecoration;
-//             view.style.padding = this._dropDown.style.padding;
-//             view.style.fontSize = this._dropDown.style.fontSize;
-//             view.height = this._dropDown.height;
-
-//             if (realizedViewType === RealizedViewType.DropDownView) {
-//                 view.opacity = this._dropDown.opacity;
-//             }
-
-//             (view as any).isHintViewIn = false;
+            // Hint View styles
+            if (index === 0) {
+                view.color = new Color(255, 148, 150, 148);
+                (view as any).isHintViewIn = true;
             
-//             // Hint View styles
-//             if (index === 0) { 
-//                 view.color = new Color(255, 148, 150, 148);
-//                 (view as any).isHintViewIn = true;
-                
-//                 // HACK: if there is no hint defined, make the view in the drop down virtually invisible.
-//                 if (realizedViewType === RealizedViewType.DropDownView
-//                     && (types.isNullOrUndefined(this._dropDown.hint) || this._dropDown.hint === "")) {
-//                     view.height = 1;
-//                     view.style.fontSize = 0;
-//                     view.style.padding = "0";
-//                 }
-//                 // END HACK
-//             }
+                // HACK: if there is no hint defined, make the view in the drop down virtually invisible.
+                if (realizedViewType === RealizedViewType.DropDownView
+                    && (types.isNullOrUndefined(owner.hint) || owner.hint === "")) {
+                    view.height = 1;
+                    view.style.fontSize = 0;
+                    view.style.padding = "0";
+                }
+                // END HACK
+            }
+        
+            owner._realizedItems[realizedViewType][convertView.hashCode()] = view;
+        }
+
+        return convertView;
+    }
+}
+
+@Interfaces([android.widget.AdapterView.OnItemSelectedListener])
+class DropDownItemSelectedListener extends java.lang.Object implements android.widget.AdapterView.OnItemSelectedListener {
+    constructor(private owner: WeakRef<DropDown>) {
+        super();
+
+        return global.__native(this);
+    }
+
+    public onItemSelected(parent: any, convertView: android.view.View, index: number, id: number) {
+        const owner = this.owner.get();
+        const oldIndex = owner.selectedIndex;
+        const newIndex = (index === 0 ? null : index - 1);
             
-//             this._dropDown._realizedItems[realizedViewType][convertView.hashCode()] = view;
-//         }
+        owner.selectedIndex = newIndex;
 
-//         return convertView;
-//     }
-// }
+        if (newIndex !== oldIndex) {
+            owner.notify({
+                eventName: DropDownBase.selectedIndexChangedEvent,
+                object: owner,
+                oldIndex,
+                newIndex
+            } as SelectedIndexChangedEventData);
+        }
+    }
 
-// //#region Styling
-// export class DropDownStyler implements style.Styler {
-//     //#region  Text Decoration
-//     private static setTextDecorationProperty(dropDown: DropDown, newValue: any) {
-//         dropDown._propagateStylePropertyToRealizedViews("textDecoration", newValue);
-//     }
+    public onNothingSelected() {
+        /* Currently Not Needed */
+    }
+}
 
-//     private static resetTextDecorationProperty(dropDown: DropDown, nativeValue: any) {
-//         dropDown._propagateStylePropertyToRealizedViews("textDecoration", nativeValue);
-//     }
-//     //#endregion
+@Interfaces([android.view.View.OnTouchListener])
+class DropDownTouchListener extends java.lang.Object implements android.view.View.OnTouchListener {
+    constructor(private owner: WeakRef<DropDown>) {
+        super();
 
-//     //#region Color
-//     private static setColorProperty(dropDown: DropDown, newValue: number) {
-//         dropDown._propagatePropertyToRealizedViews("color", new Color(newValue), false);
-//     }
+        return global.__native(this);
+    }
 
-//     private static resetColorProperty(dropDown: DropDown, nativeValue: number) {
-//         dropDown._propagatePropertyToRealizedViews("color", new Color(nativeValue), false);
-//     }
+    public onTouch(v: android.view.View, event: android.view.MotionEvent) {
+        if (event.getAction() === android.view.MotionEvent.ACTION_DOWN) {
+            const owner = this.owner.get();
 
-//     private static getNativeColorValue(dropDown: DropDown): number {
-//         return dropDown.color.android;
-//     }
-//     //#endregion
-
-//     //#region Background Color
-//     private static setBackgroundColorProperty(dropDown: DropDown, newValue: number) {
-//         dropDown._propagatePropertyToRealizedViews("backgroundColor", new Color(newValue));
-//     }
-
-//     private static resetBackgroundColorProperty(dropDown: DropDown, nativeValue: number) {
-//         dropDown._propagatePropertyToRealizedViews("backgroundColor", new Color(nativeValue));
-//     }
-
-//     private static getNativeBackgroundColorValue(dropDown: DropDown): number {
-//         return dropDown.backgroundColor.android;
-//     }
-//     //#endregion
-  
-//     public static registerHandlers() {
-//         style.registerHandler(style.textDecorationProperty,
-//             new style.StylePropertyChangedHandler(
-//                 DropDownStyler.setTextDecorationProperty,
-//                 DropDownStyler.resetTextDecorationProperty
-//             ),
-//             common.DROPDOWN);
-        
-//         style.registerHandler(style.colorProperty,
-//             new style.StylePropertyChangedHandler(
-//                 DropDownStyler.setColorProperty,
-//                 DropDownStyler.resetColorProperty,
-//                 DropDownStyler.getNativeColorValue
-//             ),
-//             common.DROPDOWN);
-        
-//         style.registerHandler(style.backgroundColorProperty,
-//             new style.StylePropertyChangedHandler(
-//                 DropDownStyler.setBackgroundColorProperty,
-//                 DropDownStyler.resetBackgroundColorProperty,
-//                 DropDownStyler.getNativeBackgroundColorValue
-//             ),
-//             common.DROPDOWN);
-//     }
-// }
-// DropDownStyler.registerHandlers();
-// //#endregion
+            owner.notify({
+                eventName: DropDownBase.openedEvent,
+                object: owner
+            });
+        }
+        return false;
+    }
+}
