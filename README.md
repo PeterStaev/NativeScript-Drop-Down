@@ -184,68 +184,19 @@ export class AppComponent {
 It is a common case that you want to have one thing displayed in the drop down and then get some backend value
 tied to the tex. For example drop down with states you might want tos how the full state name (i.e. Florida)
 and then when working with your backend you want to use the state code (i.e. FL). The Drop Down items property can be
-set to either Array of objects or a custom object that implements `getItem(index: number): any` function and `length` proerty. 
-So you can achieve this by implementing the following helper class:
+set to either Array of objects or a custom object that implements `getItem(index: number): any` function and `length` proerty. With versionn 3.0 of the plugin it has a built in class that helps you with this scenario:
 
 ```TypeScript
-import * as types from "utils/types";
-
-export interface IValueItem {
-    ValueMember: any
-    DisplayMember: any
-}
-
-export class ValueList {
-    private _array: Array<IValueItem>;
-
-    get length(): number { return this._array.length; }
-
-    constructor(array: Array<IValueItem>) {
-        this._array = array;
-    }
-
-    public getItem(index: number) { // Used for items source in list picker
-        return this.getText(index);
-    }
-
-    public getText(index: number): string {
-        if (types.isNullOrUndefined(index)) {
-            return null;
-        }
-        
-        if (index < 0 || index >= this._array.length) {
-            return "";
-        }
-
-        return this._array[index].DisplayMember;
-    }
-
-    public getValue(index: number) {
-        if (types.isNullOrUndefined(index) || index < 0 || index >= this._array.length) {
-            return null;
-        }
-
-        return this._array[index].ValueMember;
-    }
-
-    public getIndex(value: any): number {
-        let loop: number;
-
-        for (loop = 0; loop < this._array.length; loop++) {
-            if (this.getValue(loop) == value) {
-                return loop;
-            }
-        }
-
-        return -1;
-    }
-}
+import { ValueList } from "nativescript-drop-down";
 ```
 
-Then you can set the `items` property of the DropDownto an instance of ValueList:
+Then you can set the `items` property of the DropDown to an instance of ValueList:
 ```TypeScript
 let dd = page.getViewById<DropDown>("dd");
-let itemSource = new ValueList([{ ValueMember: "FL", DisplayMember:"Florida" }, { ValueMember: "MI", DisplayMember:"Michigan" }]);
+let itemSource = new ValueList<string>([
+    { ValueMember: "FL", DisplayMember:"Florida" }, 
+    { ValueMember: "MI", DisplayMember:"Michigan" }
+]);
 dd.items = itemSource;
 ```
 

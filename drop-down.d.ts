@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
-
+import { ObservableArray } from "data/observable-array";
 import { View } from "ui/core/view";
 import { Property } from "ui/core/dependency-observable";
 import { EventData } from "data/observable";
@@ -21,6 +21,11 @@ import { EventData } from "data/observable";
 export interface SelectedIndexChangedEventData extends EventData {
     oldIndex: number;
     newIndex: number;
+}
+
+export interface ValueItem<T> {
+    ValueMember: T;
+    DisplayMember: string;
 }
 
 export class DropDown extends View {
@@ -44,4 +49,10 @@ export class DropDown extends View {
     public on(event: "selectedIndexChanged", callback: (args: SelectedIndexChangedEventData) => void, thisArg?: any);
 
     public open();
+}
+
+export class ValueList<T> extends ObservableArray<ValueItem<T>> {
+    public getText(index: number): string;
+    public getValue(index: number): T;
+    public getIndex(value: T): number;   
 }
