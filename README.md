@@ -145,7 +145,7 @@ platformNativeScriptDynamic().bootstrapModule(AppComponentModule);
                   row="0" colSpan="2">
         </DropDown>
         <Label text="Selected Index:" row="1" col="0" fontSize="18" verticalAlignment="bottom"></Label>
-        <TextField [text]="selected" row="1" col="1" ></TextField>
+        <TextField [text]="selectedIndex" row="1" col="1" ></TextField>
     </GridLayout>
 </StackLayout>
 ```

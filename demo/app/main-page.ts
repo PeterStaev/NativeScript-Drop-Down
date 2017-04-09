@@ -21,8 +21,6 @@ export function pageLoaded(args: EventData) {
     for (let loop = 0; loop < 200; loop++) {
         items.push({ ValueMember: `I${loop}`, DisplayMember: `Item ${loop}`});
     }
-
-    setTimeout(() => viewModel.set("selectedIndex", items.getIndex("I34")), 3000);
 }
 
 export function dropDownOpened(args: EventData) {
