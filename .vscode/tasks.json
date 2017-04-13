@@ -12,13 +12,8 @@
 			"args": [], 
 			"isBuildCommand": true, 
 			"problemMatcher": ["$tsc", {
-                "owner": "tslint",
-                "fileLocation": [
-                    "relative",
-                    "${workspaceRoot}"
-                ],
-                "severity": "warning",
-                "pattern": "$tslint4"
+                "base": "$tslint4",
+                "fileLocation": "relative"
             }]
 		}	
 	]

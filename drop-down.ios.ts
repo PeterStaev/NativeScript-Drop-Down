@@ -50,13 +50,6 @@ export * from "./drop-down-common";
 const TOOLBAR_HEIGHT = 44;
 const HINT_COLOR = new Color("#3904041E");
 
-export const mangleExclude = [
-    "DropDownListDataSource",
-    "DropDownListPickerDelegateImpl",
-    "TNSDropDownLabel",
-    "TapHandler"
-];
-
 export class DropDown extends DropDownBase {
     public _listPicker: UIPickerView;
     public nativeView: TNSDropDownLabel;
