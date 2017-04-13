@@ -10,11 +10,11 @@
       "android": "3.0.0-rc.1"
     },
     "plugin": {
-        "nan": "true",
-        "pan": "true",
-        "core3": "true",
-        "category": "Interface"
-      }
+      "nan": "true",
+      "pan": "true",
+      "core3": "true",
+      "category": "Interface"
+    }
   },
   "repository": {
     "type": "git",
