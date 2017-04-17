@@ -35,15 +35,6 @@ String value used when hooking to opened event.
 * **selectedIndexChangedEvent** - *String*  
 String value used when hooking to selectedIndexChanged event.
 
-* **itemsProperty** - *[Property](http://docs.nativescript.org/api-reference/classes/_ui_core_dependency_observable_.property.html)*  
-Represents the observable property backing the items property of each DropDown instance.
-
-* **selectedIndexProperty** - *[Property](http://docs.nativescript.org/api-reference/classes/_ui_core_dependency_observable_.property.html)*  
-Represents the observable property backing the selectedIndex property of each DropDown instance.
-
-* **hintProperty** - *[Property](http://docs.nativescript.org/api-reference/classes/_ui_core_dependency_observable_.property.html)*  
-Represents the observable property backing the hint property of each DropDown instance.
-
 ### Instance Properties
 * **ios** - *[UILabel](https://developer.apple.com/reference/uikit/uilabel)*  
 Gets the native iOS view that represents the user interface for this component. Valid only when running on iOS.
@@ -51,7 +42,7 @@ Gets the native iOS view that represents the user interface for this component. 
 * **android** - *[android.widget.Spinner](http://developer.android.com/reference/android/widget/Spinner.html)*  
 Gets the native android widget that represents the user interface for this component. Valid only when running on Android OS.
 
-* **items** - *Object*  
+* **items** - *Array | ItemsSource*  
 Gets or sets the items collection of the DropDown. The items property can be set to an array or an object defining length and getItem(index) method.
 
 * **selectedIndex** - *Number*  
@@ -211,7 +202,7 @@ let selectedValue = itemSource.getValue(dd.selectedIndex);
 ```
 
 ## Working with Webpack+Uglify
-In case you are uing webpack and also are minifying/uglifying your code, there are some specific names that should be excluded from the uglification for the widget to work properly. The DropDown widget export those and you need to add them to the mangle exclude option of the uglifyjs plugin in the `webpack.common.js` file:
+In case you are uing webpack and also are minifying/uglifying your code, there are some specific names that should be excluded from the uglification for the widget to work properly. The DropDown widget exports those and you need to add them to the mangle exclude option of the uglifyjs plugin in the `webpack.common.js` file:
 ```js
 var dropDownMangleExcludes = require("nativescript-drop-down/uglify-mangle-excludes").default;
 //......
