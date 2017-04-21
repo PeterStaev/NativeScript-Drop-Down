@@ -458,7 +458,7 @@ class TNSDropDownLabel extends TNSLabel {
     public setText(value: string) {
         const actualText = value || this._hint || "";
 
-        this._hasText = !types.isNullOrUndefined(value);
+        this._hasText = !types.isNullOrUndefined(value) && value !== "";
         this.text = (actualText === "" ? " " : actualText); // HACK: If empty use <space> so the label does not collapse
         
         this._refreshColor();
