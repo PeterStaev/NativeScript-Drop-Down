@@ -121,7 +121,7 @@ export class DropDown extends common.DropDown {
         this._listPicker.items = data.newValue;
 
         // HACK: This is needed, because in the listpicker module Telerik automatically selects the first item if the current selectedIndex is undefined.         
-        if (isNothingSelected) {
+        if (isNothingSelected && data.newValue && data.newValue.length > 0) {
             this.selectedIndex = null;
         }
     }
@@ -212,7 +212,7 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
 class DropDownLabelWrapper extends Label {
     private _ios: UILabel;
     private _hint: string = "";
-    private _hasText: boolean = true;
+    private _hasText: boolean = false;
     private _internalColor: Color;
 
     constructor(dropDown: DropDown) {
