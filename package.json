@@ -1,6 +1,6 @@
 {
   "name": "nativescript-drop-down",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "description": "A NativeScript DropDown widget.",
   "main": "drop-down",
   "typings": "drop-down.d.ts",

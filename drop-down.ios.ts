@@ -225,7 +225,6 @@ class DropDownLabelWrapper extends Label {
     public onLoaded() {
         super.onLoaded();
         this.internalColor = this.color;
-        this.text = null;
     }
 
     get text(): string {
@@ -234,7 +233,7 @@ class DropDownLabelWrapper extends Label {
     set text(value: string) {
         let actualText = value || this._hint || "";
 
-        this._hasText = !types.isNullOrUndefined(value);
+        this._hasText = !types.isNullOrUndefined(value) && value !== null;
         this._ios.text = (actualText === "" ? " " : actualText); // HACK: If empty use <space> so the label does not collapse
         
         this._refreshColor();
