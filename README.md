@@ -141,7 +141,7 @@ platformNativeScriptDynamic().bootstrapModule(AppComponentModule);
 <StackLayout>
     <GridLayout rows="auto, auto, *" columns="auto, *">
         <DropDown #dd backroundColor="red" [items]="items" [selectedIndex]="selectedIndex" 
-                  (selectedIndexChanged)="onchange($event)" (opened)="onopen()"
+                  (selectedIndexChange)="onchange(dd.selectedIndex)" (opened)="onopen()"
                   row="0" colSpan="2">
         </DropDown>
         <Label text="Selected Index:" row="1" col="0" fontSize="18" verticalAlignment="bottom"></Label>
@@ -153,7 +153,7 @@ platformNativeScriptDynamic().bootstrapModule(AppComponentModule);
 ```TypeScript
 // app.component.ts
 import { Component } from "@angular/core";
-import { SelectedIndexChangedEventData } from "nativescript-drop-down";
+//import { SelectedIndexChangedEventData } from "nativescript-drop-down";
 
 @Component({
     selector: "my-app",
@@ -170,10 +170,15 @@ export class AppComponent {
         }
     }
 
+/*
     public onchange(args: SelectedIndexChangedEventData) {
         console.log(`Drop Down selected index changed from ${args.oldIndex} to ${args.newIndex}`);
     }
+*/
 
+    public onchange(selectedi){
+        console.log("selected index " + selectedi);
+    }
     public onopen() {
         console.log("Drop Down opened.");
     }
