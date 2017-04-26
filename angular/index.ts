@@ -1,4 +1,4 @@
-import { AfterViewInit, Directive, ElementRef, HostListener, NgModule, forwardRef } from "@angular/core";
+import { AfterViewInit, Directive, ElementRef, HostListener, Inject, NgModule, forwardRef } from "@angular/core";
 import { FormsModule, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { BaseValueAccessor, registerElement } from "nativescript-angular";
 import { convertToInt } from "nativescript-angular/common/utils";
@@ -30,7 +30,7 @@ export class SelectedIndexValueAccessor extends BaseValueAccessor<SelectableView
     private _normalizedValue: number;
     private viewInitialized: boolean;
 
-    constructor(elementRef: ElementRef) {
+    constructor(@Inject(ElementRef) elementRef: ElementRef) {
         super(elementRef.nativeElement);
     }
 

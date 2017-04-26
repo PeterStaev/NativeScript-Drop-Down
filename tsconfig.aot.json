@@ -9,7 +9,7 @@
         "target": "es5",
         "module": "commonjs",
         "outDir": "bin/dist",
-        "lib": ["es6", "dom"],
+        "lib": ["es6", "dom", "es2015.iterable"],
         "rootDir": ".",
         "baseUrl": ".",
         "paths": {
@@ -18,6 +18,7 @@
             "./node_modules/*"
             ]
         },
+        "emitDecoratorMetadata": true,
         "moduleResolution": "node"
     },
     "files": [
