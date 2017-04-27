@@ -43,6 +43,10 @@ export class SelectedIndexValueAccessor extends BaseValueAccessor<SelectableView
     public onTouched = () => { };
 
     public writeValue(value: any): void {
+        if (value === undefined || value === null || value === "") {
+            return null;
+        }
+
         this._normalizedValue = convertToInt(value);
         if (this.viewInitialized) {
             this.view.selectedIndex = this._normalizedValue;
