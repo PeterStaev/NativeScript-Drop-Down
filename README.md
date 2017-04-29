@@ -145,7 +145,7 @@ platformNativeScriptDynamic().bootstrapModule(AppComponentModule);
                   row="0" colSpan="2">
         </DropDown>
         <Label text="Selected Index:" row="1" col="0" fontSize="18" verticalAlignment="bottom"></Label>
-        <TextField [text]="selected" row="1" col="1" ></TextField>
+        <TextField [text]="selectedIndex" row="1" col="1" ></TextField>
     </GridLayout>
 </StackLayout>
 ```
@@ -171,6 +171,7 @@ export class AppComponent {
     }
 
     public onchange(args: SelectedIndexChangedEventData) {
+        this.selectedIndex = args.newIndex;
         console.log(`Drop Down selected index changed from ${args.oldIndex} to ${args.newIndex}`);
     }
 
