@@ -35,6 +35,10 @@
   },
   
   "devDependencies": {
+    "@angular/compiler-cli": "^4.0.3",
+    "@angular/core": "^4.0.3",
+    "@angular/forms": "^4.0.3",
+    "nativescript-angular": "rc",
     "typescript": "~2.2.2",
     "tslint": "^4.5.1",
     "tns-core-modules": "rc",

@@ -4,6 +4,7 @@ import { AppRoutingModule } from "./app.routing";
 import { AppComponent } from "./app.component";
 
 import { DropDownComponent } from "./dropdown/dropdown.component";
+import { DropDownModule } from 'nativescript-drop-down/angular';
 
 @NgModule({
     bootstrap: [
@@ -11,6 +12,7 @@ import { DropDownComponent } from "./dropdown/dropdown.component";
     ],
     imports: [
         NativeScriptModule,
+        DropDownModule,
         AppRoutingModule
     ],
     declarations: [

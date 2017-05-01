@@ -106,23 +106,48 @@ export function dropDownSelectedIndexChanged(args: SelectedIndexChangedEventData
 }
 ```
 
-## Angular 2 Example
+## Angular
 
+##### Migration to 3.0+
+
+- Remove:
+```typescript
+registerElement("DropDown", () => require("nativescript-drop-down/drop-down").DropDown);`
+```
+- Import `DropDownModule` in `NgModule`:
+```typescript
+import { DropDownModule } from “nativescript-drop-down/angular”;
+…
+@NgModule({
+	…
+	imports: [
+		…
+		DropDownModule,
+		…
+	],
+	…
+})
+```
+
+##### Example Usage
 ```TypeScript
 // main.ts
-import { platformNativeScriptDynamic, NativeScriptModule } from "nativescript-angular/platform";
 import { NgModule } from "@angular/core";
+import { NativeScriptModule } from "nativescript-angular/nativescript.module";
+import { platformNativeScriptDynamic } from "nativescript-angular/platform";
+import { DropDownModule } from "nativescript-drop-down/angular";
 import { AppComponent } from "./app.component";
-import { registerElement } from "nativescript-angular/element-registry";
-
-registerElement("DropDown", () => require("nativescript-drop-down/drop-down").DropDown);
 
 @NgModule({
-    declarations: [AppComponent],
-    bootstrap: [AppComponent],
-    imports: [NativeScriptModule],
+    declarations: [ AppComponent ],
+    bootstrap:    [ AppComponent ],
+    imports:      [
+        NativeScriptModule,
+        DropDownModule,
+    ],
 })
-class AppComponentModule {}
+class AppComponentModule {
+}
 
 platformNativeScriptDynamic().bootstrapModule(AppComponentModule);
 ```
@@ -130,13 +155,24 @@ platformNativeScriptDynamic().bootstrapModule(AppComponentModule);
 ```HTML
 <!-- app.component.html -->
 <StackLayout>
-    <GridLayout rows="auto, auto, *" columns="auto, *">
-        <DropDown #dd backroundColor="red" [items]="items" [selectedIndex]="selectedIndex" 
-                  (selectedIndexChanged)="onchange($event)" (opened)="onopen()"
-                  row="0" colSpan="2">
-        </DropDown>
-        <Label text="Selected Index:" row="1" col="0" fontSize="18" verticalAlignment="bottom"></Label>
-        <TextField [text]="selectedIndex" row="1" col="1" ></TextField>
+    <GridLayout rows="auto, auto, *"
+                columns="auto, *">
+        <DropDown #dd
+                  backroundColor="red"
+                  [items]="items"
+                  [(ngModel)]="selectedIndex"
+                  (selectedIndexChanged)="onchange($event)"
+                  (opened)="onopen()"
+                  row="0"
+                  colSpan="2"></DropDown>
+        <Label text="Selected Index:"
+               row="1"
+               col="0"
+               fontSize="18"
+               verticalAlignment="bottom"></Label>
+        <TextField [text]="selectedIndex"
+                   row="1"
+                   col="1"></TextField>
     </GridLayout>
 </StackLayout>
 ```

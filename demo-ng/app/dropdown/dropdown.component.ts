@@ -8,27 +8,30 @@ import { SelectedIndexChangedEventData, ValueList } from "nativescript-drop-down
 })
 export class DropDownComponent implements OnInit {
     public selectedIndex: number = null;
-    public hint = "My Hint";
+    public hint                  = "My Hint";
     public items: ValueList<string>;
-    public cssClass: string = "default";
+    public cssClass: string      = "default";
 
     public ngOnInit() {
         this.items = new ValueList<string>();
-        for (let loop = 0; loop < 200; loop++) {
-            this.items.push({ value: `I${loop}`, display: `Item ${loop}`});
+        for ( let loop = 0; loop < 200; loop++ ) {
+            this.items.push({
+                value:   `I${loop}`,
+                display: `Item ${loop}`,
+            });
         }
     }
 
     public onchange(args: SelectedIndexChangedEventData) {
-        console.log(`Drop Down selected index changed from ${args.oldIndex} to ${args.newIndex}. New value is '${this.items.getValue(args.newIndex)}'`);
-        this.selectedIndex = args.newIndex;
+        console.log(`Drop Down selected index changed from ${args.oldIndex} to ${args.newIndex}. New value is "${this.items.getValue(
+            args.newIndex)}"`);
     }
 
     public onopen() {
         console.log("Drop Down opened.");
     }
-    
+
     public changeStyles() {
         this.cssClass = "changed-styles";
-    }    
+    }
 }
