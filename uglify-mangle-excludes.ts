@@ -10,9 +10,5 @@ export default [
     // Android    
     "DropDownAdapter",
     "DropDownItemSelectedListener",
-    "DropDownTouchListener",
-
-    // Angular
-    "DropDownModule",
-    "SelectedIndexValueAccessor"
+    "DropDownTouchListener"
 ];

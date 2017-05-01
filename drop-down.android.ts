@@ -73,12 +73,6 @@ export class DropDown extends DropDownBase {
         spinner.setOnTouchListener(touchListener);
         (spinner as any).touchListener = touchListener;
 
-        // When used in templates the selectedIndex changed event is fired before the native widget is init.
-        // So here we must set the inital value (if any)
-        if (!types.isNullOrUndefined(this.selectedIndex)) {
-            this.android.setSelection(this.selectedIndex + 1); // +1 for the hint first element
-        }
-
         return spinner;
     }
 
@@ -89,6 +83,12 @@ export class DropDown extends DropDownBase {
         nativeView.adapter.owner = new WeakRef(this);
         nativeView.itemSelectedListener.owner = new WeakRef(this);
         nativeView.touchListener.owner = new WeakRef(this);
+
+        // When used in templates the selectedIndex changed event is fired before the native widget is init.
+        // So here we must set the inital value (if any)
+        if (!types.isNullOrUndefined(this.selectedIndex)) {
+            this.android.setSelection(this.selectedIndex + 1); // +1 for the hint first element
+        }
     }
 
     public disposeNativeView() {
