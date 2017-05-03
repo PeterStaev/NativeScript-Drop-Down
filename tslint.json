@@ -1,59 +1,32 @@
 ﻿{
+  "extends": "tslint:latest",
   "rules": {
-    "class-name": true,
-    "comment-format": [ true, "check-space" ],
-    "curly": true,
     "eofline": false,
-    "forin": false,
-    "indent": [ true, "spaces" ],
-    "label-position": true,
-    "label-undefined": true,
-    "max-line-length": [ false ],
-    "member-ordering": [
-      true,
-      "static-before-instance",
-      "variables-before-functions"
-    ],
-    "no-arg": true,
-    "no-bitwise": false,
-    "no-console": [
-      true,
-      "debug",
-      "info",
-      "time",
-      "timeEnd",
-      "trace"
-    ],
-    "no-construct": true,
-    "no-debugger": true,
-    "no-duplicate-key": true,
-    "no-duplicate-variable": true,
-    "no-empty": true,
-    "no-eval": true,
-    "no-inferrable-types": true,
-    "no-shadowed-variable": true,
-    "no-string-literal": true,
-    "no-switch-case-fall-through": true,
-    "no-trailing-whitespace": false,
-    "no-unused-expression": true,
-    "no-unused-variable": true,
-    "no-unreachable": true,
-    "no-use-before-declare": true,
-    "no-var-keyword": true,
+    "one-line": [ "check-open-brace" ],
     "object-literal-sort-keys": false,
-    "one-line": [ false ],
-    "quotemark": [ true, "double" ],
-    "radix": true,
-    "semicolon": true,
-    "triple-equals": [ true ],
-    "variable-name": false,
-    "whitespace": [
+    "interface-name": [ true, "never-prefix" ],
+    "max-line-length": [ false ],
+    "variable-name": [ true, "ban-keywords" ],
+    "prefer-for-of": true,
+    "no-string-literal": false,
+    "no-trailing-whitespace": false,
+    "trailing-comma": [
       true,
-      "check-branch",
-      "check-decl",
-      "check-operator",
-      "check-separator",
-      "check-type"
-    ]
+      {
+        "multiline": "never",
+        "singleline": "never"
+      }
+    ],
+    "switch-default": false,
+    "max-classes-per-file": [false],
+    "no-console": [
+      false
+    ],
+    "ordered-imports": [
+      true,
+      {"named-imports-order": "lowercase-last"}
+    ],
+    "no-unused-variable": [true],
+    "no-bitwise": false
   }
 }

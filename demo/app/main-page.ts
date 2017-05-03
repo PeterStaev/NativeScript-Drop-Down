@@ -1,25 +1,26 @@
 import { EventData, Observable} from "data/observable";
-import { ObservableArray } from "data/observable-array";
 import pages = require("ui/page");
-import { SelectedIndexChangedEventData } from "nativescript-drop-down";
+import { SelectedIndexChangedEventData, ValueList } from "nativescript-drop-down";
 
-var viewModel: Observable;
+let viewModel: Observable;
 
 export function pageLoaded(args: EventData) {
-    var page = <pages.Page>args.object;
-    var items = new ObservableArray();
+    const page = args.object as pages.Page;
+    const items = new ValueList<string>();
 
     viewModel = new Observable();
 
-    for (var loop = 0; loop < 200; loop++) {
-        items.push("Item " + loop.toString());
-    }
 
     viewModel.set("items", items);
     viewModel.set("hint", "My Hint");
-    viewModel.set("selectedIndex", 1);    
+    viewModel.set("selectedIndex", null);    
+    viewModel.set("cssClass", "default");
 
     page.bindingContext = viewModel;
+
+    for (let loop = 0; loop < 200; loop++) {
+        items.push({ value: `I${loop}`, display: `Item ${loop}`});
+    }
 }
 
 export function dropDownOpened(args: EventData) {
@@ -27,12 +28,9 @@ export function dropDownOpened(args: EventData) {
 }
 
 export function dropDownSelectedIndexChanged(args: SelectedIndexChangedEventData) {
-    console.log(`Drop Down selected index changed from ${args.oldIndex} to ${args.newIndex}`);
+    console.log(`Drop Down selected index changed from ${args.oldIndex} to ${args.newIndex}. New value is '${viewModel.get("items").getValue(args.newIndex)}'`);
 }
 
 export function changeStyles() {
-    console.log("set")
-    viewModel.set("backgroundColor", "blue");
-    viewModel.set("color", "green");
     viewModel.set("cssClass", "changed-styles");
 }

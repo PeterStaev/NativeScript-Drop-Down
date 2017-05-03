@@ -4,6 +4,7 @@
         "**/.git": true,
         "**/.DS_Store": true, 
         "demo": true, 
+        "demo-ng": true, 
         "bin/**": true
     }
 }

@@ -1,7 +1,5 @@
+import "./bundle-config";
+
 import application = require("application");
-application.mainModule = "main-page";
 
-// Remove this in the AppBuilder templates
-application.cssFile = "./app.css"
-
-application.start();
+application.start({ moduleName: "main-page" });

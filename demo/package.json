@@ -1,29 +1,44 @@
 {
   "nativescript": {
-    "id": "net.tangrainc.dropdownsample",
-    "tns-ios": {
-      "version": "2.5.0"
-    },
+    "id": "com.tangrainc.dropdownsample",
     "tns-android": {
-      "version": "2.5.0"
+      "version": "3.0.0-rc.1"
+    },
+    "tns-ios": {
+      "version": "3.0.0-rc.1"
     }
   },
   "scripts": {
-    "android": "npm uninstall nativescript-drop-down && tns deploy android",
-    "ios": "npm uninstall nativescript-drop-down && tns deploy ios"
+    "android": "npm uninstall nativescript-drop-down && tns platform remove android && tns platform add android@rc && tns run android",
+    "ios": "npm uninstall nativescript-drop-down && tns run ios --emulator",
+    "debug-ios": "npm uninstall nativescript-drop-down && tns debug ios --emulator",
+    "ns-bundle": "ns-bundle",
+    "start-android-bundle": "npm run ns-bundle --android --start-app",
+    "start-ios-bundle": "npm run ns-bundle --ios --start-app --uglify",
+    "build-android-bundle": "npm run ns-bundle --android --build-app",
+    "build-ios-bundle": "npm run ns-bundle --ios --build-app"
   },
   "dependencies": {
     "nativescript-drop-down": "file:../bin/dist",
-    "tns-core-modules": "^2.5.0"
+    "tns-core-modules": "rc"
   },
   "devDependencies": {
+    "awesome-typescript-loader": "~3.0.0-beta.9",
     "babel-traverse": "6.10.4",
     "babel-types": "6.11.1",
     "babylon": "6.8.2",
+    "copy-webpack-plugin": "~3.0.1",
+    "extract-text-webpack-plugin": "~2.0.0-beta.4",
     "filewalker": "0.1.3",
     "lazy": "1.0.11",
-    "nativescript-dev-typescript": "^0.3.3",
-    "typescript": "^2.0.10",
-    "tns-platform-declarations": "2.4.0"
+    "nativescript-css-loader": "~0.26.0",
+    "nativescript-dev-typescript": "^0.4.0",
+    "nativescript-dev-webpack": "^0.3.7",
+    "raw-loader": "~0.5.1",
+    "resolve-url-loader": "~1.6.0",
+    "tns-platform-declarations": "rc",
+    "typescript": "^2.2.2",
+    "webpack": "2.2.0",
+    "webpack-sources": "~0.1.3"
   }
 }

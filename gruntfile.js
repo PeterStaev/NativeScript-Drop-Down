@@ -1,16 +1,11 @@
 ﻿module.exports = function (grunt) {
     var localConfig = {
-        typeScriptSrc: [
-            "**/*.ts",
-            "!node_modules/**/*.*",
-            "!demo/**/*.*",
-            "!bin/**/*.*"
-        ],
         typeScriptDeclarations: [
             "**/*.d.ts",
             "!references.d.ts",
             "!node_modules/**/*.*",
             "!demo/**/*.*",
+            "!demo-ng/**/*.*",
             "!bin/**/*.*"
         ],
         outDir: "bin/dist/"
@@ -20,23 +15,6 @@
         clean: {
             build: {
                 src: [localConfig.outDir]
-            }
-        },
-        ts: {
-            build: {
-                src: localConfig.typeScriptSrc,
-                outDir: localConfig.outDir,
-                tsconfig: true
-            }
-        },
-        tslint:
-        {
-            build:
-            {
-                src: localConfig.typeScriptSrc,
-                options: {
-                    configuration: grunt.file.readJSON("./tslint.json")
-                }
             }
         },
         copy: {
@@ -66,6 +44,15 @@
             }
         },
         exec: {
+            tsCompile: {
+                cmd: "node ./node_modules/typescript/bin/tsc --project tsconfig.json --outDir " + localConfig.outDir
+            },
+            ngCompile: {
+                cmd: "node ./node_modules/.bin/ngc --project tsconfig.aot.json --outDir " + localConfig.outDir
+            },
+            tslint: {
+                cmd: "node ./node_modules/tslint/bin/tslint --project tsconfig.json"
+            },
             npm_publish: {
                 cmd: "npm publish",
                 cwd: localConfig.outDir
@@ -73,16 +60,15 @@
         }
     });
 
-    grunt.loadNpmTasks("grunt-ts");
-    grunt.loadNpmTasks("grunt-tslint");
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-exec");
 
     grunt.registerTask("build", [
-        "tslint:build",
+        "exec:tslint",
         "clean:build",
-        "ts:build",
+        "exec:tsCompile",
+        "exec:ngCompile",
         "copy"
     ]);
     grunt.registerTask("publish", [

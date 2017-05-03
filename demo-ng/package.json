@@ -1,0 +1,39 @@
+{
+  "description": "NativeScript Application",
+  "license": "SEE LICENSE IN <your-license-filename>",
+  "readme": "NativeScript Application",
+  "repository": "<fill-your-repository-here>",
+  "nativescript": {
+    "id": "com.tangrainc.dropdownsample.ng",
+    "tns-ios": {
+      "version": "3.0.0-rc.1"
+    }
+  },
+  "scripts": {
+    "android": "npm uninstall nativescript-drop-down && tns platform remove android && tns platform add android@rc && tns run android",
+    "ios": "npm uninstall nativescript-drop-down && tns run ios --emulator",
+    "debug-ios": "npm uninstall nativescript-drop-down && tns debug ios --emulator"
+  },
+  "dependencies": {
+    "@angular/animations": "^4.0.3",
+    "@angular/common": "^4.0.3",
+    "@angular/compiler": "^4.0.3",
+    "@angular/core": "^4.0.3",
+    "@angular/forms": "^4.0.3",
+    "@angular/http": "^4.0.3",
+    "@angular/platform-browser": "^4.0.3",
+    "@angular/platform-browser-dynamic": "^4.0.3",
+    "@angular/router": "^4.0.3",
+    "nativescript-angular": "rc",
+    "nativescript-drop-down": "file:../bin/dist",
+    "reflect-metadata": "~0.1.8",
+    "rxjs": "~5.2.0",
+    "tns-core-modules": "rc",
+    "zone.js": "~0.8.2"
+  },
+  "devDependencies": {
+    "nativescript-dev-android-snapshot": "^0.*.*",
+    "nativescript-dev-typescript": "0.4.2",
+    "typescript": "~2.2.0"
+  }
+}

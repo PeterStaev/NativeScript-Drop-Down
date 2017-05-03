@@ -1,11 +1,10 @@
 <Page xmlns="http://schemas.nativescript.org/tns.xsd" loaded="pageLoaded" xmlns:dd="nativescript-drop-down">
   <GridLayout rows="auto, auto, auto, *" columns="auto, *">
     <dd:DropDown id="dd" hint="{{ hint }}" items="{{ items }}" selectedIndex="{{ selectedIndex }}" 
-                 backgroundColor="{{ backgroundColor }}" color="{{ color }}" class="{{ cssClass }}"
-                 opened="dropDownOpened" selectedIndexChanged="dropDownSelectedIndexChanged" 
-                 row="0" colSpan="2" />
+                  opened="dropDownOpened" selectedIndexChanged="dropDownSelectedIndexChanged" class="{{ cssClass }}"
+                  row="0" colSpan="2" />                 
     <Label text="Selected Index:" row="1" col="0" fontSize="18" verticalAlignment="bottom"/>
     <TextField text="{{ selectedIndex }}" row="1" col="1" />
-    <Button row="2" col="0" colSpan="2" tap="changeStyles" text="Change Styles" />
+    <Button row="2" col="0" colSpan="2" tap="changeStyles" text="Change Styles" style="font-size: 25" />
   </GridLayout>
 </Page>

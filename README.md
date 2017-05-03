@@ -4,7 +4,7 @@
 [![npm downloads](https://img.shields.io/npm/dt/nativescript-drop-down.svg)](https://www.npmjs.com/package/nativescript-drop-down)
 [![npm](https://img.shields.io/npm/v/nativescript-drop-down.svg)](https://www.npmjs.com/package/nativescript-drop-down)
 
-A NativeScript DropDown widget. The DropDown displays items from which the user can select one. For iOS it wraps up a [UITextField](https://developer.apple.com/library/prerelease/ios/documentation/UIKit/Reference/UITextField_Class/index.html) with an `inputView` set to an [UIPickerView](https://developer.apple.com/library/prerelease/ios/documentation/UIKit/Reference/UIPickerView_Class/index.html) which displays the items. For Android it wraps up the [Spinner](http://developer.android.com/reference/android/widget/Spinner.html) widget.
+A NativeScript DropDown widget. The DropDown displays items from which the user can select one. For iOS it wraps up a [UILabel](https://developer.apple.com/reference/uikit/uilabel) with an `inputView` set to an [UIPickerView](https://developer.apple.com/library/prerelease/ios/documentation/UIKit/Reference/UIPickerView_Class/index.html) which displays the items. For Android it wraps up the [Spinner](http://developer.android.com/reference/android/widget/Spinner.html) widget.
 
 ## Screenshot
 ![Screenshot of iOS and Android](https://raw.githubusercontent.com/PeterStaev/NativeScript-Drop-Down/master/docs/screenshot.png)
@@ -35,15 +35,6 @@ String value used when hooking to opened event.
 * **selectedIndexChangedEvent** - *String*  
 String value used when hooking to selectedIndexChanged event.
 
-* **itemsProperty** - *[Property](http://docs.nativescript.org/api-reference/classes/_ui_core_dependency_observable_.property.html)*  
-Represents the observable property backing the items property of each DropDown instance.
-
-* **selectedIndexProperty** - *[Property](http://docs.nativescript.org/api-reference/classes/_ui_core_dependency_observable_.property.html)*  
-Represents the observable property backing the selectedIndex property of each DropDown instance.
-
-* **hintProperty** - *[Property](http://docs.nativescript.org/api-reference/classes/_ui_core_dependency_observable_.property.html)*  
-Represents the observable property backing the hint property of each DropDown instance.
-
 ### Instance Properties
 * **ios** - *[UILabel](https://developer.apple.com/reference/uikit/uilabel)*  
 Gets the native iOS view that represents the user interface for this component. Valid only when running on iOS.
@@ -51,7 +42,7 @@ Gets the native iOS view that represents the user interface for this component. 
 * **android** - *[android.widget.Spinner](http://developer.android.com/reference/android/widget/Spinner.html)*  
 Gets the native android widget that represents the user interface for this component. Valid only when running on Android OS.
 
-* **items** - *Object*  
+* **items** - *Array | ItemsSource*  
 Gets or sets the items collection of the DropDown. The items property can be set to an array or an object defining length and getItem(index) method.
 
 * **selectedIndex** - *Number*  
@@ -115,23 +106,48 @@ export function dropDownSelectedIndexChanged(args: SelectedIndexChangedEventData
 }
 ```
 
-## Angular 2 Example
+## Angular
 
+##### Migration to 3.0+
+
+- Remove:
+```typescript
+registerElement("DropDown", () => require("nativescript-drop-down/drop-down").DropDown);`
+```
+- Import `DropDownModule` in `NgModule`:
+```typescript
+import { DropDownModule } from “nativescript-drop-down/angular”;
+…
+@NgModule({
+	…
+	imports: [
+		…
+		DropDownModule,
+		…
+	],
+	…
+})
+```
+
+##### Example Usage
 ```TypeScript
 // main.ts
-import { platformNativeScriptDynamic, NativeScriptModule } from "nativescript-angular/platform";
 import { NgModule } from "@angular/core";
+import { NativeScriptModule } from "nativescript-angular/nativescript.module";
+import { platformNativeScriptDynamic } from "nativescript-angular/platform";
+import { DropDownModule } from "nativescript-drop-down/angular";
 import { AppComponent } from "./app.component";
-import { registerElement } from "nativescript-angular/element-registry";
-
-registerElement("DropDown", () => require("nativescript-drop-down/drop-down").DropDown);
 
 @NgModule({
-    declarations: [AppComponent],
-    bootstrap: [AppComponent],
-    imports: [NativeScriptModule],
+    declarations: [ AppComponent ],
+    bootstrap:    [ AppComponent ],
+    imports:      [
+        NativeScriptModule,
+        DropDownModule,
+    ],
 })
-class AppComponentModule {}
+class AppComponentModule {
+}
 
 platformNativeScriptDynamic().bootstrapModule(AppComponentModule);
 ```
@@ -139,13 +155,24 @@ platformNativeScriptDynamic().bootstrapModule(AppComponentModule);
 ```HTML
 <!-- app.component.html -->
 <StackLayout>
-    <GridLayout rows="auto, auto, *" columns="auto, *">
-        <DropDown #dd backroundColor="red" [items]="items" [selectedIndex]="selectedIndex" 
-                  (selectedIndexChanged)="onchange($event)" (opened)="onopen()"
-                  row="0" colSpan="2">
-        </DropDown>
-        <Label text="Selected Index:" row="1" col="0" fontSize="18" verticalAlignment="bottom"></Label>
-        <TextField [text]="selected" row="1" col="1" ></TextField>
+    <GridLayout rows="auto, auto, *"
+                columns="auto, *">
+        <DropDown #dd
+                  backroundColor="red"
+                  [items]="items"
+                  [(ngModel)]="selectedIndex"
+                  (selectedIndexChanged)="onchange($event)"
+                  (opened)="onopen()"
+                  row="0"
+                  colSpan="2"></DropDown>
+        <Label text="Selected Index:"
+               row="1"
+               col="0"
+               fontSize="18"
+               verticalAlignment="bottom"></Label>
+        <TextField [text]="selectedIndex"
+                   row="1"
+                   col="1"></TextField>
     </GridLayout>
 </StackLayout>
 ```
@@ -184,68 +211,19 @@ export class AppComponent {
 It is a common case that you want to have one thing displayed in the drop down and then get some backend value
 tied to the tex. For example drop down with states you might want tos how the full state name (i.e. Florida)
 and then when working with your backend you want to use the state code (i.e. FL). The Drop Down items property can be
-set to either Array of objects or a custom object that implements `getItem(index: number): any` function and `length` proerty. 
-So you can achieve this by implementing the following helper class:
+set to either Array of objects or a custom object that implements `getItem(index: number): any` function and `length` proerty. With versionn 3.0 of the plugin it has a built in class that helps you with this scenario:
 
 ```TypeScript
-import * as types from "utils/types";
-
-export interface IValueItem {
-    ValueMember: any
-    DisplayMember: any
-}
-
-export class ValueList {
-    private _array: Array<IValueItem>;
-
-    get length(): number { return this._array.length; }
-
-    constructor(array: Array<IValueItem>) {
-        this._array = array;
-    }
-
-    public getItem(index: number) { // Used for items source in list picker
-        return this.getText(index);
-    }
-
-    public getText(index: number): string {
-        if (types.isNullOrUndefined(index)) {
-            return null;
-        }
-        
-        if (index < 0 || index >= this._array.length) {
-            return "";
-        }
-
-        return this._array[index].DisplayMember;
-    }
-
-    public getValue(index: number) {
-        if (types.isNullOrUndefined(index) || index < 0 || index >= this._array.length) {
-            return null;
-        }
-
-        return this._array[index].ValueMember;
-    }
-
-    public getIndex(value: any): number {
-        let loop: number;
-
-        for (loop = 0; loop < this._array.length; loop++) {
-            if (this.getValue(loop) == value) {
-                return loop;
-            }
-        }
-
-        return -1;
-    }
-}
+import { ValueList } from "nativescript-drop-down";
 ```
 
-Then you can set the `items` property of the DropDownto an instance of ValueList:
+Then you can set the `items` property of the DropDown to an instance of ValueList:
 ```TypeScript
 let dd = page.getViewById<DropDown>("dd");
-let itemSource = new ValueList([{ ValueMember: "FL", DisplayMember:"Florida" }, { ValueMember: "MI", DisplayMember:"Michigan" }]);
+let itemSource = new ValueList<string>([
+    { value: "FL", display: "Florida" }, 
+    { value: "MI", display: "Michigan" }
+]);
 dd.items = itemSource;
 ```
 
@@ -257,4 +235,29 @@ dd.selectedIndex = itemSource.getIndex("FL");
 2.You can get the backend value of what the user selected using:
 ```TypeScript
 let selectedValue = itemSource.getValue(dd.selectedIndex);
+```
+
+## Working with Webpack+Uglify
+In case you are uing webpack and also are minifying/uglifying your code, there are some specific names that should be excluded from the uglification for the widget to work properly. The DropDown widget exports those and you need to add them to the mangle exclude option of the uglifyjs plugin in the `webpack.common.js` file:
+```js
+var dropDownMangleExcludes = require("nativescript-drop-down/uglify-mangle-excludes").default;
+//......
+module.exports = function (platform, destinationApp) {
+    //......
+    if (process.env.npm_config_uglify) {
+        plugins.push(new webpack.LoaderOptionsPlugin({
+            minimize: true
+        }));
+
+        //Work around an Android issue by setting compress = false
+        var compress = platform !== "android";
+        plugins.push(new webpack.optimize.UglifyJsPlugin({
+            mangle: {
+                except: nsWebpack.uglifyMangleExcludes.concat(dropDownMangleExcludes),
+            },
+            compress: compress,
+        }));
+    }
+   //......
+}
 ```
