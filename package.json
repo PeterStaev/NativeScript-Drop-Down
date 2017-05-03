@@ -38,14 +38,22 @@
   },
   
   "devDependencies": {
-    "@angular/compiler-cli": "^4.0.3",
-    "@angular/core": "^4.0.3",
-    "@angular/forms": "^4.0.3",
-    "nativescript-angular": "rc",
+    "@angular/common": "~4.0.3",
+    "@angular/compiler": "~4.0.3",
+    "@angular/compiler-cli": "~4.0.3",
+    "@angular/core": "~4.0.3",
+    "@angular/forms": "~4.0.3",
+    "@angular/http": "~4.0.3",
+    "@angular/platform-browser": "~4.0.3",
+    "@angular/router": "~4.0.3",
+    "rxjs":"~5.0.1",
+    "zone.js": "~0.8.9",
+    "nativescript-angular": "3.0.0",
+
     "typescript": "~2.2.2",
     "tslint": "^4.5.1",
-    "tns-core-modules": "rc",
-    "tns-platform-declarations": "rc",
+    "tns-core-modules": "3.0.0",
+    "tns-platform-declarations": "3.0.0",
 
     "grunt": "1.0.1",
     "grunt-contrib-copy": "1.0.0",
