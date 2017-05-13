@@ -88,6 +88,12 @@ export class DropDown extends DropDownBase {
         this._toolbar.setItemsAnimated(nsArray, false);
     }
     
+    public disposeNativeView() {
+        this._doneTapDelegate = null;
+        this._dropDownDelegate = null;
+        this._dropDownDataSource = null;
+    }
+
     get ios(): TNSDropDownLabel {
         return this.nativeView;
     }
@@ -111,15 +117,11 @@ export class DropDown extends DropDownBase {
     }
 
     public onUnloaded() {
-        this.ios.inputView = null;
-        this.ios.inputAccessoryView = null;
-
         this._listPicker.delegate = null;
         this._listPicker.dataSource = null;
 
-        this._doneTapDelegate = null;
-        this._dropDownDelegate = null;
-        this._dropDownDataSource = null;
+        this.ios.inputView = null;
+        this.ios.inputAccessoryView = null;
 
         super.onUnloaded();
     }
