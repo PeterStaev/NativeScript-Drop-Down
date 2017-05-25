@@ -300,7 +300,9 @@ class DropDownAdapter extends android.widget.BaseAdapter implements android.widg
             label.style.textDecoration = owner.style.textDecoration;
             label.style.textAlignment = owner.style.textAlignment;
             label.style.fontInternal = owner.style.fontInternal;
-            label.style.fontSize = owner.style.fontSize;
+            if (owner.style.fontSize) {
+                label.style.fontSize = owner.style.fontSize;
+            }    
             view.style.backgroundColor = owner.style.backgroundColor;
             view.style.padding = owner.style.padding;
             view.style.height = owner.style.height;
