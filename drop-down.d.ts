@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
 import { ObservableArray } from "data/observable-array";
-import { View } from "ui/core/view";
-import { Property } from "ui/core/dependency-observable";
+import { CoercibleProperty, Property, View } from "ui/core/view";
 import { EventData } from "data/observable";
+import { ItemsSource } from "ui/list-picker";
 
 export interface SelectedIndexChangedEventData extends EventData {
     oldIndex: number;
@@ -32,17 +32,13 @@ export class DropDown extends View {
     public static openedEvent: string;
     public static selectedIndexChangedEvent: string;
 
-    public static itemsProperty: Property;
-    public static selectedIndexProperty: Property;
-    public static hintProperty: Property;
+    public items: any[] | ItemsSource;
+    public selectedIndex: number;
+    public hint: string;
+    public accessoryViewVisible: boolean; /* iOS ONLY! */
 
-    items: any;
-    selectedIndex: number;
-    hint: string;
-    accessoryViewVisible: boolean; /* iOS ONLY! */
-
-    ios: any; /* UILabel */
-    android: any; /*android.widget.Spinner */
+    public ios: any; /* UILabel */
+    public android: any; /*android.widget.Spinner */
 
     public on(eventNames: string, callback: (data: EventData) => void, thisArg?: any);       
     public on(event: "opened", callback: (args: EventData) => void, thisArg?: any); 
@@ -51,8 +47,12 @@ export class DropDown extends View {
     public open();
 }
 
-export class ValueList<T> extends ObservableArray<ValueItem<T>> {
+export class ValueList<T> extends ObservableArray<ValueItem<T>> implements ItemsSource {
     public getDisplay(index: number): string;
     public getValue(index: number): T;
     public getIndex(value: T): number;   
 }
+
+export const selectedIndexProperty: CoercibleProperty<DropDown, number>;
+export const itemsProperty: Property<DropDown, any[] | ItemsSource>;
+export const hintProperty: Property<DropDown, string>;
