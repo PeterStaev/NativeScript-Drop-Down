@@ -44,8 +44,8 @@ export class DropDown extends View {
     ios: any; /* UILabel */
     android: any; /*android.widget.Spinner */
 
-    public on(eventNames: string, callback: (data: EventData) => void, thisArg?: any);       
-    public on(event: "opened", callback: (args: EventData) => void, thisArg?: any); 
+    public on(eventNames: string, callback: (data: EventData) => void, thisArg?: any);
+    public on(event: "opened", callback: (args: EventData) => void, thisArg?: any);
     public on(event: "selectedIndexChanged", callback: (args: SelectedIndexChangedEventData) => void, thisArg?: any);
 
     public open();
@@ -54,5 +54,7 @@ export class DropDown extends View {
 export class ValueList<T> extends ObservableArray<ValueItem<T>> {
     public getDisplay(index: number): string;
     public getValue(index: number): T;
-    public getIndex(value: T): number;   
+    public getIndex(value: T): number;
+    public getItem(index: number): ValueItem<T>;
+    public push(value: ValueItem<T>);
 }
