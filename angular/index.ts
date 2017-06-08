@@ -1,7 +1,6 @@
 import { AfterViewInit, Directive, ElementRef, HostListener, Inject, NgModule, forwardRef } from "@angular/core";
 import { FormsModule, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { BaseValueAccessor, registerElement } from "nativescript-angular";
-import { convertToInt } from "nativescript-angular/common/utils";
 import { View } from "tns-core-modules/ui/core/view";
 
 registerElement("DropDown", () => require("../drop-down").DropDown);
@@ -47,7 +46,7 @@ export class SelectedIndexValueAccessor extends BaseValueAccessor<SelectableView
             this._normalizedValue = null;
         }
         else {
-            this._normalizedValue = convertToInt(value);
+            this._normalizedValue = value;
         }
         
         if (this.viewInitialized) {

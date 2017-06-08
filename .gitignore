@@ -56,3 +56,4 @@ platforms
 demo/lib
 *.log
 !webpack.*.js
+.idea/
