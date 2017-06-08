@@ -1,13 +1,13 @@
 {
   "name": "nativescript-drop-down",
-  "version": "3.0.2",
+  "version": "3.1.0",
   "description": "A NativeScript DropDown widget.",
   "main": "drop-down",
   "typings": "drop-down.d.ts",
   "nativescript": {
     "platforms": {
-      "ios": "3.0.0",
-      "android": "3.0.0"
+      "ios": "3.0.1",
+      "android": "3.0.1"
     },
     "plugin": {
       "nan": "true",
@@ -34,7 +34,7 @@
   "license": "Apache-2.0",
   
   "peerDependencies": {
-     "tns-core-modules": "^3.0.0"
+    "tns-core-modules": "next"
   },
   
   "devDependencies": {
@@ -46,14 +46,14 @@
     "@angular/http": "~4.0.3",
     "@angular/platform-browser": "~4.0.3",
     "@angular/router": "~4.0.3",
-    "rxjs":"~5.0.1",
+    "rxjs": "^5.0.1",
     "zone.js": "~0.8.9",
-    "nativescript-angular": "3.0.0",
+    "nativescript-angular": "next",
 
     "typescript": "~2.2.2",
     "tslint": "^4.5.1",
-    "tns-core-modules": "3.0.0",
-    "tns-platform-declarations": "3.0.0",
+    "tns-core-modules": "next",
+    "tns-platform-declarations": "3.0.1",
 
     "grunt": "1.0.1",
     "grunt-contrib-copy": "1.0.0",
