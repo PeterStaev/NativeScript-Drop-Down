@@ -399,6 +399,7 @@ class TNSDropDownLabel extends TNSLabel {
         label._owner = owner;
         label._isInputViewOpened = false;
         label.color = utils.ios.getter(UIColor, UIColor.blackColor);
+        label.text = " "; // HACK: Set the text to space so that it takes the necessary height if no hint/selected item
 
         return label;
     }
