@@ -304,11 +304,8 @@ export class DropDown extends DropDownBase {
     }
 }
 
+@ObjCClass()
 class TapHandler extends NSObject {
-    public static ObjCExposedMethods = {
-        tap: { returns: interop.types.void, params: [] }
-    };
-
     public static initWithOwner(owner: WeakRef<DropDown>) {
         const tapHandler = TapHandler.new() as TapHandler;
         tapHandler._owner = owner;
@@ -318,14 +315,14 @@ class TapHandler extends NSObject {
 
     private _owner: WeakRef<DropDown>;
 
+    @ObjCMethod()    
     public tap() {
         this._owner.get().ios.resignFirstResponder();
     }
 }
 
+@ObjCClass(UIPickerViewDataSource)
 class DropDownListDataSource extends NSObject implements UIPickerViewDataSource {
-    public static ObjCProtocols = [UIPickerViewDataSource];
-
     public static initWithOwner(owner: WeakRef<DropDown>): DropDownListDataSource {
         const dataSource = DropDownListDataSource.new() as DropDownListDataSource;
 
@@ -346,9 +343,8 @@ class DropDownListDataSource extends NSObject implements UIPickerViewDataSource 
     }
 }
 
+@ObjCClass(UIPickerViewDelegate)
 class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDelegate {
-    public static ObjCProtocols = [UIPickerViewDelegate];
-    
     public static initWithOwner(owner: WeakRef<DropDown>): DropDownListPickerDelegateImpl {
         const delegate = DropDownListPickerDelegateImpl.new() as DropDownListPickerDelegateImpl;
         

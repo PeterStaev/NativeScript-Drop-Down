@@ -1,11 +1,11 @@
 {
   "nativescript": {
     "id": "com.tangrainc.dropdownsample",
-    "tns-ios": {
-      "version": "3.0.0"
-    },
     "tns-android": {
       "version": "3.0.0"
+    },
+    "tns-ios": {
+      "version": "3.0.1"
     }
   },
   "scripts": {
@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "nativescript-drop-down": "file:../bin/dist",
-    "tns-core-modules": "3.0.0"
+    "tns-core-modules": "3.0.1"
   },
   "devDependencies": {
     "awesome-typescript-loader": "~3.0.0-beta.9",
@@ -36,7 +36,7 @@
     "nativescript-dev-webpack": "^0.3.7",
     "raw-loader": "~0.5.1",
     "resolve-url-loader": "~1.6.0",
-    "tns-platform-declarations": "rc",
+    "tns-platform-declarations": "3.0.1",
     "typescript": "~2.2.2",
     "webpack": "2.2.0",
     "webpack-sources": "~0.1.3"
