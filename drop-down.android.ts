@@ -49,8 +49,11 @@ const enum RealizedViewType {
 
 export class DropDown extends DropDownBase {
     public nativeView: android.widget.Spinner;
-    public _realizedItems = [{}, {}];
-    
+    public _realizedItems = [
+        new Map<android.view.View, View>(),
+        new Map<android.view.View, View>()
+    ];
+
     private _androidViewId: number;
 
     public createNativeView() {
@@ -68,7 +71,7 @@ export class DropDown extends DropDownBase {
         const itemSelectedListener = new DropDownItemSelectedListener(new WeakRef(this));
         spinner.setOnItemSelectedListener(itemSelectedListener);
         (spinner as any).itemSelectedListener = itemSelectedListener;
-        
+
         const touchListener = new DropDownTouchListener(new WeakRef(this));
         spinner.setOnTouchListener(touchListener);
         (spinner as any).touchListener = touchListener;
@@ -99,14 +102,14 @@ export class DropDown extends DropDownBase {
 
         this._clearCache(RealizedViewType.DropDownView);
         this._clearCache(RealizedViewType.ItemView);
-        
+
         super.disposeNativeView();
     }
-    
+
     get android(): android.widget.Spinner {
         return this.nativeView;
     }
-    
+
     public open() {
         this.nativeView.performClick();
     }
@@ -116,7 +119,7 @@ export class DropDown extends DropDownBase {
     }
     public [selectedIndexProperty.setNative](value: number) {
         this._clearCache(RealizedViewType.DropDownView);
-        
+
         const actualIndex = (types.isNullOrUndefined(value) ? 0 : value + 1);
         this.nativeView.setSelection(actualIndex);
     }
@@ -138,14 +141,14 @@ export class DropDown extends DropDownBase {
     public [hintProperty.setNative](value: string) {
         (this.android.getAdapter() as DropDownAdapter).notifyDataSetChanged();
     }
-    
+
     public [textDecorationProperty.getDefault](): TextDecoration {
         return "none";
     }
     public [textDecorationProperty.setNative](value: TextDecoration) {
         this._propagateStylePropertyToRealizedViews("textDecoration", value, true);
     }
-    
+
     public [textAlignmentProperty.getDefault](): TextAlignment {
         return "left";
     }
@@ -160,9 +163,9 @@ export class DropDown extends DropDownBase {
     public [fontSizeProperty.setNative](value: number | { nativeSize: number }) {
         if (!types.isNullOrUndefined(value)) {
             this._propagateStylePropertyToRealizedViews("fontSize", value, true);
-        }    
+        }
     }
-    
+
     public [backgroundColorProperty.setNative](value: Color | number) {
         this._propagateStylePropertyToRealizedViews("backgroundColor", value, true);
     }
@@ -178,36 +181,34 @@ export class DropDown extends DropDownBase {
             const view = new Label();
             const layout = new StackLayout();
 
-            layout.style.horizontalAlignment = "stretch";           
+            layout.style.horizontalAlignment = "stretch";
             view.id = LABELVIEWID;
 
             layout.addChild(view);
 
             return layout;
         }
-        
-        return this._realizedItems[realizedViewType][convertView.hashCode()];
+
+        return this._realizedItems[realizedViewType].get(convertView);
     }
 
     private _propagateStylePropertyToRealizedViews(property: string, value: any, isIncludeHintIn = true) {
         const realizedItems = this._realizedItems;
         for (const item of realizedItems) {
-            // tslint:disable-next-line:forin
-            for (const key in item) {
-                const view = item[key];
-                if (isIncludeHintIn || !view.isHintViewIn) {
+            item.forEach((view) => {
+                if (isIncludeHintIn || !(view as any).isHintViewIn) {
                     if (property === "textAlignment" || property === "textDecoration"
                         || property === "fontInternal" || property === "fontSize"
                         || property === "color") {
-                        const label: Label = view.getViewById(LABELVIEWID);
+                        const label = view.getViewById<Label>(LABELVIEWID);
                         label.style[property] = value;
                     }
                     else {
                         view.style[property] = value;
-                    }    
-                }    
-            }
-        }        
+                    }
+                }
+            });
+        }
     }
 
     private _updateSelectedIndexOnItemsPropertyChanged(newItems: any[] | ItemsSource) {
@@ -222,15 +223,13 @@ export class DropDown extends DropDownBase {
     }
 
     private _clearCache(realizedViewType: RealizedViewType) {
-        const items = this._realizedItems[realizedViewType];
-        const keys = Object.keys(items);
-
-        for (const key of keys) {
-            const view = items[key];
+        const realizedItems = this._realizedItems[realizedViewType];
+        realizedItems.forEach((view) => {
             if (view.parent) {
                 view.parent._removeView(view);
-            }    
-        }
+            }
+        });
+        realizedItems.clear();
     }
 }
 
@@ -256,7 +255,7 @@ class DropDownAdapter extends android.widget.BaseAdapter implements android.widg
         if (i === 0) {
             return owner.hint;
         }
-    
+
         const realIndex = i - 1;
         return owner._getItemAsString(realIndex);
     }
@@ -294,7 +293,7 @@ class DropDownAdapter extends android.widget.BaseAdapter implements android.widg
 
             const label = view.getViewById<Label>(LABELVIEWID);
             label.text = this.getItem(index);
-    
+
             // Copy root styles to view        
             label.style.color = owner.style.color;
             label.style.textDecoration = owner.style.textDecoration;
@@ -302,7 +301,7 @@ class DropDownAdapter extends android.widget.BaseAdapter implements android.widg
             label.style.fontInternal = owner.style.fontInternal;
             if (owner.style.fontSize) {
                 label.style.fontSize = owner.style.fontSize;
-            }    
+            }
             view.style.backgroundColor = owner.style.backgroundColor;
             view.style.padding = owner.style.padding;
             view.style.height = owner.style.height;
@@ -312,12 +311,12 @@ class DropDownAdapter extends android.widget.BaseAdapter implements android.widg
             }
 
             (view as any).isHintViewIn = false;
-        
+
             // Hint View styles
             if (index === 0) {
                 view.color = new Color(255, 148, 150, 148);
                 (view as any).isHintViewIn = true;
-            
+
                 // HACK: if there is no hint defined, make the view in the drop down virtually invisible.
                 if (realizedViewType === RealizedViewType.DropDownView
                     && (types.isNullOrUndefined(owner.hint) || owner.hint === "")) {
@@ -325,8 +324,8 @@ class DropDownAdapter extends android.widget.BaseAdapter implements android.widg
                 }
                 // END HACK
             }
-        
-            owner._realizedItems[realizedViewType][convertView.hashCode()] = view;
+
+            owner._realizedItems[realizedViewType].set(convertView, view);
         }
 
         return convertView;
@@ -345,7 +344,7 @@ class DropDownItemSelectedListener extends java.lang.Object implements android.w
         const owner = this.owner.get();
         const oldIndex = owner.selectedIndex;
         const newIndex = (index === 0 ? null : index - 1);
-            
+
         owner.selectedIndex = newIndex;
 
         if (newIndex !== oldIndex) {

@@ -10,7 +10,6 @@ export function pageLoaded(args: EventData) {
 
     viewModel = new Observable();
 
-
     viewModel.set("items", items);
     viewModel.set("hint", "My Hint");
     viewModel.set("selectedIndex", null);    
