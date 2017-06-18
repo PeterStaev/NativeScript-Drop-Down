@@ -322,8 +322,6 @@ class DropDownAdapter extends android.widget.BaseAdapter implements android.widg
                 if (realizedViewType === RealizedViewType.DropDownView
                     && (types.isNullOrUndefined(owner.hint) || owner.hint === "")) {
                     view.height = 1;
-                    view.style.fontSize = 0;
-                    view.style.padding = "0";
                 }
                 // END HACK
             }
