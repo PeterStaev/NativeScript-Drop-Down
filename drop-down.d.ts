@@ -30,6 +30,7 @@ export interface ValueItem<T> {
 
 export class DropDown extends View {
     public static openedEvent: string;
+    public static closedEvent: string;
     public static selectedIndexChangedEvent: string;
 
     public items: any[] | ItemsSource;
@@ -42,9 +43,11 @@ export class DropDown extends View {
 
     public on(eventNames: string, callback: (data: EventData) => void, thisArg?: any);       
     public on(event: "opened", callback: (args: EventData) => void, thisArg?: any); 
+    public on(event: "closed", callback: (args: EventData) => void, thisArg?: any); 
     public on(event: "selectedIndexChanged", callback: (args: SelectedIndexChangedEventData) => void, thisArg?: any);
 
     public open();
+    public close();
 }
 
 export class ValueList<T> extends ObservableArray<ValueItem<T>> implements ItemsSource {

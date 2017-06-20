@@ -23,6 +23,7 @@ export * from "ui/core/view";
 
 export abstract class DropDownBase extends View implements DropDownDefinition {
     public static openedEvent = "opened";
+    public static closedEvent = "closed";
     public static selectedIndexChangedEvent = "selectedIndexChanged";
     
     public hint: string;    
@@ -33,6 +34,7 @@ export abstract class DropDownBase extends View implements DropDownDefinition {
     public isValueListIn: boolean;
 
     public abstract open();
+    public abstract close();
 
     public _getItemAsString(index: number) {
         const items = this.items;

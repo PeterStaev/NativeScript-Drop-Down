@@ -48,7 +48,7 @@ const enum RealizedViewType {
 }
 
 export class DropDown extends DropDownBase {
-    public nativeView: android.widget.Spinner;
+    public nativeView: TNSSpinner;
     public _realizedItems = [
         new Map<android.view.View, View>(),
         new Map<android.view.View, View>()
@@ -57,7 +57,7 @@ export class DropDown extends DropDownBase {
     private _androidViewId: number;
 
     public createNativeView() {
-        const spinner = new android.widget.Spinner(this._context);
+        const spinner = new TNSSpinner(new WeakRef(this));
 
         if (!this._androidViewId) {
             this._androidViewId = android.view.View.generateViewId();
@@ -72,10 +72,6 @@ export class DropDown extends DropDownBase {
         spinner.setOnItemSelectedListener(itemSelectedListener);
         (spinner as any).itemSelectedListener = itemSelectedListener;
 
-        const touchListener = new DropDownTouchListener(new WeakRef(this));
-        spinner.setOnTouchListener(touchListener);
-        (spinner as any).touchListener = touchListener;
-
         return spinner;
     }
 
@@ -85,7 +81,6 @@ export class DropDown extends DropDownBase {
         const nativeView = this.nativeView as any;
         nativeView.adapter.owner = new WeakRef(this);
         nativeView.itemSelectedListener.owner = new WeakRef(this);
-        nativeView.touchListener.owner = new WeakRef(this);
 
         // When used in templates the selectedIndex changed event is fired before the native widget is init.
         // So here we must set the inital value (if any)
@@ -98,7 +93,6 @@ export class DropDown extends DropDownBase {
         const nativeView = this.nativeView as any;
         nativeView.adapter.owner = null;
         nativeView.itemSelectedListener.owner = null;
-        nativeView.touchListener.owner = null;
 
         this._clearCache(RealizedViewType.DropDownView);
         this._clearCache(RealizedViewType.ItemView);
@@ -112,6 +106,10 @@ export class DropDown extends DropDownBase {
 
     public open() {
         this.nativeView.performClick();
+    }
+
+    public close() {
+        this.nativeView.onDetachedFromWindow();
     }
 
     public [selectedIndexProperty.getDefault](): number {
@@ -230,6 +228,44 @@ export class DropDown extends DropDownBase {
             }
         });
         realizedItems.clear();
+    }
+}
+
+class TNSSpinner extends android.widget.Spinner {
+    private _isOpenedIn = false;
+
+    constructor(private owner: WeakRef<DropDown>) {
+        super(owner.get()._context);
+        return global.__native(this);
+    }
+
+    public performClick() {
+        const owner = this.owner.get();
+
+        this._isOpenedIn = true;
+
+        owner.notify({
+            eventName: DropDownBase.openedEvent,
+            object: owner
+        });
+
+        return super.performClick();
+    }
+
+    public onWindowFocusChanged(hasWindowFocus: boolean) {
+        super.onWindowFocusChanged(hasWindowFocus);
+
+        if (this._isOpenedIn && hasWindowFocus) {
+            const owner = this.owner.get();
+            owner.notify({
+                eventName: DropDownBase.closedEvent,
+                object: owner
+            });
+        }
+    }
+
+    public onDetachedFromWindow() {
+        super.onDetachedFromWindow();
     }
 }
 
@@ -359,26 +395,5 @@ class DropDownItemSelectedListener extends java.lang.Object implements android.w
 
     public onNothingSelected() {
         /* Currently Not Needed */
-    }
-}
-
-@Interfaces([android.view.View.OnTouchListener])
-class DropDownTouchListener extends java.lang.Object implements android.view.View.OnTouchListener {
-    constructor(private owner: WeakRef<DropDown>) {
-        super();
-
-        return global.__native(this);
-    }
-
-    public onTouch(v: android.view.View, event: android.view.MotionEvent) {
-        if (event.getAction() === android.view.MotionEvent.ACTION_DOWN) {
-            const owner = this.owner.get();
-
-            owner.notify({
-                eventName: DropDownBase.openedEvent,
-                object: owner
-            });
-        }
-        return false;
     }
 }

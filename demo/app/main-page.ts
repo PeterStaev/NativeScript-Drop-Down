@@ -1,12 +1,15 @@
 import { EventData, Observable} from "data/observable";
 import pages = require("ui/page");
-import { SelectedIndexChangedEventData, ValueList } from "nativescript-drop-down";
+import { DropDown, SelectedIndexChangedEventData, ValueList } from "nativescript-drop-down";
 
 let viewModel: Observable;
+let dd: DropDown;
 
 export function pageLoaded(args: EventData) {
     const page = args.object as pages.Page;
     const items = new ValueList<string>();
+    
+    dd = page.getViewById<DropDown>("dd");
 
     viewModel = new Observable();
 
@@ -26,10 +29,22 @@ export function dropDownOpened(args: EventData) {
     console.log("Drop Down opened");
 }
 
+export function dropDownClosed(args: EventData) {
+    console.log("Drop Down closed");
+}
+
 export function dropDownSelectedIndexChanged(args: SelectedIndexChangedEventData) {
     console.log(`Drop Down selected index changed from ${args.oldIndex} to ${args.newIndex}. New value is '${viewModel.get("items").getValue(args.newIndex)}'`);
 }
 
 export function changeStyles() {
     viewModel.set("cssClass", "changed-styles");
+}
+
+export function open() {
+    dd.open();
+}
+
+export function close() {
+    dd.close();
 }

@@ -25,12 +25,18 @@ You need to add `xmlns:dd="nativescript-drop-down"` to your page tag, and then s
 * **opened**  
 Triggered when the DropDown is opened. 
 
+* **closed**  
+Triggered when the DropDown is closed. 
+
 * **selectedIndexChanged**  
 Triggered when the user changes the selection in the DropDown 
 
 ### Static Properties
 * **openedEvent** - *String*  
 String value used when hooking to opened event.
+
+* **closedEvent** - *String*  
+String value used when hooking to closed event.
 
 * **selectedIndexChangedEvent** - *String*  
 String value used when hooking to selectedIndexChanged event.
@@ -56,15 +62,19 @@ Gets/sets whether there will be an accessory view (toolbar with Done button) und
 
 ### Methods 
 * **open(): void**  
-Opens the drop down. 
+Opens the drop down.
+
+* **close(): void**  
+Closes the drop down. 
 
 ## Example
-```XML
+```xml
 <!-- test-page.xml -->
 <Page xmlns="http://schemas.nativescript.org/tns.xsd" loaded="pageLoaded" xmlns:dd="nativescript-drop-down">
   <GridLayout rows="auto, auto, *" columns="auto, *">
     <dd:DropDown items="{{ items }}" selectedIndex="{{ selectedIndex }}" 
-                 opened="dropDownOpened" selectedIndexChanged="dropDownSelectedIndexChanged"
+                 opened="dropDownOpened" closed="dropDownClosed" 
+                 selectedIndexChanged="dropDownSelectedIndexChanged"
                  row="0" colSpan="2" />
     <Label text="Selected Index:" row="1" col="0" fontSize="18" verticalAlignment="bottom"/>
     <TextField text="{{ selectedIndex }}" row="1" col="1" />
@@ -72,7 +82,7 @@ Opens the drop down.
 </Page>
 ```
 
-```TypeScript
+```ts
 // test-page.ts
 import observable = require("data/observable");
 import observableArray = require("data/observable-array");
@@ -101,6 +111,10 @@ export function dropDownOpened(args: EventData) {
     console.log("Drop Down opened");
 }
 
+export function dropDownClosed(args: EventData) {
+    console.log("Drop Down closed");
+}
+
 export function dropDownSelectedIndexChanged(args: SelectedIndexChangedEventData) {
     console.log(`Drop Down selected index changed from ${args.oldIndex} to ${args.newIndex}`);
 }
@@ -117,20 +131,20 @@ registerElement("DropDown", () => require("nativescript-drop-down/drop-down").Dr
 - Import `DropDownModule` in `NgModule`:
 ```typescript
 import { DropDownModule } from “nativescript-drop-down/angular”;
-…
+//......
 @NgModule({
-	…
+	//......
 	imports: [
-		…
+        //......
 		DropDownModule,
-		…
+        //......
 	],
-	…
+    //......
 })
 ```
 
 ##### Example Usage
-```TypeScript
+```ts
 // main.ts
 import { NgModule } from "@angular/core";
 import { NativeScriptModule } from "nativescript-angular/nativescript.module";
@@ -152,7 +166,7 @@ class AppComponentModule {
 platformNativeScriptDynamic().bootstrapModule(AppComponentModule);
 ```
 
-```HTML
+```html
 <!-- app.component.html -->
 <StackLayout>
     <GridLayout rows="auto, auto, *"
@@ -163,6 +177,7 @@ platformNativeScriptDynamic().bootstrapModule(AppComponentModule);
                   [(ngModel)]="selectedIndex"
                   (selectedIndexChanged)="onchange($event)"
                   (opened)="onopen()"
+                  (closed)="onclose()"
                   row="0"
                   colSpan="2"></DropDown>
         <Label text="Selected Index:"
@@ -177,7 +192,7 @@ platformNativeScriptDynamic().bootstrapModule(AppComponentModule);
 </StackLayout>
 ```
 
-```TypeScript
+```ts
 // app.component.ts
 import { Component } from "@angular/core";
 import { SelectedIndexChangedEventData } from "nativescript-drop-down";
@@ -204,6 +219,10 @@ export class AppComponent {
     public onopen() {
         console.log("Drop Down opened.");
     }
+
+    public onclose() {
+        console.log("Drop Down closed.");
+    }
 }
 ```
 
@@ -213,12 +232,12 @@ tied to the tex. For example drop down with states you might want tos how the fu
 and then when working with your backend you want to use the state code (i.e. FL). The Drop Down items property can be
 set to either Array of objects or a custom object that implements `getItem(index: number): any` function and `length` proerty. With versionn 3.0 of the plugin it has a built in class that helps you with this scenario:
 
-```TypeScript
+```ts
 import { ValueList } from "nativescript-drop-down";
 ```
 
 Then you can set the `items` property of the DropDown to an instance of ValueList:
-```TypeScript
+```ts
 let dd = page.getViewById<DropDown>("dd");
 let itemSource = new ValueList<string>([
     { value: "FL", display: "Florida" }, 
@@ -229,11 +248,11 @@ dd.items = itemSource;
 
 This enables you to do things like:  
 1.If you want to select an item in the DropDown by its backend value (for example FL), you can do this with:
-```TypeScript
+```ts
 dd.selectedIndex = itemSource.getIndex("FL");
 ```
 2.You can get the backend value of what the user selected using:
-```TypeScript
+```ts
 let selectedValue = itemSource.getValue(dd.selectedIndex);
 ```
 

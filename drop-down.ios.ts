@@ -53,7 +53,7 @@ const HINT_COLOR = new Color("#3904041E");
 export class DropDown extends DropDownBase {
     public _listPicker: UIPickerView;
     public nativeView: TNSDropDownLabel;
-    
+
     private _dropDownDelegate: DropDownListPickerDelegateImpl;
     private _dropDownDataSource: DropDownListDataSource;
 
@@ -65,7 +65,7 @@ export class DropDown extends DropDownBase {
 
     constructor() {
         super();
-        
+
         const applicationFrame = utils.ios.getter(UIScreen, UIScreen.mainScreen).applicationFrame;
 
         this.nativeView = TNSDropDownLabel.initWithOwner(new WeakRef(this));
@@ -87,7 +87,7 @@ export class DropDown extends DropDownBase {
         nsArray.addObject(this._doneButton);
         this._toolbar.setItemsAnimated(nsArray, false);
     }
-    
+
     public disposeNativeView() {
         this._doneTapDelegate = null;
         this._dropDownDelegate = null;
@@ -128,6 +128,10 @@ export class DropDown extends DropDownBase {
 
     public open() {
         this.ios.becomeFirstResponder();
+    }
+
+    public close() {
+        this.ios.resignFirstResponder();
     }
 
     public [selectedIndexProperty.getDefault](): number {
@@ -247,7 +251,7 @@ export class DropDown extends DropDownBase {
             case "line-through":
                 attributes.set(NSStrikethroughStyleAttributeName, NSUnderlineStyle.StyleSingle);
                 break;
-                
+
             case "underline line-through":
                 attributes.set(NSUnderlineStyleAttributeName, NSUnderlineStyle.StyleSingle);
                 attributes.set(NSStrikethroughStyleAttributeName, NSUnderlineStyle.StyleSingle);
@@ -292,7 +296,7 @@ export class DropDown extends DropDownBase {
             this.nativeView.text = sourceString;
         }
     }
-    
+
     private _setPadding(newPadding: { top?: number, right?: number, bottom?: number, left?: number }) {
         const nativeView = this.nativeView;
         const padding = nativeView.padding;
@@ -315,9 +319,9 @@ class TapHandler extends NSObject {
 
     private _owner: WeakRef<DropDown>;
 
-    @ObjCMethod()    
+    @ObjCMethod()
     public tap() {
-        this._owner.get().ios.resignFirstResponder();
+        this._owner.get().close();
     }
 }
 
@@ -347,14 +351,14 @@ class DropDownListDataSource extends NSObject implements UIPickerViewDataSource 
 class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDelegate {
     public static initWithOwner(owner: WeakRef<DropDown>): DropDownListPickerDelegateImpl {
         const delegate = DropDownListPickerDelegateImpl.new() as DropDownListPickerDelegateImpl;
-        
+
         delegate._owner = owner;
-        
+
         return delegate;
     }
 
     private _owner: WeakRef<DropDown>;
-    
+
     public pickerViewViewForRowForComponentReusingView(pickerView: UIPickerView, row: number, component: number, view: UIView): UIView {
         // NOTE: Currently iOS sends the reusedView always as null, so no reusing is possible
         const owner = this._owner.get();
@@ -370,12 +374,12 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
         labelStyle.padding = style.padding;
         labelStyle.textAlignment = style.textAlignment;
         labelStyle.textDecoration = style.textDecoration;
-        
+
         return label.ios;
     }
 
     public pickerViewDidSelectRowInComponent(pickerView: UIPickerView, row: number, component: number): void {
-        const  owner = this._owner.get();
+        const owner = this._owner.get();
         if (owner) {
             const oldIndex = owner.selectedIndex;
 
@@ -411,7 +415,7 @@ class TNSDropDownLabel extends TNSLabel {
     private _hint: string;
     private _hasText: boolean;
     private _internalColor: UIColor;
-    
+
     get inputView(): UIView {
         return this._inputView;
     }
@@ -453,13 +457,13 @@ class TNSDropDownLabel extends TNSLabel {
         this._internalColor = value;
         this._refreshColor();
     }
-    
+
     public setText(value: string) {
         const actualText = value || this._hint || "";
 
         this._hasText = !types.isNullOrUndefined(value) && value !== "";
         this.text = (actualText === "" ? " " : actualText); // HACK: If empty use <space> so the label does not collapse
-        
+
         this._refreshColor();
 
         this._owner.get()._setTextAttributes();
@@ -467,7 +471,7 @@ class TNSDropDownLabel extends TNSLabel {
 
     public becomeFirstResponder(): boolean {
         const result = super.becomeFirstResponder();
-        
+
         if (result) {
             if (!this._isInputViewOpened) {
                 const owner = this._owner.get();
@@ -483,14 +487,20 @@ class TNSDropDownLabel extends TNSLabel {
 
         return result;
     }
-    
+
     public resignFirstResponder(): boolean {
         const result = super.resignFirstResponder();
+        const owner = this._owner.get();
 
         if (result) {
             this._isInputViewOpened = false;
+
+            owner.notify({
+                eventName: DropDownBase.closedEvent,
+                object: owner
+            });
         }
-        
+
         return result;
     }
 
@@ -500,5 +510,5 @@ class TNSDropDownLabel extends TNSLabel {
 
     private _refreshColor() {
         this.textColor = (this._hasText && this._internalColor ? this._internalColor : HINT_COLOR.ios);
-    }    
+    }
 }

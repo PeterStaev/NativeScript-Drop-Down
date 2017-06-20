@@ -31,6 +31,10 @@ export class DropDownComponent implements OnInit {
         console.log("Drop Down opened.");
     }
 
+    public onclose() {
+        console.log("Drop Down closed.");
+    }
+
     public changeStyles() {
         this.cssClass = "changed-styles";
     }
