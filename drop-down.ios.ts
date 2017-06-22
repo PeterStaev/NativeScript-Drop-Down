@@ -396,6 +396,7 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
     }
 }
 
+@ObjCClass()
 class TNSDropDownLabel extends TNSLabel {
     public static initWithOwner(owner: WeakRef<DropDown>): TNSDropDownLabel {
         const label = TNSDropDownLabel.new() as TNSDropDownLabel;
@@ -404,6 +405,8 @@ class TNSDropDownLabel extends TNSLabel {
         label._isInputViewOpened = false;
         label.color = utils.ios.getter(UIColor, UIColor.blackColor);
         label.text = " "; // HACK: Set the text to space so that it takes the necessary height if no hint/selected item
+
+        label.addGestureRecognizer(UITapGestureRecognizer.alloc().initWithTargetAction(label, "tap"));
 
         return label;
     }
@@ -504,8 +507,11 @@ class TNSDropDownLabel extends TNSLabel {
         return result;
     }
 
-    public touchesEndedWithEvent(touches: NSSet<UITouch>, event: _UIEvent) {
-        this.becomeFirstResponder();
+    @ObjCMethod()
+    public tap( @ObjCParam(UITapGestureRecognizer) sender: UITapGestureRecognizer) {
+        if (sender.state === UIGestureRecognizerState.Ended) {
+            this.becomeFirstResponder();
+        }    
     }
 
     private _refreshColor() {

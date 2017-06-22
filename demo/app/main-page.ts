@@ -1,4 +1,5 @@
-import { EventData, Observable} from "data/observable";
+import { EventData, Observable } from "data/observable";
+import { GestureTypes } from "ui/gestures";
 import pages = require("ui/page");
 import { DropDown, SelectedIndexChangedEventData, ValueList } from "nativescript-drop-down";
 
@@ -9,6 +10,10 @@ export function pageLoaded(args: EventData) {
     const page = args.object as pages.Page;
     const items = new ValueList<string>();
     
+    page.observe(GestureTypes.tap, () => {
+        console.log("page tap");
+    });
+
     dd = page.getViewById<DropDown>("dd");
 
     viewModel = new Observable();
