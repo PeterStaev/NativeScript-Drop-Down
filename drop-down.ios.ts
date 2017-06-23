@@ -127,7 +127,9 @@ export class DropDown extends DropDownBase {
     }
 
     public open() {
-        this.ios.becomeFirstResponder();
+        if (this.isEnabled) {
+            this.ios.becomeFirstResponder();
+        }    
     }
 
     public close() {
@@ -510,7 +512,11 @@ class TNSDropDownLabel extends TNSLabel {
     @ObjCMethod()
     public tap( @ObjCParam(UITapGestureRecognizer) sender: UITapGestureRecognizer) {
         if (sender.state === UIGestureRecognizerState.Ended) {
-            this.becomeFirstResponder();
+            const owner = this._owner.get();
+
+            if (owner.isEnabled) {
+                this.becomeFirstResponder();
+            }    
         }    
     }
 

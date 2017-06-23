@@ -17,6 +17,9 @@
     color: green;
     text-align: right;
 }
+.default:disabled {
+    opacity: 0.5
+}
 
 StackLayout {
     horizontal-align: center;

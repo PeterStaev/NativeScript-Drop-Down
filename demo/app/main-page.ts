@@ -21,6 +21,7 @@ export function pageLoaded(args: EventData) {
     viewModel.set("items", items);
     viewModel.set("hint", "My Hint");
     viewModel.set("selectedIndex", null);    
+    viewModel.set("isEnabled", true);    
     viewModel.set("cssClass", "default");
 
     page.bindingContext = viewModel;

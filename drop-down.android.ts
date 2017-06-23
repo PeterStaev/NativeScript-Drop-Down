@@ -105,7 +105,9 @@ export class DropDown extends DropDownBase {
     }
 
     public open() {
-        this.nativeView.performClick();
+        if (this.isEnabled) {
+            this.nativeView.performClick();
+        }    
     }
 
     public close() {
