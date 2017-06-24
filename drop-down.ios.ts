@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
 import { Color } from "color";
-import { Label } from "ui/label";
 import { ItemsSource } from "ui/list-picker";
 import { Font } from "ui/styling/font";
+import { Style } from "ui/styling/style";
 import {
     TextAlignment,
     TextDecoration,
@@ -33,6 +33,7 @@ import {
     DropDownBase,
     Length,
     backgroundColorProperty,
+    backgroundInternalProperty,
     colorProperty,
     fontInternalProperty,
     hintProperty,
@@ -179,11 +180,22 @@ export class DropDown extends DropDownBase {
         return this.nativeView.backgroundColor;
     }
     public [backgroundColorProperty.setNative](value: Color | UIColor) {
+        if (!value) {
+            return;
+        }
+        
         const color = value instanceof Color ? value.ios : value;
 
         this.nativeView.backgroundColor = color;
         this._listPicker.backgroundColor = color;
         this._listPicker.reloadAllComponents();
+    }
+
+    public [backgroundInternalProperty.getDefault](): UIColor {
+        return null;
+    }
+    public [backgroundInternalProperty.setNative](value: Color) {
+        //
     }
 
     public [fontInternalProperty.getDefault](): UIFont {
@@ -196,6 +208,7 @@ export class DropDown extends DropDownBase {
 
     public [textAlignmentProperty.setNative](value: TextAlignment) {
         switch (value) {
+            case "initial":
             case "left":
                 this.nativeView.textAlignment = NSTextAlignment.Left;
                 break;
@@ -211,15 +224,15 @@ export class DropDown extends DropDownBase {
     }
 
     public [textDecorationProperty.setNative](value: TextDecoration) {
-        this._setTextAttributes();
+        _setTextAttributes(this.nativeView, this.style);
     }
 
     public [textTransformProperty.setNative](value: TextTransform) {
-        this._setTextAttributes();
+        _setTextAttributes(this.nativeView, this.style);
     }
 
     public [letterSpacingProperty.setNative](value: number) {
-        this._setTextAttributes();
+        _setTextAttributes(this.nativeView, this.style);
     }
 
     public [paddingTopProperty.setNative](value: Length) {
@@ -236,67 +249,6 @@ export class DropDown extends DropDownBase {
 
     public [paddingLeftProperty.setNative](value: Length) {
         this._setPadding({ left: layout.toDeviceIndependentPixels(this.effectivePaddingLeft) });
-    }
-
-    public _setTextAttributes() {
-        const style = this.style;
-        const attributes = new Map<string, any>();
-
-        switch (style.textDecoration) {
-            case "none":
-                break;
-
-            case "underline":
-                attributes.set(NSUnderlineStyleAttributeName, NSUnderlineStyle.StyleSingle);
-                break;
-
-            case "line-through":
-                attributes.set(NSStrikethroughStyleAttributeName, NSUnderlineStyle.StyleSingle);
-                break;
-
-            case "underline line-through":
-                attributes.set(NSUnderlineStyleAttributeName, NSUnderlineStyle.StyleSingle);
-                attributes.set(NSStrikethroughStyleAttributeName, NSUnderlineStyle.StyleSingle);
-                break;
-        }
-
-        if (style.letterSpacing !== 0) {
-            attributes.set(NSKernAttributeName, style.letterSpacing * this.nativeView.font.pointSize);
-        }
-
-        if (this.nativeView.textColor && attributes.size > 0) {
-            attributes.set(NSForegroundColorAttributeName, this.nativeView.textColor);
-        }
-
-        const text: string = types.isNullOrUndefined(this.nativeView.text) ? "" : this.nativeView.text.toString();
-        let sourceString: string;
-        switch (style.textTransform) {
-            case "uppercase":
-                sourceString = NSString.stringWithString(text).uppercaseString;
-                break;
-
-            case "lowercase":
-                sourceString = NSString.stringWithString(text).lowercaseString;
-                break;
-
-            case "capitalize":
-                sourceString = NSString.stringWithString(text).capitalizedString;
-                break;
-
-            default:
-                sourceString = text;
-        }
-
-        if (attributes.size > 0) {
-            const result = NSMutableAttributedString.alloc().initWithString(sourceString);
-            result.setAttributesRange(attributes as any, { location: 0, length: sourceString.length });
-            this.nativeView.attributedText = result;
-        }
-        else {
-            // Clear attributedText or text won't be affected.
-            this.nativeView.attributedText = undefined;
-            this.nativeView.text = sourceString;
-        }
     }
 
     private _setPadding(newPadding: { top?: number, right?: number, bottom?: number, left?: number }) {
@@ -365,19 +317,40 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
         // NOTE: Currently iOS sends the reusedView always as null, so no reusing is possible
         const owner = this._owner.get();
         const style = owner.style;
-        const label = new Label();
-        const labelStyle = label.style;
-
+        const label = TNSLabel.alloc().init();
+        
         label.text = owner._getItemAsString(row);
 
-        // Copy Styles        
-        labelStyle.color = style.color;
-        labelStyle.fontInternal = style.fontInternal;
-        labelStyle.padding = style.padding;
-        labelStyle.textAlignment = style.textAlignment;
-        labelStyle.textDecoration = style.textDecoration;
+        // Copy Styles
+        if (style.color) {
+            label.textColor = style.color.ios;
+        }
 
-        return label.ios;
+        label.padding = {
+            top: utils.layout.toDeviceIndependentPixels(owner.effectivePaddingTop),
+            right: utils.layout.toDeviceIndependentPixels(owner.effectivePaddingRight),
+            bottom: utils.layout.toDeviceIndependentPixels(owner.effectivePaddingBottom),
+            left: utils.layout.toDeviceIndependentPixels(owner.effectivePaddingLeft)
+        };
+
+        label.font = style.fontInternal.getUIFont(label.font);
+
+        switch (style.textAlignment) {
+            case "initial":
+            case "left":
+                label.textAlignment = NSTextAlignment.Left;
+                break;
+            case "center":
+                label.textAlignment = NSTextAlignment.Center;
+                break;
+            case "right":
+                label.textAlignment = NSTextAlignment.Right;
+                break;
+        }
+
+        _setTextAttributes(label, style);
+
+        return label;
     }
 
     public pickerViewDidSelectRowInComponent(pickerView: UIPickerView, row: number, component: number): void {
@@ -447,11 +420,12 @@ class TNSDropDownLabel extends TNSLabel {
         return this._hint;
     }
     set hint(value: string) {
+        const owner = this._owner.get();
         this._hint = value;
 
         if (!this._hasText) {
             this.text = value;
-            this._owner.get()._setTextAttributes();
+            _setTextAttributes(owner.nativeView, owner.style);
         }
     }
 
@@ -465,13 +439,14 @@ class TNSDropDownLabel extends TNSLabel {
 
     public setText(value: string) {
         const actualText = value || this._hint || "";
+        const owner = this._owner.get();
 
         this._hasText = !types.isNullOrUndefined(value) && value !== "";
         this.text = (actualText === "" ? " " : actualText); // HACK: If empty use <space> so the label does not collapse
 
         this._refreshColor();
 
-        this._owner.get()._setTextAttributes();
+        _setTextAttributes(owner.nativeView, owner.style);
     }
 
     public becomeFirstResponder(): boolean {
@@ -522,5 +497,65 @@ class TNSDropDownLabel extends TNSLabel {
 
     private _refreshColor() {
         this.textColor = (this._hasText && this._internalColor ? this._internalColor : HINT_COLOR.ios);
+    }
+}
+
+function _setTextAttributes(nativeView: TNSLabel, style: Style) {
+    const attributes = new Map<string, any>();
+
+    switch (style.textDecoration) {
+        case "none":
+            break;
+
+        case "underline":
+            attributes.set(NSUnderlineStyleAttributeName, NSUnderlineStyle.StyleSingle);
+            break;
+
+        case "line-through":
+            attributes.set(NSStrikethroughStyleAttributeName, NSUnderlineStyle.StyleSingle);
+            break;
+
+        case "underline line-through":
+            attributes.set(NSUnderlineStyleAttributeName, NSUnderlineStyle.StyleSingle);
+            attributes.set(NSStrikethroughStyleAttributeName, NSUnderlineStyle.StyleSingle);
+            break;
+    }
+
+    if (style.letterSpacing !== 0) {
+        attributes.set(NSKernAttributeName, style.letterSpacing * nativeView.font.pointSize);
+    }
+
+    if (nativeView.textColor && attributes.size > 0) {
+        attributes.set(NSForegroundColorAttributeName, nativeView.textColor);
+    }
+
+    const text: string = types.isNullOrUndefined(nativeView.text) ? "" : nativeView.text.toString();
+    let sourceString: string;
+    switch (style.textTransform) {
+        case "uppercase":
+            sourceString = NSString.stringWithString(text).uppercaseString;
+            break;
+
+        case "lowercase":
+            sourceString = NSString.stringWithString(text).lowercaseString;
+            break;
+
+        case "capitalize":
+            sourceString = NSString.stringWithString(text).capitalizedString;
+            break;
+
+        default:
+            sourceString = text;
+    }
+
+    if (attributes.size > 0) {
+        const result = NSMutableAttributedString.alloc().initWithString(sourceString);
+        result.setAttributesRange(attributes as any, { location: 0, length: sourceString.length });
+        nativeView.attributedText = result;
+    }
+    else {
+        // Clear attributedText or text won't be affected.
+        nativeView.attributedText = undefined;
+        nativeView.text = sourceString;
     }
 }
