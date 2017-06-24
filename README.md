@@ -57,6 +57,9 @@ Gets or sets the selected index of the DropDown.
 * **hint** - *String*  
 Gets or sets the hint for the DropDown.
 
+* **isEnabled** - *boolean*  
+Gets or sets whether the drop down is enabled. If you want to apply a specific style you can use the `:disabled` pseudo css selector. 
+
 * **accessoryViewVisible** - *boolean* (Default: true)  
 Gets/sets whether there will be an accessory view (toolbar with Done button) under iOS. Valid only when running on iOS.
 
