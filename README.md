@@ -283,3 +283,7 @@ module.exports = function (platform, destinationApp) {
    //......
 }
 ```
+## Donate
+`bitcoin:14fjysmpwLvSsAskvLASw6ek5XfhTzskHC`
+
+![Donate](https://www.tangrainc.com/qr.png)
