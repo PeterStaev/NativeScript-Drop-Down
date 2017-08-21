@@ -133,7 +133,7 @@ registerElement("DropDown", () => require("nativescript-drop-down/drop-down").Dr
 ```
 - Import `DropDownModule` in `NgModule`:
 ```typescript
-import { DropDownModule } from “nativescript-drop-down/angular”;
+import { DropDownModule } from "nativescript-drop-down/angular";
 //......
 @NgModule({
 	//......
