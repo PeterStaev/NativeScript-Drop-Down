@@ -33,7 +33,6 @@ matrix:
     script: grunt exec:tslint
 
     - stage: "WebPack"
-    # iOS
     os: osx
     env:
         - Platform="iOS"
@@ -44,7 +43,6 @@ matrix:
     script: 
         - cd demo && npm install && npm run ns-bundle --ios --build-app --uglify && cd ..
         - cd demo-ng && npm install && npm run ns-bundle --ios --build-app --uglify && cd ..
-    # Android
     - language: android
     os: linux
     env:
