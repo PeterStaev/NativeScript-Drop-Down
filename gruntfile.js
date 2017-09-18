@@ -64,11 +64,15 @@
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-exec");
 
-    grunt.registerTask("build", [
-        "exec:tslint",
+    grunt.registerTask("compile", [
         "clean:build",
         "exec:tsCompile",
         "exec:ngCompile",
+        "copy"
+    ]);
+    grunt.registerTask("build", [
+        "exec:tslint",
+        "compile",
         "copy"
     ]);
     grunt.registerTask("publish", [
