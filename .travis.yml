@@ -27,10 +27,10 @@ install:
 matrix:
   include:
     - stage: "Lint"
-        language: node_js
-        os: linux
-        node_js: "6"
-        script: grunt exec:tslint
+    language: node_js
+    os: linux
+    node_js: "6"
+    script: grunt exec:tslint
 
     - stage: "WebPack"
       os: osx
