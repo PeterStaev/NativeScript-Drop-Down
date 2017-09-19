@@ -32,13 +32,20 @@ matrix:
       language: node_js
       os: linux
       node_js: "6"
-      script: grunt exec:tslint
+      script: 
+        - cd bin/dist && cat README.md | grep -q "# Installation" && cd ../..
+        - cd bin/dist && cat README.md | grep -q "# Configuration" && cd ../..
+        - cd bin/dist && cat README.md | grep -q "# API" && cd ../..
+        - cd bin/dist && cat README.md | grep -q "# Usage" && cd ../..
+        - cd bin/dist && cat package.json | grep -q "\"license\"" && cd ../..
+        - cd bin/dist && cat package.json | grep -q "\"nativescript\"" && cd ../..
+        - grunt exec:tslint
 
     - stage: "Build"
-      env: 
-        - Android="25"
       language: android
       os: linux
+      env: 
+        - Android="25"
       jdk: oraclejdk8
       before_install: nvm install 6.10.3
       script: 
@@ -57,7 +64,17 @@ matrix:
         - cd demo-ng && npm install && tns build ios && cd ..
 
     - stage: "WebPack"
-      os: osx
+      language: android
+      os: linux
+      env:
+        - Android="25"
+        - Platform="Android"
+      jdk: oraclejdk8
+      before_install: nvm install 6.10.3
+      script: 
+        - cd demo && npm install && npm run ns-bundle --android --build-app --uglify && cd ..
+        - cd demo-ng && npm install && npm run ns-bundle --android --build-app --uglify && cd ..
+    - os: osx
       env: 
         - iOS="10.3"
         - Xcode="8.3"
@@ -69,13 +86,3 @@ matrix:
       script: 
         - cd demo && npm install && npm run ns-bundle --ios --build-app --uglify && cd ..
         - cd demo-ng && npm install && npm run ns-bundle --ios --build-app --uglify && cd ..
-    - language: android
-      os: linux
-      env:
-        - Android="25"
-        - Platform="Android"
-      jdk: oraclejdk8
-      before_install: nvm install 6.10.3
-      script: 
-        - cd demo && npm install && npm run ns-bundle --android --build-app --uglify && cd ..
-        - cd demo-ng && npm install && npm run ns-bundle --android --build-app --uglify && cd ..

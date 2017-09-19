@@ -16,8 +16,8 @@ Run the following command from the root of your project:
 
 This command automatically installs the necessary files, as well as stores nativescript-drop-down as a dependency in your project's package.json file.
 
-## Usage
-You need to add `xmlns:dd="nativescript-drop-down"` to your page tag, and then simply use `<dd:DropDown/>` in order to add the widget to your page.
+## Configuration
+There is no additional configuration needed!
 
 ## API
 
@@ -70,7 +70,9 @@ Opens the drop down.
 * **close(): void**  
 Closes the drop down. 
 
-## Example
+## Usage
+You need to add `xmlns:dd="nativescript-drop-down"` to your page tag, and then simply use `<dd:DropDown/>` in order to add the widget to your page.
+
 ```xml
 <!-- test-page.xml -->
 <Page xmlns="http://schemas.nativescript.org/tns.xsd" loaded="pageLoaded" xmlns:dd="nativescript-drop-down">
@@ -123,7 +125,7 @@ export function dropDownSelectedIndexChanged(args: SelectedIndexChangedEventData
 }
 ```
 
-## Angular
+## Usage in Angular
 
 ##### Migration to 3.0+
 
