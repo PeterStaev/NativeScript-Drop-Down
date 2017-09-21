@@ -5,8 +5,8 @@ android:
     - tools
     - platform-tools
     - build-tools-25.0.2
-    - android-25
     - android-23
+    - android-25
     - extra-android-m2repository
 
 before_cache:
@@ -28,7 +28,7 @@ install:
 
 matrix:
   include:
-    - stage: "Lint"
+    - stage: lint
       language: node_js
       os: linux
       node_js: "6"
@@ -41,7 +41,7 @@ matrix:
         - cd bin/dist && cat package.json | grep -q "\"nativescript\"" && cd ../..
         - grunt exec:tslint
 
-    - stage: "Build"
+    - stage: build
       language: android
       os: linux
       env: 
@@ -51,7 +51,9 @@ matrix:
       script: 
         - cd demo && npm install && tns build android && cd ..
         - cd demo-ng && npm install && tns build android && cd ..
-    - os: osx
+
+    - stage: build
+      os: osx
       env: 
         - iOS="10.3"
         - Xcode="8.3"
@@ -63,7 +65,7 @@ matrix:
         - cd demo && npm install && tns build ios && cd ..
         - cd demo-ng && npm install && tns build ios && cd ..
 
-    - stage: "WebPack"
+    - stage: webpack
       language: android
       os: linux
       env:
@@ -74,7 +76,9 @@ matrix:
       script: 
         - cd demo && npm install && npm run ns-bundle --android --build-app --uglify && cd ..
         - cd demo-ng && npm install && npm run ns-bundle --android --build-app --uglify && cd ..
-    - os: osx
+    
+    - stage: webpack
+      os: osx
       env: 
         - iOS="10.3"
         - Xcode="8.3"
@@ -86,3 +90,17 @@ matrix:
       script: 
         - cd demo && npm install && npm run ns-bundle --ios --build-app --uglify && cd ..
         - cd demo-ng && npm install && npm run ns-bundle --ios --build-app --uglify && cd ..
+
+before_deploy:
+    - cd bin/dist
+
+deploy:
+    language: node_js 
+    node_js: "6"
+    provider: npm
+    email: "peter@tangrasoft.com"
+    api_key:
+        secure: U3FCudZUlh/TjfF51/binIIWkwKsbuMB1OivJrJ4HWLlxNcbes91uBVFLJ5aktg+yJxR72yH/cJ7BQRh/I18AUX+tnLcUHR9bz31WdM7+njm5gmAbb2c4cypKZ1L1yeIhhOtL7wZqYzvP5Jbthuv/ewQkYtMJXZiOXuYFhOtMUXMVAS8PIQfNbCCW7UFqhGAolfSHExVv4OgJh/GAAcscg8XPdArUOicZhGSSSRc5J71S8R9z46g02BXMx0DHMgcM0gTzkDjq0yA3ns+XCqEQrJNQC8jvD8OPY49VG+rKBY/xGO6JzRTue5HlmsXNbI98bk+qljaXCFllv3RBW6mu5lFBhDDJtzSrr3PuyddOC1EnCStDP1tfvj6tPTw7mMWY3LfOBzPl9E8T1HxJBbmGEpjVLvmBlujhw8osbnLYJjgK+qETjvBn3mem6NhGd4H/q3Q1iioVwRWwrVCeVFrpoq/Aa2ySZYKGU4wqJDYbGIOgBr8PB3pFc4BauEJhQmhoP8vF4s6yNEfTkXuA61Nsqwv2DuG1uqTcmcrSeXRTaA2nWok8oEqQ/QAk/t9HFDuZLQhCgDJaXoKmDtNsVQ/rfTyMNBTXm95IWwSlQb2RwYxsgagKEBk86myYkzh1tQJdERIWqF2zmohQTMaiwqv+ssDW1eyydPcnkFfyQyAPn8=
+    skip_cleanup: true
+    on:
+        branch: release
