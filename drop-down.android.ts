@@ -352,7 +352,7 @@ class DropDownAdapter extends android.widget.BaseAdapter implements android.widg
 
             // Hint View styles
             if (index === 0) {
-                view.color = new Color(255, 148, 150, 148);
+                label.style.color = new Color(255, 148, 150, 148);
                 (view as any).isHintViewIn = true;
 
                 // HACK: if there is no hint defined, make the view in the drop down virtually invisible.
