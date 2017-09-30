@@ -1,8 +1,11 @@
+sudo: false
+
 android:
   components:
     - tools
     - platform-tools
     - build-tools-25.0.2
+    - android-23
     - android-25
     - extra-android-m2repository
 
@@ -85,5 +88,3 @@ matrix:
         api_key:
             secure: U3FCudZUlh/TjfF51/binIIWkwKsbuMB1OivJrJ4HWLlxNcbes91uBVFLJ5aktg+yJxR72yH/cJ7BQRh/I18AUX+tnLcUHR9bz31WdM7+njm5gmAbb2c4cypKZ1L1yeIhhOtL7wZqYzvP5Jbthuv/ewQkYtMJXZiOXuYFhOtMUXMVAS8PIQfNbCCW7UFqhGAolfSHExVv4OgJh/GAAcscg8XPdArUOicZhGSSSRc5J71S8R9z46g02BXMx0DHMgcM0gTzkDjq0yA3ns+XCqEQrJNQC8jvD8OPY49VG+rKBY/xGO6JzRTue5HlmsXNbI98bk+qljaXCFllv3RBW6mu5lFBhDDJtzSrr3PuyddOC1EnCStDP1tfvj6tPTw7mMWY3LfOBzPl9E8T1HxJBbmGEpjVLvmBlujhw8osbnLYJjgK+qETjvBn3mem6NhGd4H/q3Q1iioVwRWwrVCeVFrpoq/Aa2ySZYKGU4wqJDYbGIOgBr8PB3pFc4BauEJhQmhoP8vF4s6yNEfTkXuA61Nsqwv2DuG1uqTcmcrSeXRTaA2nWok8oEqQ/QAk/t9HFDuZLQhCgDJaXoKmDtNsVQ/rfTyMNBTXm95IWwSlQb2RwYxsgagKEBk86myYkzh1tQJdERIWqF2zmohQTMaiwqv+ssDW1eyydPcnkFfyQyAPn8=
         skip_cleanup: true
-        on:
-          branch: release
