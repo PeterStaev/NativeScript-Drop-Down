@@ -3,7 +3,6 @@ android:
     - tools
     - platform-tools
     - build-tools-25.0.2
-    - android-23
     - android-25
     - extra-android-m2repository
 
@@ -30,14 +29,7 @@ matrix:
       language: node_js
       os: linux
       node_js: "6"
-      script: 
-        - cd bin/dist && cat README.md | grep -q "# Installation" && cd ../..
-        - cd bin/dist && cat README.md | grep -q "# Configuration" && cd ../..
-        - cd bin/dist && cat README.md | grep -q "# API" && cd ../..
-        - cd bin/dist && cat README.md | grep -q "# Usage" && cd ../..
-        - cd bin/dist && cat package.json | grep -q "\"license\"" && cd ../..
-        - cd bin/dist && cat package.json | grep -q "\"nativescript\"" && cd ../..
-        - grunt exec:tslint
+      script: grunt lint
 
     - stage: build
       language: android
@@ -46,9 +38,7 @@ matrix:
         - Android="25"
       jdk: oraclejdk8
       before_install: nvm install 6.10.3
-      script: 
-        - cd demo && npm install && tns build android && cd ..
-        - cd demo-ng && npm install && tns build android && cd ..
+      script: "grunt ci:build:android"
 
     - stage: build
       os: osx
@@ -59,9 +49,7 @@ matrix:
       language: node_js 
       node_js: "6"
       jdk: oraclejdk8
-      script: 
-        - cd demo && npm install && tns build ios && cd ..
-        - cd demo-ng && npm install && tns build ios && cd ..
+      script: "grunt ci:build:ios"
 
     - stage: webpack
       language: android
@@ -71,9 +59,7 @@ matrix:
         - Platform="Android"
       jdk: oraclejdk8
       before_install: nvm install 6.10.3
-      script: 
-        - cd demo && npm install && npm run ns-bundle --android --build-app --uglify && cd ..
-        - cd demo-ng && npm install && npm run ns-bundle --android --build-app --uglify && cd ..
+      script: "grunt ci:webpack:android"
     
     - stage: webpack
       os: osx
@@ -85,9 +71,7 @@ matrix:
       language: node_js 
       node_js: "6"
       jdk: oraclejdk8
-      script: 
-        - cd demo && npm install && npm run ns-bundle --ios --build-app --uglify && cd ..
-        - cd demo-ng && npm install && npm run ns-bundle --ios --build-app --uglify && cd ..
+      script: "grunt ci:webpack:ios"
 
     - stage: deploy
       if: branch = release

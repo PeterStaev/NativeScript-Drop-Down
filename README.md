@@ -285,6 +285,20 @@ module.exports = function (platform, destinationApp) {
    //......
 }
 ```
+
+## Demos
+This repository includes both Angular and plain NativeScript demos. In order to run those execute the following in your shell:
+```shell
+$ git clone https://github.com/peterstaev/nativescript-drop-down
+$ cd nativescript-drop-down
+$ npm install
+$ npm run demo-ios
+```
+This will run the plain NativeScript demo project on iOS. If you want to run it on Android simply use the `-android` instead of the `-ios` sufix. 
+
+If you want to run the Angular demo simply use the `demo-ng-` prefix instead of `demo-`. 
+
+
 ## Donate
 `bitcoin:14fjysmpwLvSsAskvLASw6ek5XfhTzskHC`
 
