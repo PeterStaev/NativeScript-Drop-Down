@@ -7,7 +7,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const { NativeScriptWorkerPlugin } = require("nativescript-worker-loader/NativeScriptWorkerPlugin");
-
+const dropDownMangleExcludes = require("nativescript-drop-down/uglify-mangle-excludes").default;
 
 const mainSheet = `app.css`;
 
@@ -189,7 +189,7 @@ function getPlugins(platform, env) {
         // Work around an Android issue by setting compress = false
         const compress = platform !== "android";
         plugins.push(new webpack.optimize.UglifyJsPlugin({
-            mangle: { except: nsWebpack.uglifyMangleExcludes },
+            mangle: { except: nsWebpack.uglifyMangleExcludes.concat(dropDownMangleExcludes) },
             compress,
         }));
     }
