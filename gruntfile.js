@@ -45,15 +45,9 @@
             }
         },
         exec: {
-            tsCompile: {
-                cmd: "node ./node_modules/typescript/bin/tsc --project tsconfig.json --outDir " + localConfig.outDir
-            },
-            ngCompile: {
-                cmd: "node ./node_modules/.bin/ngc --project tsconfig.aot.json --outDir " + localConfig.outDir
-            },
-            tslint: {
-                cmd: "node ./node_modules/tslint/bin/tslint --project tsconfig.json"
-            },
+            tsCompile: "npm run tsc -- --outDir " + localConfig.outDir,
+            ngCompile: "npm run ngc -- --outDir " + localConfig.outDir,
+            tslint: "npm run tslint",
             checkRequiredReadmeSection: {
                 cwd: "bin/dist",
                 cmd: function (section) {

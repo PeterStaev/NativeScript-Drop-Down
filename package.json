@@ -21,6 +21,9 @@
     "url": "https://github.com/PeterStaev/NativeScript-Drop-Down"
   },
   "scripts": {
+    "tslint": "tslint --project tsconfig.json",
+    "tsc": "tsc --project tsconfig.json",
+    "ngc": "ngc --project tsconfig.aot.json",
     "demo-ios": "grunt build && cd demo && tns run ios",
     "demo-android": "grunt build && cd demo && tns run android",
     "demo-ng-ios": "grunt build && cd demo-ng && tns run ios",
