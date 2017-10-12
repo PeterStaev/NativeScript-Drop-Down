@@ -332,8 +332,10 @@ class DropDownAdapter extends android.widget.BaseAdapter implements android.widg
             const label = view.getViewById<Label>(LABELVIEWID);
             label.text = this.getItem(index);
 
-            // Copy root styles to view        
-            label.style.color = owner.style.color;
+            // Copy root styles to view
+            if (owner.style.color) {
+                label.style.color = owner.style.color;
+            }
             label.style.textDecoration = owner.style.textDecoration;
             label.style.textAlignment = owner.style.textAlignment;
             label.style.fontInternal = owner.style.fontInternal;
