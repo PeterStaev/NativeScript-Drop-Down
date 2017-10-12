@@ -38,7 +38,7 @@
     "nativescript-drop-down": "file:../bin/dist",
     "reflect-metadata": "~0.1.8",
     "rxjs": "~5.2.0",
-    "tns-core-modules": "^3.3.0-2017-10-11-1",
+    "tns-core-modules": "next",
     "zone.js": "~0.8.2"
   },
   "devDependencies": {

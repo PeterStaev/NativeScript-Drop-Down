@@ -38,7 +38,7 @@
   ],
   "license": "Apache-2.0",
   "peerDependencies": {
-    "tns-core-modules": "^3.3.0-2017-10-11-1"
+    "tns-core-modules": "^3.1.0 || >3.3.0-"
   },
   "devDependencies": {
     "@angular/common": "~4.4.1",
@@ -55,7 +55,7 @@
     "grunt-exec": "2.0.0",
     "nativescript-angular": "4.4.0",
     "rxjs": "~5.0.1",
-    "tns-core-modules": "^3.3.0-2017-10-11-1",
+    "tns-core-modules": "next",
     "tns-platform-declarations": "3.0.1",
     "tslint": "^4.5.1",
     "typescript": "~2.2.2",
