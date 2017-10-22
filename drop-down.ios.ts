@@ -33,7 +33,6 @@ import {
     DropDownBase,
     Length,
     backgroundColorProperty,
-    backgroundInternalProperty,
     colorProperty,
     fontInternalProperty,
     hintProperty,
@@ -189,13 +188,6 @@ export class DropDown extends DropDownBase {
         this.nativeView.backgroundColor = color;
         this._listPicker.backgroundColor = color;
         this._listPicker.reloadAllComponents();
-    }
-
-    public [backgroundInternalProperty.getDefault](): UIColor {
-        return null;
-    }
-    public [backgroundInternalProperty.setNative](value: Color) {
-        //
     }
 
     public [fontInternalProperty.getDefault](): UIFont {

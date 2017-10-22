@@ -8,6 +8,8 @@
     text-align: center;
     text-decoration: underline;
     margin: 20;
+    border-width: 2;
+    border-color: black;
 }
 .changed-styles {
     padding: 10;

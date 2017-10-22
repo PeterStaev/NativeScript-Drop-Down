@@ -6,5 +6,6 @@
         "demo": true, 
         "demo-ng": true, 
         "bin/**": true
-    }
+    },
+    "typescript.tsdk": "node_modules/typescript/lib"
 }
