@@ -67,7 +67,9 @@
             },
             "ci-webpack-demo": {
                 cmd: function (platform, demoSuffix) {
-                    return "cd demo" + (demoSuffix != "" ? "-" + demoSuffix : "")+ " && npm install && npm run ns-bundle --" + platform + " --build-app --uglify --snapshot";
+                    return "cd demo" + (demoSuffix != "" ? "-" + demoSuffix : "") + " && npm install && tns build " + platform
+                        + " --env.uglify --env.snapshot"
+                        + (demoSuffix === "ng" ? " --env.aot" : "");
                 }
             },
             npm_publish: {
