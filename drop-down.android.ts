@@ -295,9 +295,9 @@ class TNSSpinnerImpl extends android.widget.Spinner {
 
 TNSSpinner = TNSSpinnerImpl as any;
 }
-/* A snapshot-friendly, lazy-loaded class for TNSSpinner END */
+/* TNSSpinner END */
 
-/* DropDownAdpater BEGIN */
+/* A snapshot-friendly, lazy-loaded class for DropDownAdpater BEGIN */
 interface DropDownAdapter extends android.widget.BaseAdapter, android.widget.ISpinnerAdapter {
     /*tslint:disable-next-line no-misused-new*/
     new(owner: WeakRef<DropDown>): DropDownAdapter;
