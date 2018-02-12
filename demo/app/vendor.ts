@@ -7,4 +7,6 @@ application.loadAppCss();
 
 require("./vendor-platform");
 
+require("nativescript-drop-down"); // Added for snapshots
+
 require("bundle-entry-points");
