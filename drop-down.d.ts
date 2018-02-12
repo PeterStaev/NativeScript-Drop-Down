@@ -18,20 +18,20 @@ import { CoercibleProperty, Property, View } from "ui/core/view";
 import { EventData } from "data/observable";
 import { ItemsSource } from "ui/list-picker";
 
-export interface SelectedIndexChangedEventData extends EventData {
+export declare interface SelectedIndexChangedEventData extends EventData {
     oldIndex: number;
     newIndex: number;
 }
 
-export interface ValueItem<T> {
+export declare interface ValueItem<T> {
     value: T;
     display: string;
 }
 
-export class DropDown extends View {
-    public static openedEvent: string;
-    public static closedEvent: string;
-    public static selectedIndexChangedEvent: string;
+export declare class DropDown extends View {
+    public static openedEvent: "opened";
+    public static closedEvent: "closed";
+    public static selectedIndexChangedEvent: "selectedIndexChanged";
 
     public items: any[] | ItemsSource;
     public selectedIndex: number;
@@ -41,21 +41,21 @@ export class DropDown extends View {
     public ios: any; /* UILabel */
     public android: any; /*android.widget.Spinner */
 
-    public on(eventNames: string, callback: (data: EventData) => void, thisArg?: any);       
-    public on(event: "opened", callback: (args: EventData) => void, thisArg?: any); 
-    public on(event: "closed", callback: (args: EventData) => void, thisArg?: any); 
+    public on(eventNames: string, callback: (data: EventData) => void, thisArg?: any);
+    public on(event: "opened", callback: (args: EventData) => void, thisArg?: any);
+    public on(event: "closed", callback: (args: EventData) => void, thisArg?: any);
     public on(event: "selectedIndexChanged", callback: (args: SelectedIndexChangedEventData) => void, thisArg?: any);
 
     public open();
     public close();
 }
 
-export class ValueList<T> extends ObservableArray<ValueItem<T>> implements ItemsSource {
+export declare class ValueList<T> extends ObservableArray<ValueItem<T>> implements ItemsSource {
     public getDisplay(index: number): string;
     public getValue(index: number): T;
-    public getIndex(value: T): number;   
+    public getIndex(value: T): number;
 }
 
-export const selectedIndexProperty: CoercibleProperty<DropDown, number>;
-export const itemsProperty: Property<DropDown, any[] | ItemsSource>;
-export const hintProperty: Property<DropDown, string>;
+export declare const selectedIndexProperty: CoercibleProperty<DropDown, number>;
+export declare const itemsProperty: Property<DropDown, any[] | ItemsSource>;
+export declare const hintProperty: Property<DropDown, string>;

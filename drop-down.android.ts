@@ -57,6 +57,7 @@ export class DropDown extends DropDownBase {
     private _androidViewId: number;
 
     public createNativeView() {
+        initializeTNSSpinner();
         const spinner = new TNSSpinner(new WeakRef(this));
 
         if (!this._androidViewId) {
@@ -64,13 +65,15 @@ export class DropDown extends DropDownBase {
         }
         spinner.setId(this._androidViewId);
 
+        initializeDropDownAdapter();
         const adapter = new DropDownAdapter(new WeakRef(this));
         spinner.setAdapter(adapter);
-        (spinner as any).adapter = adapter;
+        spinner.adapter = adapter;
 
+        initializeDropDownItemSelectedListener();
         const itemSelectedListener = new DropDownItemSelectedListener(new WeakRef(this));
         spinner.setOnItemSelectedListener(itemSelectedListener);
-        (spinner as any).itemSelectedListener = itemSelectedListener;
+        spinner.itemSelectedListener = itemSelectedListener;
 
         return spinner;
     }
@@ -78,7 +81,7 @@ export class DropDown extends DropDownBase {
     public initNativeView() {
         super.initNativeView();
 
-        const nativeView = this.nativeView as any;
+        const nativeView = this.nativeView;
         nativeView.adapter.owner = new WeakRef(this);
         nativeView.itemSelectedListener.owner = new WeakRef(this);
 
@@ -90,7 +93,7 @@ export class DropDown extends DropDownBase {
     }
 
     public disposeNativeView() {
-        const nativeView = this.nativeView as any;
+        const nativeView = this.nativeView;
         nativeView.adapter.owner = null;
         nativeView.itemSelectedListener.owner = null;
 
@@ -107,11 +110,11 @@ export class DropDown extends DropDownBase {
     public open() {
         if (this.isEnabled) {
             this.nativeView.performClick();
-        }    
+        }
     }
 
     public close() {
-        this.nativeView.onDetachedFromWindow();
+        this.nativeView.onDetachedFromWindowX();
     }
 
     public [selectedIndexProperty.getDefault](): number {
@@ -233,7 +236,26 @@ export class DropDown extends DropDownBase {
     }
 }
 
-class TNSSpinner extends android.widget.Spinner {
+/* A snapshot-friendly, lazy-loaded class for TNSSpinner BEGIN */
+interface TNSSpinner extends android.widget.Spinner {
+    adapter;
+    itemSelectedListener;
+
+    /*tslint:disable-next-line no-misused-new*/
+    new(owner: WeakRef<DropDown>): TNSSpinner;
+
+    /** onDetachedFromWindow is protected so public version renamed */
+    onDetachedFromWindowX();
+}
+
+let TNSSpinner: TNSSpinner;
+
+function initializeTNSSpinner() {
+if (TNSSpinner) {
+    return;
+}
+
+class TNSSpinnerImpl extends android.widget.Spinner {
     private _isOpenedIn = false;
 
     constructor(private owner: WeakRef<DropDown>) {
@@ -266,12 +288,29 @@ class TNSSpinner extends android.widget.Spinner {
         }
     }
 
-    public onDetachedFromWindow() {
+    public onDetachedFromWindowX(): void {
         super.onDetachedFromWindow();
     }
 }
 
-class DropDownAdapter extends android.widget.BaseAdapter implements android.widget.ISpinnerAdapter {
+TNSSpinner = TNSSpinnerImpl as any;
+}
+/* A snapshot-friendly, lazy-loaded class for TNSSpinner END */
+
+/* DropDownAdpater BEGIN */
+interface DropDownAdapter extends android.widget.BaseAdapter, android.widget.ISpinnerAdapter {
+    /*tslint:disable-next-line no-misused-new*/
+    new(owner: WeakRef<DropDown>): DropDownAdapter;
+}
+
+let DropDownAdapter: DropDownAdapter;
+
+function initializeDropDownAdapter() {
+if (DropDownAdapter) {
+    return;
+}
+
+class DropDownAdapterImpl extends android.widget.BaseAdapter implements android.widget.ISpinnerAdapter {
     constructor(private owner: WeakRef<DropDown>) {
         super();
 
@@ -372,8 +411,25 @@ class DropDownAdapter extends android.widget.BaseAdapter implements android.widg
     }
 }
 
+DropDownAdapter = DropDownAdapterImpl as any;
+}
+/* DropDownAdpater END */
+
+/* A snapshot-friendly, lazy-loaded class for DropDownItemSelectedListener BEGIN */
+interface DropDownItemSelectedListener extends java.lang.Object, android.widget.AdapterView.OnItemSelectedListener {
+    /*tslint:disable-next-line no-misused-new*/
+    new(owner: WeakRef<DropDown>): DropDownItemSelectedListener;
+}
+
+let DropDownItemSelectedListener: DropDownItemSelectedListener;
+
+function initializeDropDownItemSelectedListener() {
+if (DropDownItemSelectedListener) {
+    return;
+}
+
 @Interfaces([android.widget.AdapterView.OnItemSelectedListener])
-class DropDownItemSelectedListener extends java.lang.Object implements android.widget.AdapterView.OnItemSelectedListener {
+class DropDownItemSelectedListenerImpl extends java.lang.Object implements android.widget.AdapterView.OnItemSelectedListener {
     constructor(private owner: WeakRef<DropDown>) {
         super();
 
@@ -401,3 +457,7 @@ class DropDownItemSelectedListener extends java.lang.Object implements android.w
         /* Currently Not Needed */
     }
 }
+
+DropDownItemSelectedListener = DropDownItemSelectedListenerImpl as any;
+}
+/* DropDownItemSelectedListener END */

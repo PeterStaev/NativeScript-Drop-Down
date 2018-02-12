@@ -57,11 +57,11 @@
     "grunt-contrib-copy": "1.0.0",
     "grunt-exec": "2.0.0",
     "nativescript-angular": "4.4.0",
-    "rxjs": "~5.0.1",
-    "tns-core-modules": "^3.0.0",
-    "tns-platform-declarations": "3.0.1",
+    "rxjs": "~5.5.6",
+    "tns-core-modules": "^3.4.0",
+    "tns-platform-declarations": "^3.4.0",
     "tslint": "^4.5.1",
-    "typescript": "~2.2.2",
+    "typescript": "~2.3.0",
     "zone.js": "~0.8.12"
   }
 }

@@ -19,7 +19,8 @@
             ]
         },
         "emitDecoratorMetadata": true,
-        "moduleResolution": "node"
+        "moduleResolution": "node",
+        "skipLibCheck": true
     },
     "files": [
         "angular/index.ts"

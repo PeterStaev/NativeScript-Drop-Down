@@ -57,3 +57,5 @@ demo/lib
 *.log
 !webpack.*.js
 report
+
+package-lock.json
