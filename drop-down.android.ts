@@ -242,7 +242,7 @@ interface TNSSpinner extends android.widget.Spinner {
     itemSelectedListener;
 
     /*tslint:disable-next-line no-misused-new*/
-    new(owner: WeakRef<DropDown>): TNSSpinner;
+    new (owner: WeakRef<DropDown>): TNSSpinner;
 
     /** onDetachedFromWindow is protected so public version renamed */
     onDetachedFromWindowX();
@@ -251,213 +251,213 @@ interface TNSSpinner extends android.widget.Spinner {
 let TNSSpinner: TNSSpinner;
 
 function initializeTNSSpinner() {
-if (TNSSpinner) {
-    return;
-}
-
-class TNSSpinnerImpl extends android.widget.Spinner {
-    private _isOpenedIn = false;
-
-    constructor(private owner: WeakRef<DropDown>) {
-        super(owner.get()._context);
-        return global.__native(this);
+    if (TNSSpinner) {
+        return;
     }
 
-    public performClick() {
-        const owner = this.owner.get();
+    class TNSSpinnerImpl extends android.widget.Spinner {
+        private _isOpenedIn = false;
 
-        this._isOpenedIn = true;
+        constructor(private owner: WeakRef<DropDown>) {
+            super(owner.get()._context);
+            return global.__native(this);
+        }
 
-        owner.notify({
-            eventName: DropDownBase.openedEvent,
-            object: owner
-        });
-
-        return super.performClick();
-    }
-
-    public onWindowFocusChanged(hasWindowFocus: boolean) {
-        super.onWindowFocusChanged(hasWindowFocus);
-
-        if (this._isOpenedIn && hasWindowFocus) {
+        public performClick() {
             const owner = this.owner.get();
+
+            this._isOpenedIn = true;
+
             owner.notify({
-                eventName: DropDownBase.closedEvent,
+                eventName: DropDownBase.openedEvent,
                 object: owner
             });
+
+            return super.performClick();
+        }
+
+        public onWindowFocusChanged(hasWindowFocus: boolean) {
+            super.onWindowFocusChanged(hasWindowFocus);
+
+            if (this._isOpenedIn && hasWindowFocus) {
+                const owner = this.owner.get();
+                owner.notify({
+                    eventName: DropDownBase.closedEvent,
+                    object: owner
+                });
+            }
+        }
+
+        public onDetachedFromWindowX(): void {
+            super.onDetachedFromWindow();
         }
     }
 
-    public onDetachedFromWindowX(): void {
-        super.onDetachedFromWindow();
-    }
-}
-
-TNSSpinner = TNSSpinnerImpl as any;
+    TNSSpinner = TNSSpinnerImpl as any;
 }
 /* TNSSpinner END */
 
 /* A snapshot-friendly, lazy-loaded class for DropDownAdpater BEGIN */
 interface DropDownAdapter extends android.widget.BaseAdapter, android.widget.ISpinnerAdapter {
     /*tslint:disable-next-line no-misused-new*/
-    new(owner: WeakRef<DropDown>): DropDownAdapter;
+    new (owner: WeakRef<DropDown>): DropDownAdapter;
 }
 
 let DropDownAdapter: DropDownAdapter;
 
 function initializeDropDownAdapter() {
-if (DropDownAdapter) {
-    return;
-}
-
-class DropDownAdapterImpl extends android.widget.BaseAdapter implements android.widget.ISpinnerAdapter {
-    constructor(private owner: WeakRef<DropDown>) {
-        super();
-
-        return global.__native(this);
+    if (DropDownAdapter) {
+        return;
     }
 
-    public isEnabled(i: number) {
-        return i !== 0;
-    }
+    class DropDownAdapterImpl extends android.widget.BaseAdapter implements android.widget.ISpinnerAdapter {
+        constructor(private owner: WeakRef<DropDown>) {
+            super();
 
-    public getCount() {
-        const owner = this.owner.get();
-        return (owner && owner.items ? owner.items.length : 0) + 1; // +1 for the hint
-    }
-
-    public getItem(i: number) {
-        const owner = this.owner.get();
-
-        if (i === 0) {
-            return owner.hint;
+            return global.__native(this);
         }
 
-        const realIndex = i - 1;
-        return owner._getItemAsString(realIndex);
-    }
-
-    public getItemId(i: number) {
-        return long(i);
-    }
-
-    public hasStableIds(): boolean {
-        return true;
-    }
-
-    public getView(index: number, convertView: android.view.View, parent: android.view.ViewGroup): android.view.View {
-        return this._generateView(index, convertView, parent, RealizedViewType.ItemView);
-    }
-
-    public getDropDownView(index: number, convertView: android.view.View, parent: android.view.ViewGroup): android.view.View {
-        return this._generateView(index, convertView, parent, RealizedViewType.DropDownView);
-    }
-
-    private _generateView(index: number, convertView: android.view.View, parent: android.view.ViewGroup, realizedViewType: RealizedViewType): android.view.View {
-        const owner = this.owner.get();
-
-        if (!owner) {
-            return null;
+        public isEnabled(i: number) {
+            return i !== 0;
         }
 
-        const view = owner._getRealizedView(convertView, realizedViewType);
+        public getCount() {
+            const owner = this.owner.get();
+            return (owner && owner.items ? owner.items.length : 0) + 1; // +1 for the hint
+        }
 
-        if (view) {
-            if (!view.parent) {
-                owner._addView(view);
-                convertView = view.android;
+        public getItem(i: number) {
+            const owner = this.owner.get();
+
+            if (i === 0) {
+                return owner.hint;
             }
 
-            const label = view.getViewById<Label>(LABELVIEWID);
-            label.text = this.getItem(index);
+            const realIndex = i - 1;
+            return owner._getItemAsString(realIndex);
+        }
 
-            // Copy root styles to view
-            if (owner.style.color) {
-                label.style.color = owner.style.color;
+        public getItemId(i: number) {
+            return long(i);
+        }
+
+        public hasStableIds(): boolean {
+            return true;
+        }
+
+        public getView(index: number, convertView: android.view.View, parent: android.view.ViewGroup): android.view.View {
+            return this._generateView(index, convertView, parent, RealizedViewType.ItemView);
+        }
+
+        public getDropDownView(index: number, convertView: android.view.View, parent: android.view.ViewGroup): android.view.View {
+            return this._generateView(index, convertView, parent, RealizedViewType.DropDownView);
+        }
+
+        private _generateView(index: number, convertView: android.view.View, parent: android.view.ViewGroup, realizedViewType: RealizedViewType): android.view.View {
+            const owner = this.owner.get();
+
+            if (!owner) {
+                return null;
             }
-            label.style.textDecoration = owner.style.textDecoration;
-            label.style.textAlignment = owner.style.textAlignment;
-            label.style.fontInternal = owner.style.fontInternal;
-            if (owner.style.fontSize) {
-                label.style.fontSize = owner.style.fontSize;
-            }
-            view.style.backgroundColor = owner.style.backgroundColor;
-            view.style.padding = owner.style.padding;
-            view.style.height = owner.style.height;
 
-            if (realizedViewType === RealizedViewType.DropDownView) {
-                view.style.opacity = owner.style.opacity;
-            }
+            const view = owner._getRealizedView(convertView, realizedViewType);
 
-            (view as any).isHintViewIn = false;
-
-            // Hint View styles
-            if (index === 0) {
-                label.style.color = new Color(255, 148, 150, 148);
-                (view as any).isHintViewIn = true;
-
-                // HACK: if there is no hint defined, make the view in the drop down virtually invisible.
-                if (realizedViewType === RealizedViewType.DropDownView
-                    && (types.isNullOrUndefined(owner.hint) || owner.hint === "")) {
-                    view.height = 1;
+            if (view) {
+                if (!view.parent) {
+                    owner._addView(view);
+                    convertView = view.android;
                 }
-                // END HACK
+
+                const label = view.getViewById<Label>(LABELVIEWID);
+                label.text = this.getItem(index);
+
+                // Copy root styles to view
+                if (owner.style.color) {
+                    label.style.color = owner.style.color;
+                }
+                label.style.textDecoration = owner.style.textDecoration;
+                label.style.textAlignment = owner.style.textAlignment;
+                label.style.fontInternal = owner.style.fontInternal;
+                if (owner.style.fontSize) {
+                    label.style.fontSize = owner.style.fontSize;
+                }
+                view.style.backgroundColor = owner.style.backgroundColor;
+                view.style.padding = owner.style.padding;
+                view.style.height = owner.style.height;
+
+                if (realizedViewType === RealizedViewType.DropDownView) {
+                    view.style.opacity = owner.style.opacity;
+                }
+
+                (view as any).isHintViewIn = false;
+
+                // Hint View styles
+                if (index === 0) {
+                    label.style.color = new Color(255, 148, 150, 148);
+                    (view as any).isHintViewIn = true;
+
+                    // HACK: if there is no hint defined, make the view in the drop down virtually invisible.
+                    if (realizedViewType === RealizedViewType.DropDownView
+                        && (types.isNullOrUndefined(owner.hint) || owner.hint === "")) {
+                        view.height = 1;
+                    }
+                    // END HACK
+                }
+
+                owner._realizedItems[realizedViewType].set(convertView, view);
             }
 
-            owner._realizedItems[realizedViewType].set(convertView, view);
+            return convertView;
         }
-
-        return convertView;
     }
-}
 
-DropDownAdapter = DropDownAdapterImpl as any;
+    DropDownAdapter = DropDownAdapterImpl as any;
 }
 /* DropDownAdpater END */
 
 /* A snapshot-friendly, lazy-loaded class for DropDownItemSelectedListener BEGIN */
 interface DropDownItemSelectedListener extends java.lang.Object, android.widget.AdapterView.OnItemSelectedListener {
     /*tslint:disable-next-line no-misused-new*/
-    new(owner: WeakRef<DropDown>): DropDownItemSelectedListener;
+    new (owner: WeakRef<DropDown>): DropDownItemSelectedListener;
 }
 
 let DropDownItemSelectedListener: DropDownItemSelectedListener;
 
 function initializeDropDownItemSelectedListener() {
-if (DropDownItemSelectedListener) {
-    return;
-}
-
-@Interfaces([android.widget.AdapterView.OnItemSelectedListener])
-class DropDownItemSelectedListenerImpl extends java.lang.Object implements android.widget.AdapterView.OnItemSelectedListener {
-    constructor(private owner: WeakRef<DropDown>) {
-        super();
-
-        return global.__native(this);
+    if (DropDownItemSelectedListener) {
+        return;
     }
 
-    public onItemSelected(parent: any, convertView: android.view.View, index: number, id: number) {
-        const owner = this.owner.get();
-        const oldIndex = owner.selectedIndex;
-        const newIndex = (index === 0 ? null : index - 1);
+    @Interfaces([android.widget.AdapterView.OnItemSelectedListener])
+    class DropDownItemSelectedListenerImpl extends java.lang.Object implements android.widget.AdapterView.OnItemSelectedListener {
+        constructor(private owner: WeakRef<DropDown>) {
+            super();
 
-        owner.selectedIndex = newIndex;
+            return global.__native(this);
+        }
 
-        if (newIndex !== oldIndex) {
-            owner.notify({
-                eventName: DropDownBase.selectedIndexChangedEvent,
-                object: owner,
-                oldIndex,
-                newIndex
-            } as SelectedIndexChangedEventData);
+        public onItemSelected(parent: any, convertView: android.view.View, index: number, id: number) {
+            const owner = this.owner.get();
+            const oldIndex = owner.selectedIndex;
+            const newIndex = (index === 0 ? null : index - 1);
+
+            owner.selectedIndex = newIndex;
+
+            if (newIndex !== oldIndex) {
+                owner.notify({
+                    eventName: DropDownBase.selectedIndexChangedEvent,
+                    object: owner,
+                    oldIndex,
+                    newIndex
+                } as SelectedIndexChangedEventData);
+            }
+        }
+
+        public onNothingSelected() {
+            /* Currently Not Needed */
         }
     }
 
-    public onNothingSelected() {
-        /* Currently Not Needed */
-    }
-}
-
-DropDownItemSelectedListener = DropDownItemSelectedListenerImpl as any;
+    DropDownItemSelectedListener = DropDownItemSelectedListenerImpl as any;
 }
 /* DropDownItemSelectedListener END */
