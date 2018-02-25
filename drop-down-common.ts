@@ -15,6 +15,7 @@ limitations under the License.
 ***************************************************************************** */
 import { ObservableArray } from "data/observable-array";
 import { CoercibleProperty, Property, View } from "ui/core/view";
+import { addWeakEventListener, removeWeakEventListener } from "ui/core/weak-event-listener";
 import { ItemsSource } from "ui/list-picker";
 import * as types from "utils/types";
 import { DropDown as DropDownDefinition, ValueItem, ValueList as ValueListDefinition } from ".";
@@ -35,6 +36,7 @@ export abstract class DropDownBase extends View implements DropDownDefinition {
 
     public abstract open();
     public abstract close();
+    public abstract refresh();
 
     public _getItemAsString(index: number) {
         const items = this.items;
@@ -130,6 +132,14 @@ export const itemsProperty = new Property<DropDownBase, any[] | ItemsSource>({
 
         target.isItemsSourceIn = typeof getItem === "function";
         target.isValueListIn = typeof getDisplay === "function";
+
+        if (oldValue instanceof ObservableArray) {
+            removeWeakEventListener(oldValue, ObservableArray.changeEvent, target.refresh, target);
+        }
+
+        if (newValue instanceof ObservableArray) {
+            addWeakEventListener(newValue, ObservableArray.changeEvent, target.refresh, target);
+        }
     }
 });
 itemsProperty.register(DropDownBase);

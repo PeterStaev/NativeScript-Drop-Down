@@ -117,12 +117,18 @@ export class DropDown extends DropDownBase {
         this.nativeView.onDetachedFromWindowX();
     }
 
+    public refresh() {
+        this._updateSelectedIndexOnItemsPropertyChanged(this.items);
+        (this.android.getAdapter() as DropDownAdapter).notifyDataSetChanged();
+
+        // Coerce selected index after we have set items to native view.
+        selectedIndexProperty.coerce(this);
+    }
+
     public [selectedIndexProperty.getDefault](): number {
         return null;
     }
     public [selectedIndexProperty.setNative](value: number) {
-        this._clearCache(RealizedViewType.DropDownView);
-
         const actualIndex = (types.isNullOrUndefined(value) ? 0 : value + 1);
         this.nativeView.setSelection(actualIndex);
     }
@@ -195,6 +201,16 @@ export class DropDown extends DropDownBase {
         return this._realizedItems[realizedViewType].get(convertView);
     }
 
+    public _clearCache(realizedViewType: RealizedViewType) {
+        const realizedItems = this._realizedItems[realizedViewType];
+        realizedItems.forEach((view) => {
+            if (view.parent) {
+                view.parent._removeView(view);
+            }
+        });
+        realizedItems.clear();
+    }
+
     private _propagateStylePropertyToRealizedViews(property: string, value: any, isIncludeHintIn = true) {
         const realizedItems = this._realizedItems;
         for (const item of realizedItems) {
@@ -223,16 +239,6 @@ export class DropDown extends DropDownBase {
         if (newItemsCount === 0 || this.selectedIndex >= newItemsCount) {
             this.selectedIndex = null;
         }
-    }
-
-    private _clearCache(realizedViewType: RealizedViewType) {
-        const realizedItems = this._realizedItems[realizedViewType];
-        realizedItems.forEach((view) => {
-            if (view.parent) {
-                view.parent._removeView(view);
-            }
-        });
-        realizedItems.clear();
     }
 }
 
@@ -285,6 +291,8 @@ function initializeTNSSpinner() {
                     eventName: DropDownBase.closedEvent,
                     object: owner
                 });
+                
+                owner._clearCache(RealizedViewType.DropDownView);
             }
         }
 

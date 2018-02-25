@@ -136,6 +136,13 @@ export class DropDown extends DropDownBase {
         this.ios.resignFirstResponder();
     }
 
+    public refresh() {
+        this._listPicker.reloadAllComponents();
+
+        // Coerce selected index after we have set items to native view.
+        selectedIndexProperty.coerce(this);
+    }
+
     public [selectedIndexProperty.getDefault](): number {
         return null;
     }
@@ -151,10 +158,7 @@ export class DropDown extends DropDownBase {
         return null;
     }
     public [itemsProperty.setNative](value: any[] | ItemsSource) {
-        this._listPicker.reloadAllComponents();
-
-        // Coerce selected index after we have set items to native view.
-        selectedIndexProperty.coerce(this);
+        this.refresh();
     }
 
     public [hintProperty.getDefault](): string {
