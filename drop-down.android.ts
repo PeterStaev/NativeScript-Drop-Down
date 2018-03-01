@@ -291,8 +291,6 @@ function initializeTNSSpinner() {
                     eventName: DropDownBase.closedEvent,
                     object: owner
                 });
-                
-                owner._clearCache(RealizedViewType.DropDownView);
             }
         }
 
@@ -459,6 +457,10 @@ function initializeDropDownItemSelectedListener() {
                     newIndex
                 } as SelectedIndexChangedEventData);
             }
+
+            // Seems if the user does not select an item the control reuses the views on the next open. 
+            // So it should be safe to clear the cache once the user selects an item (and not when the dropdown is closed)
+            owner._clearCache(RealizedViewType.DropDownView);
         }
 
         public onNothingSelected() {
