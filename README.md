@@ -260,6 +260,15 @@ dd.selectedIndex = itemSource.getIndex("FL");
 ```ts
 let selectedValue = itemSource.getValue(dd.selectedIndex);
 ```
+## Set the selectedIndex value in Angular
+
+You need to get an instance of the child drop down component like this:
+
+```
+@ViewChild('dd') dropDown: ElementRef;
+// set the index programatically from the parent component
+this.dropDown.nativeElement.selectedIndex = <some number from code>
+```
 
 ## Working with Webpack+Uglify
 In case you are uing webpack and also are minifying/uglifying your code, there are some specific names that should be excluded from the uglification for the widget to work properly. The DropDown widget exports those and you need to add them to the mangle exclude option of the uglifyjs plugin in the `webpack.common.js` file:
