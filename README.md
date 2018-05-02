@@ -231,6 +231,16 @@ export class AppComponent {
 }
 ```
 
+#### Set the selectedIndex value in Angular
+
+You need to get an instance of the child drop down component like this:
+
+```
+@ViewChild('dd') dropDown: ElementRef;
+// set the index programatically from the parent component
+this.dropDown.nativeElement.selectedIndex = <some number from code>
+```
+
 ## Working with value and display members
 It is a common case that you want to have one thing displayed in the drop down and then get some backend value
 tied to the tex. For example drop down with states you might want tos how the full state name (i.e. Florida)
@@ -259,15 +269,6 @@ dd.selectedIndex = itemSource.getIndex("FL");
 2.You can get the backend value of what the user selected using:
 ```ts
 let selectedValue = itemSource.getValue(dd.selectedIndex);
-```
-## Set the selectedIndex value in Angular
-
-You need to get an instance of the child drop down component like this:
-
-```
-@ViewChild('dd') dropDown: ElementRef;
-// set the index programatically from the parent component
-this.dropDown.nativeElement.selectedIndex = <some number from code>
 ```
 
 ## Working with Webpack+Uglify
