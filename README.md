@@ -231,9 +231,9 @@ export class AppComponent {
 }
 ```
 
-#### Set the selectedIndex value in Angular
+##### Set the selectedIndex value in Angular
 
-You need to get an instance of the child drop down component like this:
+Get an instance of the child drop down component like this:
 
 ```
 @ViewChild('dd') dropDown: ElementRef;
