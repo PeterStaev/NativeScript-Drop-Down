@@ -119,7 +119,10 @@ export class DropDown extends DropDownBase {
 
     public refresh() {
         this._updateSelectedIndexOnItemsPropertyChanged(this.items);
-        (this.android.getAdapter() as DropDownAdapter).notifyDataSetChanged();
+
+        if (this.android && this.android.getAdapter()) {
+            (this.android.getAdapter() as DropDownAdapter).notifyDataSetChanged();
+        }    
 
         // Coerce selected index after we have set items to native view.
         selectedIndexProperty.coerce(this);
