@@ -5,6 +5,8 @@
         "sourceMap": false,
         "removeComments": true,
         "declaration": false,
+        "noImplicitAny": false,
+        "noImplicitUseStrict": true,
         "experimentalDecorators": true,
         "target": "es5",
         "module": "commonjs",

@@ -9,10 +9,6 @@ let dd: DropDown;
 export function pageLoaded(args: EventData) {
     const page = args.object as pages.Page;
     const items = new ValueList<string>();
-    
-    page.observe(GestureTypes.tap, () => {
-        console.log("page tap");
-    });
 
     dd = page.getViewById<DropDown>("dd");
 

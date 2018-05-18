@@ -14,21 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
 import { ObservableArray } from "data/observable-array";
-import { CoercibleProperty, Property, View } from "ui/core/view";
-import { EventData } from "data/observable";
+import { CoercibleProperty, EventData, Property, View } from "ui/core/view";
+import { GestureTypes } from "ui/gestures/gestures";
 import { ItemsSource } from "ui/list-picker";
 
-export declare interface SelectedIndexChangedEventData extends EventData {
+export interface SelectedIndexChangedEventData extends EventData {
     oldIndex: number;
     newIndex: number;
 }
 
-export declare interface ValueItem<T> {
+export interface ValueItem<T> {
     value: T;
     display: string;
 }
 
-export declare class DropDown extends View {
+export class DropDown extends View {
     public static openedEvent: "opened";
     public static closedEvent: "closed";
     public static selectedIndexChangedEvent: "selectedIndexChanged";
@@ -50,12 +50,12 @@ export declare class DropDown extends View {
     public close();
 }
 
-export declare class ValueList<T> extends ObservableArray<ValueItem<T>> implements ItemsSource {
+export  class ValueList<T> extends ObservableArray<ValueItem<T>> implements ItemsSource {
     public getDisplay(index: number): string;
     public getValue(index: number): T;
     public getIndex(value: T): number;
 }
 
-export declare const selectedIndexProperty: CoercibleProperty<DropDown, number>;
-export declare const itemsProperty: Property<DropDown, any[] | ItemsSource>;
-export declare const hintProperty: Property<DropDown, string>;
+export const selectedIndexProperty: CoercibleProperty<DropDown, number>;
+export const itemsProperty: Property<DropDown, any[] | ItemsSource>;
+export const hintProperty: Property<DropDown, string>;

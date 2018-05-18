@@ -14,21 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
 import { ObservableArray } from "data/observable-array";
-import { CoercibleProperty, Property, View } from "ui/core/view";
+import { CSSType, CoercibleProperty, EventData, Property, View } from "ui/core/view";
 import { addWeakEventListener, removeWeakEventListener } from "ui/core/weak-event-listener";
 import { ItemsSource } from "ui/list-picker";
 import * as types from "utils/types";
-import { DropDown as DropDownDefinition, ValueItem, ValueList as ValueListDefinition } from ".";
+import { DropDown as DropDownDefinition, SelectedIndexChangedEventData, ValueItem, ValueList as ValueListDefinition } from ".";
 
 export * from "ui/core/view";
 
+@CSSType("DropDown")
 export abstract class DropDownBase extends View implements DropDownDefinition {
     public static openedEvent = "opened";
     public static closedEvent = "closed";
     public static selectedIndexChangedEvent = "selectedIndexChanged";
-    
-    public hint: string;    
-    public selectedIndex: number;    
+
+    public hint: string;
+    public selectedIndex: number;
     public items: any[] | ItemsSource;
     public accessoryViewVisible: boolean;
     public isItemsSourceIn: boolean;
@@ -54,8 +55,13 @@ export abstract class DropDownBase extends View implements DropDownDefinition {
         }
 
         const item = this.isItemsSourceIn ? (this.items as ItemsSource).getItem(index) : this.items[index];
-        return (item === undefined || item === null) ? index + "" : item + "";        
+        return (item === undefined || item === null) ? index + "" : item + "";
     }
+}
+
+export interface DropDownBase {
+    on(eventNames: string, callback: (data: EventData) => void, thisArg?: any);
+    on(event: "selectedIndexChanged", callback: (args: SelectedIndexChangedEventData) => void, thisArg?: any);
 }
 
 export class ValueList<T> extends ObservableArray<ValueItem<T>> implements ValueListDefinition<T> {
@@ -65,7 +71,7 @@ export class ValueList<T> extends ObservableArray<ValueItem<T>> implements Value
         if (types.isNullOrUndefined(index)) {
             return null;
         }
-        
+
         if (index < 0 || index >= this.length) {
             return "";
         }
