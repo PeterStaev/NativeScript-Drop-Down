@@ -38,7 +38,7 @@ matrix:
       language: android
       os: linux
       env: 
-        - Android="25"
+        - Android="26"
       jdk: oraclejdk8
       before_install: nvm install 6.10.3
       script: "grunt ci:build:android"
@@ -58,7 +58,7 @@ matrix:
       language: android
       os: linux
       env:
-        - Android="25"
+        - Android="26"
         - Platform="Android"
       jdk: oraclejdk8
       before_install: nvm install 6.10.3

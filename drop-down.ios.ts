@@ -148,7 +148,11 @@ export class DropDown extends DropDownBase {
     }
     public [selectedIndexProperty.setNative](value: number) {
         if (value >= 0) {
-            this._listPicker.selectRowInComponentAnimated(value, 0, true);
+
+            // HACK to fix #178
+            setTimeout(() => {
+                this._listPicker.selectRowInComponentAnimated(value, 0, true);
+            }, 1);    
         }
 
         this.ios.setText(this._getItemAsString(value));
