@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "nativescript-drop-down": "file:../bin/dist",
-    "tns-core-modules": "^4.0.1"
+    "tns-core-modules": "~4.0.1"
   },
   "devDependencies": {
     "awesome-typescript-loader": "~3.1.3",
