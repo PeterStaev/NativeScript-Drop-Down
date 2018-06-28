@@ -331,11 +331,21 @@ function initializeDropDownAdapter() {
         }
 
         public getCount() {
+            // In some strange situations owner can become null (see #181)
+            if (!this.owner) {
+                return 0;
+            }
+
             const owner = this.owner.get();
             return (owner && owner.items ? owner.items.length : 0) + 1; // +1 for the hint
         }
 
         public getItem(i: number) {
+            // In some strange situations owner can become null (see #181)
+            if (!this.owner) {
+                return "";
+            }
+
             const owner = this.owner.get();
 
             if (i === 0) {
@@ -363,6 +373,11 @@ function initializeDropDownAdapter() {
         }
 
         private _generateView(index: number, convertView: android.view.View, parent: android.view.ViewGroup, realizedViewType: RealizedViewType): android.view.View {
+            // In some strange situations owner can become null (see #181)
+            if (!this.owner) {
+                return null;
+            }
+
             const owner = this.owner.get();
 
             if (!owner) {
