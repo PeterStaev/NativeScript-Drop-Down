@@ -5,6 +5,7 @@ import { BaseValueAccessor } from "nativescript-angular/forms/value-accessors/ba
 import { View } from "tns-core-modules/ui/core/view";
 
 registerElement("DropDown", () => require("../drop-down").DropDown);
+registerElement("DropDownList", () => require("../drop-down").DropDownList);
 
 const SELECTED_INDEX_VALUE_ACCESSOR = {provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => SelectedIndexValueAccessor), multi: true};
