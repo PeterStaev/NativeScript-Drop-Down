@@ -22,7 +22,7 @@ export type SelectableView = {selectedIndex: number} & View;
  */
 @Directive({
     // tslint:disable-next-line:max-line-length directive-selector
-    selector:  "DropDown[ngModel], DropDown[formControlName], dropDown[ngModel], dropDown[formControlName], drop-down[ngModel], drop-down[formControlName]",
+    selector:  "DropDown[ngModel], DropDown[formControl], DropDown[formControlName], dropDown[ngModel], dropDown[formControl], dropDown[formControlName], drop-down[ngModel], drop-down[formControl], drop-down[formControlName]",
     providers: [SELECTED_INDEX_VALUE_ACCESSOR]
 })
 export class SelectedIndexValueAccessor extends BaseValueAccessor<SelectableView> implements AfterViewInit { // tslint:disable-line:max-line-length directive-class-suffix
