@@ -20,6 +20,7 @@ import { StackLayout } from "ui/layouts/stack-layout";
 import { ItemsSource } from "ui/list-picker";
 import { Font } from "ui/styling/font";
 import {
+    Style,
     TextAlignment,
     TextDecoration,
     fontInternalProperty,
@@ -69,7 +70,6 @@ export class DropDown extends DropDownBase {
         const adapter = new DropDownAdapter(new WeakRef(this));
         spinner.setAdapter(adapter);
         spinner.adapter = adapter;
-
         initializeDropDownItemSelectedListener();
         const itemSelectedListener = new DropDownItemSelectedListener(new WeakRef(this));
         spinner.setOnItemSelectedListener(itemSelectedListener);
@@ -365,14 +365,14 @@ function initializeDropDownAdapter() {
         }
 
         public getView(index: number, convertView: android.view.View, parent: android.view.ViewGroup): android.view.View {
-            return this._generateView(index, convertView, parent, RealizedViewType.ItemView);
+            return this._generateView(index, convertView, parent, RealizedViewType.ItemView, this.owner.get().style);
         }
 
         public getDropDownView(index: number, convertView: android.view.View, parent: android.view.ViewGroup): android.view.View {
-            return this._generateView(index, convertView, parent, RealizedViewType.DropDownView);
+            return this._generateView(index, convertView, parent, RealizedViewType.DropDownView, this.owner.get()._getDropDownStyle());
         }
 
-        private _generateView(index: number, convertView: android.view.View, parent: android.view.ViewGroup, realizedViewType: RealizedViewType): android.view.View {
+        private _generateView(index: number, convertView: android.view.View, parent: android.view.ViewGroup, realizedViewType: RealizedViewType, style: Style | void): android.view.View {
             // In some strange situations owner can become null (see #181)
             if (!this.owner) {
                 return null;
@@ -395,22 +395,27 @@ function initializeDropDownAdapter() {
                 const label = view.getViewById<Label>(LABELVIEWID);
                 label.text = this.getItem(index);
 
+                if (!style) {
+                    owner._realizedItems[realizedViewType].set(convertView, view);
+                    return convertView;
+                }
+
                 // Copy root styles to view
-                if (owner.style.color) {
-                    label.style.color = owner.style.color;
+                if (style.color) {
+                    label.style.color = style.color;
                 }
-                label.style.textDecoration = owner.style.textDecoration;
-                label.style.textAlignment = owner.style.textAlignment;
-                label.style.fontInternal = owner.style.fontInternal;
-                if (owner.style.fontSize) {
-                    label.style.fontSize = owner.style.fontSize;
+                label.style.textDecoration = style.textDecoration;
+                label.style.textAlignment = style.textAlignment;
+                label.style.fontInternal = style.fontInternal;
+                if (style.fontSize) {
+                    label.style.fontSize = style.fontSize;
                 }
-                view.style.backgroundColor = owner.style.backgroundColor;
-                view.style.padding = owner.style.padding;
-                view.style.height = owner.style.height;
+                view.style.backgroundColor = style.backgroundColor;
+                view.style.padding = style.padding;
+                view.style.height = style.height;
 
                 if (realizedViewType === RealizedViewType.DropDownView) {
-                    view.style.opacity = owner.style.opacity;
+                    view.style.opacity = style.opacity;
                 }
 
                 (view as any).isHintViewIn = false;

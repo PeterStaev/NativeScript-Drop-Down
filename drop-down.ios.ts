@@ -31,6 +31,7 @@ import * as utils from "utils/utils";
 import { SelectedIndexChangedEventData } from ".";
 import {
     DropDownBase,
+    DropDownListBase,
     Length,
     backgroundColorProperty,
     colorProperty,
@@ -49,6 +50,27 @@ export * from "./drop-down-common";
 
 const TOOLBAR_HEIGHT = 44;
 const HINT_COLOR = new Color("#3904041E");
+
+export class DropDownList extends DropDownListBase {
+    public _listPicker: UIPickerView; 
+    public [colorProperty.setNative](value: Color | UIColor) {
+        const color = value instanceof Color ? value.ios : value;
+
+        this.nativeView.color = color;
+        this._listPicker.tintColor = color;
+    }
+
+    public [backgroundColorProperty.setNative](value: Color | UIColor) {
+        if (!value) {
+            return;
+        }
+        
+        const color = value instanceof Color ? value.ios : value;
+        
+        this.nativeView.backgroundColor = color;
+        this._listPicker.backgroundColor = color;
+    }
+}
 
 export class DropDown extends DropDownBase {
     public _listPicker: UIPickerView;
@@ -86,6 +108,13 @@ export class DropDown extends DropDownBase {
         nsArray.addObject(this._flexToolbarSpace);
         nsArray.addObject(this._doneButton);
         this._toolbar.setItemsAnimated(nsArray, false);
+    }
+
+    public _addChildFromBuilder(name: string, value: any): void {
+        if (name === "DropDownList") {
+            this.dropDownList = value;
+            (value as DropDownList)._listPicker = this._listPicker;
+        }
     }
 
     public disposeNativeView() {
@@ -194,7 +223,6 @@ export class DropDown extends DropDownBase {
         const color = value instanceof Color ? value.ios : value;
 
         this.nativeView.backgroundColor = color;
-        this._listPicker.backgroundColor = color;
         this._listPicker.reloadAllComponents();
     }
 
@@ -316,12 +344,18 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
     public pickerViewViewForRowForComponentReusingView(pickerView: UIPickerView, row: number, component: number, view: UIView): UIView {
         // NOTE: Currently iOS sends the reusedView always as null, so no reusing is possible
         const owner = this._owner.get();
-        const style = owner.style;
+        const style = owner._getDropDownStyle();
+
         const label = TNSLabel.alloc().init();
         
         label.text = owner._getItemAsString(row);
+        
+        // Bailout if no style proxy defined
+        if (!style) {
+            return label;
+        }
 
-        // Copy Styles
+        // Copy styles from child element
         if (style.color) {
             label.textColor = style.color.ios;
         }
@@ -333,7 +367,9 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
             left: utils.layout.toDeviceIndependentPixels(owner.effectivePaddingLeft)
         };
 
-        label.font = style.fontInternal.getUIFont(label.font);
+        if (style.fontInternal) {
+            label.font = style.fontInternal.getUIFont(label.font);
+        }
 
         switch (style.textAlignment) {
             case "initial":

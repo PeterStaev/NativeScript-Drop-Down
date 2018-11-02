@@ -3,7 +3,9 @@
     <dd:DropDown id="dd" hint="{{ hint }}" items="{{ items }}" selectedIndex="{{ selectedIndex }}" 
                   opened="dropDownOpened" closed="dropDownClosed" selectedIndexChanged="dropDownSelectedIndexChanged" 
                   class="{{ cssClass }}" isEnabled="{{ isEnabled }}"
-                  row="0" colSpan="2" /> 
+                  row="0" colSpan="2">
+      <dd:DropDownList style="color: blue; text-align: right;"></dd:DropDownList>
+    </dd:DropDown> 
 
     <Label text="Selected Index:" row="1" col="0" fontSize="18" verticalAlignment="bottom"/>
     <TextField text="{{ selectedIndex }}" row="1" col="1" />

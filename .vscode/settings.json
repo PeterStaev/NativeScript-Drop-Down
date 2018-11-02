@@ -2,10 +2,11 @@
 {
     "files.exclude": {
         "**/.git": true,
-        "**/.DS_Store": true, 
-        "demo": true, 
-        "demo-ng": true, 
+        "**/.DS_Store": true,
+        // "demo": true,
+        // "demo-ng": true,
         "bin/**": true
     },
+    "editor.formatOnSave": false,
     "typescript.tsdk": "node_modules/typescript/lib"
 }
