@@ -4,9 +4,9 @@ android:
   components:
     - tools
     - platform-tools
-    - build-tools-27.0.3
+    - build-tools-28.0.3
     - android-23
-    - android-25
+    - android-28
     - extra-android-m2repository
 
 before_cache:
@@ -38,7 +38,7 @@ matrix:
       language: android
       os: linux
       env: 
-        - Android="26"
+        - Android="28"
       jdk: oraclejdk8
       before_install: nvm install 8.11.3
       script: "grunt ci:build:android"
@@ -47,18 +47,22 @@ matrix:
       os: osx
       env: 
         - iOS="10.3"
-        - Xcode="8.3"
-      osx_image: xcode8.3
+        - Xcode="9.4"
+      osx_image: xcode9.4
       language: node_js 
       node_js: "8"
       jdk: oraclejdk8
+      before_install:
+        - pip install --upgrade pip
+        - pip install --user --upgrade matplotlib
+        - pip install six
       script: "grunt ci:build:ios"
 
     - stage: webpack
       language: android
       os: linux
       env:
-        - Android="26"
+        - Android="28"
         - Platform="Android"
       jdk: oraclejdk8
       before_install: nvm install 8.11.3
@@ -68,12 +72,16 @@ matrix:
       os: osx
       env: 
         - iOS="10.3"
-        - Xcode="8.3"
+        - Xcode="9.4"
         - Platform="iOS"
-      osx_image: xcode8.3
+      osx_image: xcode9.4
       language: node_js 
       node_js: "8"
       jdk: oraclejdk8
+      before_install:
+        - pip install --upgrade pip
+        - pip install --user --upgrade matplotlib
+        - pip install six
       script: "grunt ci:webpack:ios"
 
     - stage: deploy
