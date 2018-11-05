@@ -26,3 +26,8 @@
 StackLayout {
     horizontal-align: center;
 }
+
+DropDownList {
+    color: blue;
+    text-align: right;
+}

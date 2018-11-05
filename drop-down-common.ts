@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
 import { ObservableArray } from "data/observable-array";
-import { AddChildFromBuilder, CSSType, CoercibleProperty, EventData, Property, View } from "ui/core/view";
+import { CSSType, CoercibleProperty, EventData, Property } from "ui/core/view";
 import { addWeakEventListener, removeWeakEventListener } from "ui/core/weak-event-listener";
+import { LayoutBase } from "ui/layouts/layout-base";
 import { ItemsSource } from "ui/list-picker";
 import { Style } from "ui/styling/style";
 import { TextBase } from "ui/text-base";
@@ -30,7 +31,7 @@ export class DropDownList extends TextBase {
 }
 
 @CSSType("DropDown")
-export abstract class DropDownBase extends View implements DropDownDefinition, AddChildFromBuilder {
+export abstract class DropDownBase extends LayoutBase implements DropDownDefinition {
     public static openedEvent = "opened";
     public static closedEvent = "closed";
     public static selectedIndexChangedEvent = "selectedIndexChanged";
@@ -43,19 +44,19 @@ export abstract class DropDownBase extends View implements DropDownDefinition, A
     public isItemsSourceIn: boolean;
     public isValueListIn: boolean;
 
+    constructor() {
+        super();
+
+        this.dropDownList = new DropDownList();
+        this.addChild(this.dropDownList);
+    }
+
     public abstract open();
     public abstract close();
     public abstract refresh();
-
     public _getDropDownStyle(): Style | void {
         if (this.dropDownList) {
             return this.dropDownList.style;
-        }
-    }
-
-    public _addChildFromBuilder(name: string, value: any): void {
-        if (name === "DropDownList") {
-            this.dropDownList = value;
         }
     }
 
