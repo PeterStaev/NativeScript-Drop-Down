@@ -36,7 +36,6 @@ export abstract class DropDownBase extends LayoutBase implements DropDownDefinit
     public static closedEvent = "closed";
     public static selectedIndexChangedEvent = "selectedIndexChanged";
 
-    public dropDownList: DropDownList;
     public hint: string;
     public selectedIndex: number;
     public items: any[] | ItemsSource;
@@ -44,6 +43,8 @@ export abstract class DropDownBase extends LayoutBase implements DropDownDefinit
     public isItemsSourceIn: boolean;
     public isValueListIn: boolean;
 
+    private dropDownList: DropDownList;
+    
     constructor() {
         super();
 
