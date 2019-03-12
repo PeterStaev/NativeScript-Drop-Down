@@ -6,10 +6,10 @@
   "nativescript": {
     "id": "com.tangrainc.dropdownsample.ng",
     "tns-android": {
-      "version": "4.1.3"
+      "version": "5.2.1"
     },
     "tns-ios": {
-      "version": "4.1.1"
+      "version": "5.2.0"
     }
   },
   "scripts": {
@@ -25,45 +25,33 @@
     "build-ios-bundle": "npm run ns-bundle --ios --build-app"
   },
   "dependencies": {
-    "@angular/animations": "~6.0.6",
-    "@angular/common": "~6.0.6",
-    "@angular/compiler": "~6.0.6",
-    "@angular/core": "~6.0.6",
-    "@angular/forms": "~6.0.6",
-    "@angular/http": "~6.0.6",
-    "@angular/platform-browser": "~6.0.6",
-    "@angular/platform-browser-dynamic": "~6.0.6",
-    "@angular/router": "~6.0.6",
-    "nativescript-angular": "^6.0.6",
+    "@angular/animations": "~7.2.0",
+    "@angular/common": "~7.2.0",
+    "@angular/compiler": "~7.2.0",
+    "@angular/core": "~7.2.0",
+    "@angular/forms": "~7.2.0",
+    "@angular/http": "~7.2.0",
+    "@angular/platform-browser": "~7.2.0",
+    "@angular/platform-browser-dynamic": "~7.2.0",
+    "@angular/router": "~7.2.0",
+    "nativescript-angular": "^7.2.2",
     "nativescript-drop-down": "file:../bin/dist",
     "reflect-metadata": "~0.1.8",
-    "rxjs": "~6.0.0 || >=6.1.0",
-    "tns-core-modules": "^4.1.0",
-    "zone.js": "^0.8.26"
+    "rxjs": "^6.3.3",
+    "tns-core-modules": "^5.2.2",
+    "zone.js": "^0.8.4"
   },
   "devDependencies": {
-    "@angular-devkit/core": "~0.6.3",
-    "@angular/compiler-cli": "~6.0.6",
-    "@ngtools/webpack": "~6.0.3",
+    "@angular/compiler-cli": "~7.2.0",
+    "@ngtools/webpack": "~7.2.0",
     "babel-traverse": "6.24.1",
     "babel-types": "6.24.1",
     "babylon": "6.17.0",
-    "clean-webpack-plugin": "~0.1.19",
-    "copy-webpack-plugin": "~4.5.1",
-    "css-loader": "~0.28.11",
     "extract-text-webpack-plugin": "~3.0.2",
     "lazy": "1.0.11",
     "nativescript-css-loader": "~0.26.0",
     "nativescript-dev-typescript": "^0.7.1",
-    "nativescript-dev-webpack": "^0.12.0",
-    "nativescript-worker-loader": "~0.9.0",
-    "raw-loader": "~0.5.1",
-    "resolve-url-loader": "~2.3.0",
-    "typescript": "~2.7.2",
-    "uglifyjs-webpack-plugin": "~1.2.5",
-    "webpack": "~4.6.0",
-    "webpack-bundle-analyzer": "~2.13.0",
-    "webpack-cli": "~2.1.3",
-    "webpack-sources": "~1.1.0"
+    "nativescript-dev-webpack": "^0.20.2",
+    "typescript": "~3.1.1"
   }
 }

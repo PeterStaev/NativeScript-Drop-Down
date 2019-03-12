@@ -1,5 +1,5 @@
 import "./bundle-config";
 
-import application = require("application");
+import * as application from "application";
 
 application.start({ moduleName: "main-page" });

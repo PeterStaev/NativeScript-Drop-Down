@@ -1,6 +1,6 @@
 import { EventData, Observable } from "data/observable";
-import { GestureTypes } from "ui/gestures";
-import pages = require("ui/page");
+import * as pages from "ui/page";
+
 import { DropDown, SelectedIndexChangedEventData, ValueList } from "nativescript-drop-down";
 
 let viewModel: Observable;
