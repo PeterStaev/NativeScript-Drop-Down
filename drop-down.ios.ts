@@ -62,14 +62,21 @@ export class DropDown extends DropDownBase {
     private _doneButton: UIBarButtonItem;
     private _doneTapDelegate: TapHandler;
     private _accessoryViewVisible: boolean;
+    
+    public createNativeView() {
+        const dropDown = TNSDropDownLabel.initWithOwner(new WeakRef(this));
 
-    constructor() {
-        super();
+        dropDown.userInteractionEnabled = true;
 
+        return dropDown;
+    }
+
+    public initNativeView() {
+        super.initNativeView();
+
+        const nativeView: TNSDropDownLabel = this.nativeViewProtected;
         const applicationFrame = utils.ios.getter(UIScreen, UIScreen.mainScreen).applicationFrame;
-
-        this.nativeView = TNSDropDownLabel.initWithOwner(new WeakRef(this));
-        this.nativeView.userInteractionEnabled = true;
+        
         this._listPicker = UIPickerView.alloc().init();
 
         this._dropDownDelegate = DropDownListPickerDelegateImpl.initWithOwner(new WeakRef(this));
@@ -86,16 +93,29 @@ export class DropDown extends DropDownBase {
         nsArray.addObject(this._flexToolbarSpace);
         nsArray.addObject(this._doneButton);
         this._toolbar.setItemsAnimated(nsArray, false);
+
+        nativeView.inputView = this._listPicker;
+        this._accessoryViewVisible = true;
+        this._showHideAccessoryView();
     }
 
     public disposeNativeView() {
         this._doneTapDelegate = null;
         this._dropDownDelegate = null;
         this._dropDownDataSource = null;
+
+        this.ios.inputView = null;
+        this.ios.inputAccessoryView = null;
+
+        this._listPicker = null;
+        this._toolbar = null;
+        this._doneButton = null;
+
+        super.disposeNativeView();
     }
 
     get ios(): TNSDropDownLabel {
-        return this.nativeView;
+        return this.nativeViewProtected;
     }
 
     get accessoryViewVisible(): boolean {
@@ -111,17 +131,11 @@ export class DropDown extends DropDownBase {
 
         this._listPicker.delegate = this._dropDownDelegate;
         this._listPicker.dataSource = this._dropDownDataSource;
-
-        this.ios.inputView = this._listPicker;
-        this._showHideAccessoryView();
     }
 
     public onUnloaded() {
         this._listPicker.delegate = null;
         this._listPicker.dataSource = null;
-
-        this.ios.inputView = null;
-        this.ios.inputAccessoryView = null;
 
         super.onUnloaded();
     }
@@ -129,7 +143,7 @@ export class DropDown extends DropDownBase {
     public open() {
         if (this.isEnabled) {
             this.ios.becomeFirstResponder();
-        }    
+        }
     }
 
     public close() {
@@ -152,7 +166,7 @@ export class DropDown extends DropDownBase {
             // HACK to fix #178
             setTimeout(() => {
                 this._listPicker.selectRowInComponentAnimated(value, 0, true);
-            }, 1);    
+            }, 1);
         }
 
         this.ios.setText(this._getItemAsString(value));
@@ -190,7 +204,7 @@ export class DropDown extends DropDownBase {
         if (!value) {
             return;
         }
-        
+
         const color = value instanceof Color ? value.ios : value;
 
         this.nativeView.backgroundColor = color;
@@ -318,7 +332,7 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
         const owner = this._owner.get();
         const style = owner.style;
         const label = TNSLabel.alloc().init();
-        
+
         label.text = owner._getItemAsString(row);
 
         // Copy Styles
@@ -485,14 +499,14 @@ class TNSDropDownLabel extends TNSLabel {
     }
 
     @ObjCMethod()
-    public tap( @ObjCParam(UITapGestureRecognizer) sender: UITapGestureRecognizer) {
+    public tap(@ObjCParam(UITapGestureRecognizer) sender: UITapGestureRecognizer) {
         if (sender.state === UIGestureRecognizerState.Ended) {
             const owner = this._owner.get();
 
             if (owner.isEnabled) {
                 this.becomeFirstResponder();
-            }    
-        }    
+            }
+        }
     }
 
     private _refreshColor() {
