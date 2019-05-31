@@ -13,10 +13,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
-import { ObservableArray } from "data/observable-array";
-import { CoercibleProperty, EventData, Property, View } from "ui/core/view";
-import { GestureTypes } from "ui/gestures/gestures";
-import { ItemsSource } from "ui/list-picker";
+import { ObservableArray } from "tns-core-modules/data/observable-array";
+import { CoercibleProperty, EventData, Property, View } from "tns-core-modules/ui/core/view";
+import { GestureTypes } from "tns-core-modules/ui/gestures/gestures";
+import { ItemsSource } from "tns-core-modules/ui/list-picker";
 
 export interface SelectedIndexChangedEventData extends EventData {
     oldIndex: number;
