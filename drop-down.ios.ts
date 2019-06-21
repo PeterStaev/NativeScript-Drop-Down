@@ -151,6 +151,10 @@ export class DropDown extends DropDownBase {
     }
 
     public refresh() {
+        if (!this._listPicker) {
+            return;
+        }
+        
         this._listPicker.reloadAllComponents();
 
         // Coerce selected index after we have set items to native view.
