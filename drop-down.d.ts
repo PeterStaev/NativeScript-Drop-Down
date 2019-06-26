@@ -54,6 +54,7 @@ export  class ValueList<T> extends ObservableArray<ValueItem<T>> implements Item
     public getDisplay(index: number): string;
     public getValue(index: number): T;
     public getIndex(value: T): number;
+    constructor(items: ValueItem<T>[]);
 }
 
 export const selectedIndexProperty: CoercibleProperty<DropDown, number>;
