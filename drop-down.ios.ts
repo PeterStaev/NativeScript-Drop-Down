@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
 import { Color } from "color";
+import { placeholderColorProperty } from "ui/editable-text-base/editable-text-base";
 import { ItemsSource } from "ui/list-picker";
 import { Font } from "ui/styling/font";
 import { Style } from "ui/styling/style";
@@ -26,7 +27,6 @@ import {
     textDecorationProperty,
     textTransformProperty
 } from "ui/text-base";
-import { placeholderColorProperty } from 'ui/editable-text-base/editable-text-base'
 import * as types from "utils/types";
 import * as utils from "utils/utils";
 import { SelectedIndexChangedEventData } from ".";

@@ -15,6 +15,7 @@ limitations under the License.
 ***************************************************************************** */
 import { Color } from "color";
 import { View } from "ui/core/view";
+import { placeholderColorProperty } from "ui/editable-text-base/editable-text-base";
 import { Label } from "ui/label";
 import { StackLayout } from "ui/layouts/stack-layout";
 import { ItemsSource } from "ui/list-picker";
@@ -27,7 +28,6 @@ import {
     textAlignmentProperty,
     textDecorationProperty
 } from "ui/text-base";
-import { placeholderColorProperty } from 'ui/editable-text-base/editable-text-base'
 import * as types from "utils/types";
 import { SelectedIndexChangedEventData } from ".";
 import {
@@ -227,7 +227,7 @@ export class DropDown extends DropDownBase {
                     if (property === "textAlignment" || property === "textDecoration"
                         || property === "fontInternal" || property === "fontSize"
                         || property === "color"
-                        || property === 'placeholderColor') {
+                        || property === "placeholderColor") {
                         const label = view.getViewById<Label>(LABELVIEWID);
                         label.style[property] = value;
                     }
