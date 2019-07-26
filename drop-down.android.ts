@@ -27,6 +27,7 @@ import {
     textAlignmentProperty,
     textDecorationProperty
 } from "ui/text-base";
+import { placeholderColorProperty } from 'ui/editable-text-base/editable-text-base'
 import * as types from "utils/types";
 import { SelectedIndexChangedEventData } from ".";
 import {
@@ -188,6 +189,10 @@ export class DropDown extends DropDownBase {
         }
     }
 
+    public [placeholderColorProperty.setNative](value: Color | number) {
+        this._propagateStylePropertyToRealizedViews("placeholderColor", value, true);
+    }
+
     public _getRealizedView(convertView: android.view.View, realizedViewType: RealizedViewType): View {
         if (!convertView) {
             const view = new Label();
@@ -221,7 +226,8 @@ export class DropDown extends DropDownBase {
                 if (isIncludeHintIn || !(view as any).isHintViewIn) {
                     if (property === "textAlignment" || property === "textDecoration"
                         || property === "fontInternal" || property === "fontSize"
-                        || property === "color") {
+                        || property === "color"
+                        || property === 'placeholderColor') {
                         const label = view.getViewById<Label>(LABELVIEWID);
                         label.style[property] = value;
                     }
@@ -399,6 +405,9 @@ function initializeDropDownAdapter() {
                 if (owner.style.color) {
                     label.style.color = owner.style.color;
                 }
+                if (owner.style.placeholderColor) {
+                    label.style.placeholderColor = owner.style.placeholderColor;
+                }
                 label.style.textDecoration = owner.style.textDecoration;
                 label.style.textAlignment = owner.style.textAlignment;
                 label.style.fontInternal = owner.style.fontInternal;
@@ -417,7 +426,11 @@ function initializeDropDownAdapter() {
 
                 // Hint View styles
                 if (index === 0) {
-                    label.style.color = new Color(255, 148, 150, 148);
+                    if (label.style.placeholderColor) {
+                        label.style.color = label.style.placeholderColor;
+                    } else {
+                        label.style.color = new Color(255, 148, 150, 148);
+                    }
                     (view as any).isHintViewIn = true;
 
                     // HACK: if there is no hint defined, make the view in the drop down virtually invisible.

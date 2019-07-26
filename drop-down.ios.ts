@@ -26,6 +26,7 @@ import {
     textDecorationProperty,
     textTransformProperty
 } from "ui/text-base";
+import { placeholderColorProperty } from 'ui/editable-text-base/editable-text-base'
 import * as types from "utils/types";
 import * as utils from "utils/utils";
 import { SelectedIndexChangedEventData } from ".";
@@ -199,6 +200,15 @@ export class DropDown extends DropDownBase {
         this.nativeView.color = color;
         this._listPicker.tintColor = color;
         this._listPicker.reloadAllComponents();
+    }
+
+    public [placeholderColorProperty.getDefault](): UIColor {
+        return this.nativeView.placeholderColor;
+    }
+    public [placeholderColorProperty.setNative](value: Color | UIColor) {
+        const color = value instanceof Color ? value.ios : value;
+
+        this.nativeView.placeholderColor = color;
     }
 
     public [backgroundColorProperty.getDefault](): UIColor {
@@ -397,6 +407,7 @@ class TNSDropDownLabel extends TNSLabel {
         label._owner = owner;
         label._isInputViewOpened = false;
         label.color = utils.ios.getter(UIColor, UIColor.blackColor);
+        label.placeholderColor = HINT_COLOR.ios;
         label.text = " "; // HACK: Set the text to space so that it takes the necessary height if no hint/selected item
 
         label.addGestureRecognizer(UITapGestureRecognizer.alloc().initWithTargetAction(label, "tap"));
@@ -411,6 +422,7 @@ class TNSDropDownLabel extends TNSLabel {
     private _hint: string;
     private _hasText: boolean;
     private _internalColor: UIColor;
+    private _internalPlaceholderColor: UIColor;
 
     get inputView(): UIView {
         return this._inputView;
@@ -452,6 +464,14 @@ class TNSDropDownLabel extends TNSLabel {
     }
     set color(value: UIColor) {
         this._internalColor = value;
+        this._refreshColor();
+    }
+
+    get placeholderColor(): UIColor {
+        return this._internalPlaceholderColor;
+    }
+    set placeholderColor(value: UIColor) {
+        this._internalPlaceholderColor = value;
         this._refreshColor();
     }
 
@@ -514,7 +534,7 @@ class TNSDropDownLabel extends TNSLabel {
     }
 
     private _refreshColor() {
-        this.textColor = (this._hasText && this._internalColor ? this._internalColor : HINT_COLOR.ios);
+        this.textColor = (this._hasText ? this._internalColor : this._internalPlaceholderColor);
     }
 }
 
