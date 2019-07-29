@@ -1,3 +1,5 @@
+**This repo only supports NativeScript pre-6.0. The latest version of the plugin supporting NS 6+ is availble as part of [ProPlugins](https://www.proplugins.org).**
+
 # NativeScript DropDown widget 
 [![Build Status](https://travis-ci.org/PeterStaev/NativeScript-Drop-Down.svg?branch=master)](https://travis-ci.org/PeterStaev/NativeScript-Drop-Down)
 [![npm downloads](https://img.shields.io/npm/dm/nativescript-drop-down.svg)](https://www.npmjs.com/package/nativescript-drop-down)
