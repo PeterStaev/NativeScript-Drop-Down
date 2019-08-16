@@ -196,7 +196,7 @@ export class DropDown extends DropDownBase {
         return "";
     }
     public [itemsTextAlignmentProperty.setNative](value: string) {
-        this.ios.itemsTextAlignment = value;
+        this.itemsTextAlignment = value;
     }
     
     public [colorProperty.getDefault](): UIColor {
@@ -370,7 +370,7 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
         };
 
         label.font = style.fontInternal.getUIFont(label.font);
-        var p_itemsTextAlignment = owner.ios.itemsTextAlignment;
+        var p_itemsTextAlignment = owner.itemsTextAlignment;
         if(p_itemsTextAlignment == ""){
             p_itemsTextAlignment = style.textAlignment;
         }
