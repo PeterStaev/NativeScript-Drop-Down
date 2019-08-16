@@ -369,7 +369,7 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
         };
 
         label.font = style.fontInternal.getUIFont(label.font);
-        var p_itemsTextAlignment = this.ios.itemsTextAlignment;
+        var p_itemsTextAlignment = owner.ios.itemsTextAlignment;
         if(p_itemsTextAlignment == ""){
             p_itemsTextAlignment = style.textAlignment;
         }
