@@ -29,6 +29,7 @@ export abstract class DropDownBase extends View implements DropDownDefinition {
     public static selectedIndexChangedEvent = "selectedIndexChanged";
 
     public hint: string;
+    public itemsTextAlignment: string;
     public selectedIndex: number;
     public items: any[] | ItemsSource;
     public accessoryViewVisible: boolean;
