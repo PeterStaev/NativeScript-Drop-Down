@@ -10,7 +10,6 @@ A NativeScript DropDown widget. The DropDown displays items from which the user 
 
 ## Screenshot
 ![Screenshot of iOS and Android](https://raw.githubusercontent.com/PeterStaev/NativeScript-Drop-Down/master/docs/screenshot.png)
-![Screenshot of iOS](docs/ios-screen-shot.png)
 
 ## Installation
 Run the following command from the root of your project:
