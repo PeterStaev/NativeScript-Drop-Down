@@ -36,8 +36,8 @@ import {
     colorProperty,
     hintProperty,
     itemsProperty,
-    itemsTextAlignment,
-    itemsPadding,
+    itemsTextAlignmentProperty,
+    itemsPaddingProperty,
     selectedIndexProperty
 } from "./drop-down-common";
 
