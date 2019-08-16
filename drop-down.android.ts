@@ -36,6 +36,8 @@ import {
     colorProperty,
     hintProperty,
     itemsProperty,
+    itemsTextAlignment,
+    itemsPadding,
     selectedIndexProperty
 } from "./drop-down-common";
 
@@ -154,7 +156,21 @@ export class DropDown extends DropDownBase {
     public [hintProperty.setNative](value: string) {
         (this.android.getAdapter() as DropDownAdapter).notifyDataSetChanged();
     }
-
+    
+    public [itemsTextAlignmentProperty.getDefault](): string {
+        return "";
+    }
+    public [itemsTextAlignmentProperty.setNative](value: string) {
+        this.android.itemsTextAlignment = value;
+    }
+    
+    public [itemsPaddingProperty.getDefault](): string {
+        return "";
+    }
+    public [itemsPaddingProperty.setNative](value: string) {
+        this.android.itemsPadding = value;
+    }
+    
     public [textDecorationProperty.getDefault](): TextDecoration {
         return "none";
     }
@@ -409,13 +425,23 @@ function initializeDropDownAdapter() {
                     label.style.placeholderColor = owner.style.placeholderColor;
                 }
                 label.style.textDecoration = owner.style.textDecoration;
-                label.style.textAlignment = owner.style.textAlignment;
+                let p_itemsTextAlignment = owner.android.itemsTextAlignment;
+                if (p_itemsTextAlignment === "" && realizedViewType === 1) {
+                    label.style.textAlignment = p_itemsTextAlignment;
+                } else {
+                    label.style.textAlignment = owner.style.textAlignment;
+                }
                 label.style.fontInternal = owner.style.fontInternal;
                 if (owner.style.fontSize) {
                     label.style.fontSize = owner.style.fontSize;
                 }
                 view.style.backgroundColor = owner.style.backgroundColor;
-                view.style.padding = owner.style.padding;
+                let p_itemsPadding = owner.android.itemsPadding;
+                if (p_itemsPadding === "" && realizedViewType === 1) {
+                    view.style.padding = p_itemsPadding;
+                } else {
+                    view.style.padding = owner.style.padding;
+                }
                 view.style.height = owner.style.height;
 
                 if (realizedViewType === RealizedViewType.DropDownView) {
