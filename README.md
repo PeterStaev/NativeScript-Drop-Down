@@ -65,6 +65,9 @@ Gets or sets whether the drop down is enabled. If you want to apply a specific s
 * **accessoryViewVisible** - *boolean* (Default: true)  
 Gets/sets whether there will be an accessory view (toolbar with Done button) under iOS. Valid only when running on iOS.
 
+* **itemsTextAlignment** - *String*  ios only
+Gets or sets the alignment for items in the DropDown.
+
 ### Methods 
 * **open(): void**  
 Opens the drop down.
