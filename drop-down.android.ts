@@ -161,14 +161,14 @@ export class DropDown extends DropDownBase {
         return "";
     }
     public [itemsTextAlignmentProperty.setNative](value: string) {
-        this.android.itemsTextAlignment = value;
+        this.itemsTextAlignment = value;
     }
     
     public [itemsPaddingProperty.getDefault](): string {
         return "";
     }
     public [itemsPaddingProperty.setNative](value: string) {
-        this.android.itemsPadding = value;
+        this.itemsPadding = value;
     }
     
     public [textDecorationProperty.getDefault](): TextDecoration {
@@ -425,7 +425,7 @@ function initializeDropDownAdapter() {
                     label.style.placeholderColor = owner.style.placeholderColor;
                 }
                 label.style.textDecoration = owner.style.textDecoration;
-                let p_itemsTextAlignment = owner.android.itemsTextAlignment;
+                let p_itemsTextAlignment = owner.itemsTextAlignment;
                 if (p_itemsTextAlignment === "" && realizedViewType === 1) {
                     label.style.textAlignment = p_itemsTextAlignment;
                 } else {
@@ -436,7 +436,7 @@ function initializeDropDownAdapter() {
                     label.style.fontSize = owner.style.fontSize;
                 }
                 view.style.backgroundColor = owner.style.backgroundColor;
-                let p_itemsPadding = owner.android.itemsPadding;
+                let p_itemsPadding = owner.itemsPadding;
                 if (p_itemsPadding === "" && realizedViewType === 1) {
                     view.style.padding = p_itemsPadding;
                 } else {
