@@ -180,6 +180,7 @@ platformNativeScriptDynamic().bootstrapModule(AppComponentModule);
                 columns="auto, *">
         <DropDown #dd
                   backroundColor="red"
+		  ios:itemsTextAlignment="center"
                   [items]="items"
                   [(ngModel)]="selectedIndex"
                   (selectedIndexChanged)="onchange($event)"
