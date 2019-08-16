@@ -155,3 +155,9 @@ export const hintProperty = new Property<DropDownBase, string>({
     defaultValue: ""
 });
 hintProperty.register(DropDownBase);
+
+export const itemsTextAlignmentProperty = new Property<DropDownBase, string>({
+    name: "itemsTextAlignment",
+    defaultValue: ""
+});
+itemsTextAlignmentProperty.register(DropDownBase);
