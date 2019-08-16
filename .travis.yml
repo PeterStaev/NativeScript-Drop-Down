@@ -48,3 +48,5 @@ matrix:
         skip_cleanup: true
         on:
           branch: release
+ after_failure:
+  - cat /home/travis/.npm/_logs/*-debug.log
