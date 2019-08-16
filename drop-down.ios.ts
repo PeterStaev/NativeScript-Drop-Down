@@ -38,6 +38,7 @@ import {
     fontInternalProperty,
     hintProperty,
     itemsProperty,
+    itemsTextAlignmentProperty,
     layout,
     paddingBottomProperty,
     paddingLeftProperty,
