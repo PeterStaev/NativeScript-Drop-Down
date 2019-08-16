@@ -10,6 +10,7 @@ A NativeScript DropDown widget. The DropDown displays items from which the user 
 
 ## Screenshot
 ![Screenshot of iOS and Android](https://raw.githubusercontent.com/PeterStaev/NativeScript-Drop-Down/master/docs/screenshot.png)
+![Screenshot of iOS](docs/ios-screen-shot.png)
 
 ## Installation
 Run the following command from the root of your project:
@@ -64,6 +65,9 @@ Gets or sets whether the drop down is enabled. If you want to apply a specific s
 
 * **accessoryViewVisible** - *boolean* (Default: true)  
 Gets/sets whether there will be an accessory view (toolbar with Done button) under iOS. Valid only when running on iOS.
+
+* **itemsTextAlignment** - *String*  ios only
+Gets or sets the alignment for items in the DropDown.
 
 ### Methods 
 * **open(): void**  
@@ -180,6 +184,7 @@ platformNativeScriptDynamic().bootstrapModule(AppComponentModule);
                 columns="auto, *">
         <DropDown #dd
                   backroundColor="red"
+		  ios:itemsTextAlignment="center"
                   [items]="items"
                   [(ngModel)]="selectedIndex"
                   (selectedIndexChanged)="onchange($event)"

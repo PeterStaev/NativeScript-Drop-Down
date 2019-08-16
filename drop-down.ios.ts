@@ -38,6 +38,7 @@ import {
     fontInternalProperty,
     hintProperty,
     itemsProperty,
+    itemsTextAlignmentProperty,
     layout,
     paddingBottomProperty,
     paddingLeftProperty,
@@ -191,6 +192,13 @@ export class DropDown extends DropDownBase {
         this.ios.hint = value;
     }
 
+    public [itemsTextAlignmentProperty.getDefault](): string {
+        return "";
+    }
+    public [itemsTextAlignmentProperty.setNative](value: string) {
+        this.itemsTextAlignment = value;
+    }
+    
     public [colorProperty.getDefault](): UIColor {
         return this.nativeView.color;
     }
@@ -362,8 +370,11 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
         };
 
         label.font = style.fontInternal.getUIFont(label.font);
-
-        switch (style.textAlignment) {
+        let p_itemsTextAlignment = owner.itemsTextAlignment;
+        if (p_itemsTextAlignment === "") {
+            p_itemsTextAlignment = style.textAlignment;
+        }
+        switch (p_itemsTextAlignment) {
             case "initial":
             case "left":
                 label.textAlignment = NSTextAlignment.Left;
