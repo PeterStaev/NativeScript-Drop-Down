@@ -427,7 +427,17 @@ function initializeDropDownAdapter() {
                 label.style.textDecoration = owner.style.textDecoration;
                 let p_itemsTextAlignment = owner.itemsTextAlignment;
                 if (p_itemsTextAlignment !== "" && realizedViewType === 1) {
-                    label.style["textAlignment"] = (p_itemsTextAlignment as TextAlignment);
+                    switch (p_itemsTextAlignment) {
+                       case ("left"):
+                         label.style.textAlignment = TextAlignment.left;
+                         break;
+                       case ("center"):
+                         label.style.textAlignment = TextAlignment.center;
+                         break;
+                       case ("right"):
+                         label.style.textAlignment = TextAlignment.right;
+                         break;
+                    }
                 } else {
                     label.style.textAlignment = owner.style.textAlignment;
                 }
@@ -436,7 +446,7 @@ function initializeDropDownAdapter() {
                     label.style.fontSize = owner.style.fontSize;
                 }
                 view.style.backgroundColor = owner.style.backgroundColor;
-                let p_itemsPadding = owner.itemsPadding;
+                const p_itemsPadding = owner.itemsPadding;
                 if (p_itemsPadding !== "" && realizedViewType === 1) {
                     view.style["padding"] = p_itemsPadding;
                 } else {
