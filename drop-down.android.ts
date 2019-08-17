@@ -157,10 +157,10 @@ export class DropDown extends DropDownBase {
         (this.android.getAdapter() as DropDownAdapter).notifyDataSetChanged();
     }
     
-    public [itemsTextAlignmentProperty.getDefault](): string {
-        return "";
+    public [itemsTextAlignmentProperty.getDefault](): TextAlignment {
+        return "left";
     }
-    public [itemsTextAlignmentProperty.setNative](value: string) {
+    public [itemsTextAlignmentProperty.setNative](value: TextAlignment) {
         this.itemsTextAlignment = value;
     }
     
