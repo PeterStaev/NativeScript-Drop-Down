@@ -30,6 +30,7 @@ export abstract class DropDownBase extends View implements DropDownDefinition {
 
     public hint: string;
     public itemsTextAlignment: string;
+    public itemsPadding: string;
     public selectedIndex: number;
     public items: any[] | ItemsSource;
     public accessoryViewVisible: boolean;
@@ -162,3 +163,9 @@ export const itemsTextAlignmentProperty = new Property<DropDownBase, string>({
     defaultValue: ""
 });
 itemsTextAlignmentProperty.register(DropDownBase);
+
+export const itemsPaddingProperty = new Property<DropDownBase, string>({
+    name: "itemsPadding",
+    defaultValue: ""
+});
+itemsPaddingProperty.register(DropDownBase);

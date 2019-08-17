@@ -35,7 +35,9 @@ import {
     backgroundColorProperty,
     colorProperty,
     hintProperty,
+    itemsPaddingProperty,
     itemsProperty,
+    itemsTextAlignmentProperty,
     selectedIndexProperty
 } from "./drop-down-common";
 
@@ -129,14 +131,40 @@ export class DropDown extends DropDownBase {
         selectedIndexProperty.coerce(this);
     }
 
-    public [selectedIndexProperty.getDefault](): number {
-        return null;
-    }
-    public [selectedIndexProperty.setNative](value: number) {
-        const actualIndex = (types.isNullOrUndefined(value) ? 0 : value + 1);
-        this.nativeView.setSelection(actualIndex);
+    public [backgroundColorProperty.setNative](value: Color | number) {
+        this._propagateStylePropertyToRealizedViews("backgroundColor", value, true);
     }
 
+    public [colorProperty.setNative](value: Color | number) {
+        if (!types.isNullOrUndefined(value)) {
+            this._propagateStylePropertyToRealizedViews("color", value, false);
+        }
+    }
+    
+    public [fontInternalProperty.setNative](value: Font | android.graphics.Typeface) {
+        this._propagateStylePropertyToRealizedViews("fontInternal", value, true);
+    }
+
+    public [fontSizeProperty.setNative](value: number | { nativeSize: number }) {
+        if (!types.isNullOrUndefined(value)) {
+            this._propagateStylePropertyToRealizedViews("fontSize", value, true);
+        }
+    }
+    
+    public [hintProperty.getDefault](): string {
+        return "";
+    }
+    public [hintProperty.setNative](value: string) {
+        (this.android.getAdapter() as DropDownAdapter).notifyDataSetChanged();
+    }
+
+    public [itemsPaddingProperty.getDefault](): string {
+        return "";
+    }
+    public [itemsPaddingProperty.setNative](value: string) {
+        this.itemsPadding = value;
+    }
+    
     public [itemsProperty.getDefault](): any[] {
         return null;
     }
@@ -147,14 +175,14 @@ export class DropDown extends DropDownBase {
         // Coerce selected index after we have set items to native view.
         selectedIndexProperty.coerce(this);
     }
-
-    public [hintProperty.getDefault](): string {
-        return "";
+    
+    public [itemsTextAlignmentProperty.getDefault](): TextAlignment {
+        return "left";
     }
-    public [hintProperty.setNative](value: string) {
-        (this.android.getAdapter() as DropDownAdapter).notifyDataSetChanged();
+    public [itemsTextAlignmentProperty.setNative](value: TextAlignment) {
+        this.itemsTextAlignment = value;
     }
-
+    
     public [textDecorationProperty.getDefault](): TextDecoration {
         return "none";
     }
@@ -169,28 +197,16 @@ export class DropDown extends DropDownBase {
         this._propagateStylePropertyToRealizedViews("textAlignment", value, true);
     }
 
-    public [fontInternalProperty.setNative](value: Font | android.graphics.Typeface) {
-        this._propagateStylePropertyToRealizedViews("fontInternal", value, true);
-    }
-
-    public [fontSizeProperty.setNative](value: number | { nativeSize: number }) {
-        if (!types.isNullOrUndefined(value)) {
-            this._propagateStylePropertyToRealizedViews("fontSize", value, true);
-        }
-    }
-
-    public [backgroundColorProperty.setNative](value: Color | number) {
-        this._propagateStylePropertyToRealizedViews("backgroundColor", value, true);
-    }
-
-    public [colorProperty.setNative](value: Color | number) {
-        if (!types.isNullOrUndefined(value)) {
-            this._propagateStylePropertyToRealizedViews("color", value, false);
-        }
-    }
-
     public [placeholderColorProperty.setNative](value: Color | number) {
         this._propagateStylePropertyToRealizedViews("placeholderColor", value, true);
+    }
+    
+    public [selectedIndexProperty.getDefault](): number {
+        return null;
+    }
+    public [selectedIndexProperty.setNative](value: number) {
+        const actualIndex = (types.isNullOrUndefined(value) ? 0 : value + 1);
+        this.nativeView.setSelection(actualIndex);
     }
 
     public _getRealizedView(convertView: android.view.View, realizedViewType: RealizedViewType): View {
@@ -409,13 +425,36 @@ function initializeDropDownAdapter() {
                     label.style.placeholderColor = owner.style.placeholderColor;
                 }
                 label.style.textDecoration = owner.style.textDecoration;
-                label.style.textAlignment = owner.style.textAlignment;
+                const _textAlignment = {
+                    _leftAlignment: "left" as TextAlignment,
+                    _centerAlignment: "center" as TextAlignment,
+                    _rightAlignment: "right" as TextAlignment
+                };
+                if (owner.itemsTextAlignment !== "" && realizedViewType === 1) {
+                    switch (owner.itemsTextAlignment) {
+                       case ("left"):
+                         label.style.textAlignment = _textAlignment._leftAlignment;
+                         break;
+                       case ("center"):
+                         label.style.textAlignment = _textAlignment._centerAlignment;
+                         break;
+                       case ("right"):
+                         label.style.textAlignment = _textAlignment._rightAlignment;
+                         break;
+                    }
+                } else {
+                    label.style.textAlignment = owner.style.textAlignment;
+                }
                 label.style.fontInternal = owner.style.fontInternal;
                 if (owner.style.fontSize) {
                     label.style.fontSize = owner.style.fontSize;
                 }
                 view.style.backgroundColor = owner.style.backgroundColor;
-                view.style.padding = owner.style.padding;
+                if (owner.itemsPadding !== "" && realizedViewType === 1) {
+                    view.style["padding"] = owner.itemsPadding;
+                } else {
+                    view.style.padding = owner.style.padding;
+                }
                 view.style.height = owner.style.height;
 
                 if (realizedViewType === RealizedViewType.DropDownView) {
