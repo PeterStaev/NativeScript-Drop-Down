@@ -427,7 +427,7 @@ function initializeDropDownAdapter() {
                 label.style.textDecoration = owner.style.textDecoration;
                 let p_itemsTextAlignment = owner.itemsTextAlignment;
                 if (p_itemsTextAlignment !== "" && realizedViewType === 1) {
-                    label.style.textAlignment = p_itemsTextAlignment;
+                    label.style["textAlignment"] = p_itemsTextAlignment;
                 } else {
                     label.style.textAlignment = owner.style.textAlignment;
                 }
@@ -438,7 +438,7 @@ function initializeDropDownAdapter() {
                 view.style.backgroundColor = owner.style.backgroundColor;
                 let p_itemsPadding = owner.itemsPadding;
                 if (p_itemsPadding !== "" && realizedViewType === 1) {
-                    view.style.padding = p_itemsPadding;
+                    view.style["padding"] = p_itemsPadding;
                 } else {
                     view.style.padding = owner.style.padding;
                 }
