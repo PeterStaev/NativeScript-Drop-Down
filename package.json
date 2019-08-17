@@ -1,5 +1,5 @@
 {
-  "name": "nativescript-drop-down",
+  "name": "@awhitesheep/nativescript-drop-down",
   "version": "5.0.3",
   "description": "A NativeScript DropDown widget.",
   "main": "drop-down",
