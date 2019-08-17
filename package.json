@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/PeterStaev/NativeScript-Drop-Down"
+    "url": "https://github.com/AWhiteSheep/NativeScript-Drop-Down"
   },
   "scripts": {
     "tslint": "tslint --project tsconfig.json",
