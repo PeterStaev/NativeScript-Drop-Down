@@ -426,9 +426,9 @@ function initializeDropDownAdapter() {
                 }
                 label.style.textDecoration = owner.style.textDecoration;
                 const _textAlignment = {
-                    _leftAlignment: 'left' as TextAlignment,
-                    _centerAlignment: 'center' as TextAlignment,
-                    _rightAlignment: 'right' as TextAlignment
+                    _leftAlignment: "left" as TextAlignment,
+                    _centerAlignment: "center" as TextAlignment,
+                    _rightAlignment: "right" as TextAlignment
                 };
                 let p_itemsTextAlignment = owner.itemsTextAlignment;
                 if (p_itemsTextAlignment !== "" && realizedViewType === 1) {
