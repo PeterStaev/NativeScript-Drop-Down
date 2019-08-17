@@ -427,7 +427,7 @@ function initializeDropDownAdapter() {
                 label.style.textDecoration = owner.style.textDecoration;
                 let p_itemsTextAlignment = owner.itemsTextAlignment;
                 if (p_itemsTextAlignment !== "" && realizedViewType === 1) {
-                    label.style["textAlignment"] = p_itemsTextAlignment;
+                    label.style["textAlignment"] = (p_itemsTextAlignment as TextAlignment);
                 } else {
                     label.style.textAlignment = owner.style.textAlignment;
                 }
