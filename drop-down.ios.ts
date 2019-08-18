@@ -193,7 +193,7 @@ export class DropDown extends DropDownBase {
     }
 
     public [itemsTextAlignmentProperty.getDefault](): string {
-        return "";
+        return "initial";
     }
     public [itemsTextAlignmentProperty.setNative](value: string) {
         this.itemsTextAlignment = value;
@@ -370,11 +370,11 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
         };
 
         label.font = style.fontInternal.getUIFont(label.font);
-        let p_itemsTextAlignment = owner.itemsTextAlignment;
-        if (p_itemsTextAlignment === "") {
-            p_itemsTextAlignment = style.textAlignment;
+        let itemsTextAlignment = owner.itemsTextAlignment;
+        if (itemsTextAlignment === "initial") {
+            itemsTextAlignment = style.textAlignment;
         }
-        switch (p_itemsTextAlignment) {
+        switch (itemsTextAlignment) {
             case "initial":
             case "left":
                 label.textAlignment = NSTextAlignment.Left;
