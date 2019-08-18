@@ -26,9 +26,6 @@ install:
     - npm install
     - grunt compile
 
-after_failure:
-    - cat /home/travis/.npm/_logs/*-debug.log
-
 matrix:
   include:
     - stage: lint
