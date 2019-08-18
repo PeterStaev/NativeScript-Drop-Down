@@ -37,6 +37,7 @@ import {
     colorProperty,
     fontInternalProperty,
     hintProperty,
+    itemsPadding,
     itemsProperty,
     itemsTextAlignmentProperty,
     layout,
