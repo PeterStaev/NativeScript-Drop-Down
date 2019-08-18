@@ -425,23 +425,8 @@ function initializeDropDownAdapter() {
                     label.style.placeholderColor = owner.style.placeholderColor;
                 }
                 label.style.textDecoration = owner.style.textDecoration;
-                const _textAlignment = {
-                    _leftAlignment: "left" as TextAlignment,
-                    _centerAlignment: "center" as TextAlignment,
-                    _rightAlignment: "right" as TextAlignment
-                };
-                if (owner.itemsTextAlignment !== "" && realizedViewType === 1) {
-                    switch (owner.itemsTextAlignment) {
-                       case ("left"):
-                         label.style.textAlignment = _textAlignment._leftAlignment;
-                         break;
-                       case ("center"):
-                         label.style.textAlignment = _textAlignment._centerAlignment;
-                         break;
-                       case ("right"):
-                         label.style.textAlignment = _textAlignment._rightAlignment;
-                         break;
-                    }
+                if (owner.itemsTextAlignment !== "initial" && realizedViewType === 1) {
+                     label.style.textAlignment = owner.itemsTextAlignment;
                 } else {
                     label.style.textAlignment = owner.style.textAlignment;
                 }
