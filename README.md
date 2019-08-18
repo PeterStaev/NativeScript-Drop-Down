@@ -66,10 +66,10 @@ Gets or sets whether the drop down is enabled. If you want to apply a specific s
 Gets/sets whether there will be an accessory view (toolbar with Done button) under iOS. Valid only when running on iOS.
 
 * **itemsTextAlignment** - *String*
-Gets or sets the alignment for items in the DropDown. eg: `itemsTextAlignment="center"`.
+Gets or sets the alignment for items in the DropDown. 
 
 * **itemsPadding** - *String* android only! for now
-Gets or sets the padding for items in the DropDown. eg: `itemsPadding="10"`.
+Gets or sets the padding for items in the DropDown. 
 
 ### Methods 
 * **open(): void**  
