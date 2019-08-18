@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
 import { ObservableArray } from "data/observable-array";
-import { CoercibleProperty, CSSType, EventData, makeParser, makeValidator, Property, View } from "ui/core/view";
+import { CoercibleProperty, CSSType, EventData, Property, View, makeParser, makeValidator } from "ui/core/view";
 import { addWeakEventListener, removeWeakEventListener } from "ui/core/weak-event-listener";
 import { ItemsSource } from "ui/list-picker";
 import { TextAlignment } from "ui/text-base";
