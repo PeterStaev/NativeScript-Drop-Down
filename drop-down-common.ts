@@ -17,6 +17,7 @@ import { ObservableArray } from "data/observable-array";
 import { CSSType, CoercibleProperty, EventData, Property, View } from "ui/core/view";
 import { addWeakEventListener, removeWeakEventListener } from "ui/core/weak-event-listener";
 import { ItemsSource } from "ui/list-picker";
+import { TextAlignment } from "ui/text-base";
 import * as types from "utils/types";
 import { DropDown as DropDownDefinition, SelectedIndexChangedEventData, ValueItem, ValueList as ValueListDefinition } from ".";
 
@@ -29,7 +30,7 @@ export abstract class DropDownBase extends View implements DropDownDefinition {
     public static selectedIndexChangedEvent = "selectedIndexChanged";
 
     public hint: string;
-    public itemsTextAlignment: string;
+    public itemsTextAlignment: TextAlignment;
     public itemsPadding: string;
     public selectedIndex: number;
     public items: any[] | ItemsSource;
