@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
 import { ObservableArray } from "data/observable-array";
-import { CSSType, CoercibleProperty, EventData, Property, View } from "ui/core/view";
+import { CSSType, CoercibleProperty, EventData, InheritedCssProperty, makeParser, makeValidator, Property, View } from "ui/core/view";
 import { addWeakEventListener, removeWeakEventListener } from "ui/core/weak-event-listener";
 import { ItemsSource } from "ui/list-picker";
 import { TextAlignment } from "ui/text-base";
@@ -161,7 +161,7 @@ hintProperty.register(DropDownBase);
 
 
 const textAlignmentConverter = makeParser<TextAlignment>(makeValidator<TextAlignment>("initial", "left", "center", "right"));
-export const itemsTextAlignmentProperty = new InheritedCssProperty<Style, TextAlignment>({ 
+export const itemsTextAlignmentProperty = new InheritedCssProperty<DropDownBase, TextAlignment>({ 
     name: "itemsTextAlignment", 
     cssName: "items-text-align", 
     defaultValue: "initial", 
