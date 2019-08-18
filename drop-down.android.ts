@@ -177,7 +177,7 @@ export class DropDown extends DropDownBase {
     }
     
     public [itemsTextAlignmentProperty.getDefault](): TextAlignment {
-        return "left";
+        return "initial";
     }
     public [itemsTextAlignmentProperty.setNative](value: TextAlignment) {
         this.itemsTextAlignment = value;
