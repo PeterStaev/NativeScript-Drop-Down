@@ -192,11 +192,18 @@ export class DropDown extends DropDownBase {
         this.ios.hint = value;
     }
 
-    public [itemsTextAlignmentProperty.getDefault](): string {
+    public [itemsTextAlignmentProperty.getDefault](): TextAlignment {
+        return "initial";
+    }
+    public [itemsTextAlignmentProperty.setNative](value: TextAlignment) {
+        this.ios.itemsTextAlignment = value;
+    }
+    
+    public [itemsPaddingProperty.getDefault](): string {
         return "";
     }
-    public [itemsTextAlignmentProperty.setNative](value: string) {
-        this.itemsTextAlignment = value;
+    public [itemsPaddingProperty.setNative](value: string) {
+        this.ios.itemsPadding = value;
     }
     
     public [colorProperty.getDefault](): UIColor {
@@ -361,20 +368,49 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
         if (style.color) {
             label.textColor = style.color.ios;
         }
+        
+        let itemsPaddingTop = owner.effectivePaddingTop;
+        let itemsPaddingRight = owner.effectivePaddingRight;
+        let itemsPaddingBottom = owner.effectivePaddingBottom;
+        let itemsPaddingLeft = owner.effectivePaddingLeft;
+        if (owner.ios.itemsPadding !== "") { 
+            const itemsPadding = owner.ios.itemsPadding.split(" ");
+            if (itemsPadding.length === 1) {
+                itemsPaddingTop = itemsPadding[0];
+                itemsPaddingRight = itemsPadding[0];
+                itemsPaddingBottom = itemsPadding[0];
+                itemsPaddingLeft = itemsPadding[0];
+            } else if (itemsPadding.length === 2) {
+                itemsPaddingTop = itemsPadding[0];
+                itemsPaddingRight = itemsPadding[1];
+                itemsPaddingBottom = itemsPadding[0];
+                itemsPaddingLeft = itemsPadding[1];
+            } else if (itemsPadding.length === 3) {
+                itemsPaddingTop = itemsPadding[0];
+                itemsPaddingRight = itemsPadding[1];
+                itemsPaddingBottom = itemsPadding[2];
+                itemsPaddingLeft = itemsPadding[1];
+            } else if (itemsPadding.length === 4) {
+                itemsPaddingTop = itemsPadding[0];
+                itemsPaddingRight = itemsPadding[1];
+                itemsPaddingBottom = itemsPadding[2];
+                itemsPaddingLeft = itemsPadding[3];
+            }
+        }
 
         label.padding = {
-            top: utils.layout.toDeviceIndependentPixels(owner.effectivePaddingTop),
-            right: utils.layout.toDeviceIndependentPixels(owner.effectivePaddingRight),
-            bottom: utils.layout.toDeviceIndependentPixels(owner.effectivePaddingBottom),
-            left: utils.layout.toDeviceIndependentPixels(owner.effectivePaddingLeft)
+            top: utils.layout.toDeviceIndependentPixels(itemsPaddingTop),
+            right: utils.layout.toDeviceIndependentPixels(itemsPaddingRight),
+            bottom: utils.layout.toDeviceIndependentPixels(itemsPaddingBottom),
+            left: utils.layout.toDeviceIndependentPixels(itemsPaddingLeft)
         };
 
         label.font = style.fontInternal.getUIFont(label.font);
-        let p_itemsTextAlignment = owner.itemsTextAlignment;
-        if (p_itemsTextAlignment === "") {
-            p_itemsTextAlignment = style.textAlignment;
+        let itemsTextAlignment = owner.ios.itemsTextAlignment;
+        if (itemsTextAlignment === "initial") {
+            itemsTextAlignment = style.textAlignment;
         }
-        switch (p_itemsTextAlignment) {
+        switch (itemsTextAlignment) {
             case "initial":
             case "left":
                 label.textAlignment = NSTextAlignment.Left;
