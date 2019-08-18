@@ -17,6 +17,7 @@ import { ObservableArray } from "data/observable-array";
 import { CoercibleProperty, EventData, Property, View } from "ui/core/view";
 import { GestureTypes } from "ui/gestures/gestures";
 import { ItemsSource } from "ui/list-picker";
+import { TextAlignment } from "ui/text-base";
 
 export interface SelectedIndexChangedEventData extends EventData {
     oldIndex: number;
@@ -35,7 +36,8 @@ export class DropDown extends View {
 
     public items: any[] | ItemsSource;
     public selectedIndex: number;
-    public itemsTextAlignment: string; /* iOS ONLY! for now */
+    public itemsTextAlignment: TextAlignment;
+    public itemsPadding: string;
     public hint: string;
     public accessoryViewVisible: boolean; /* iOS ONLY! */
 
