@@ -68,7 +68,7 @@ Gets/sets whether there will be an accessory view (toolbar with Done button) und
 * **itemsTextAlignment** - *String*
 Gets or sets the alignment for items in the DropDown. 
 
-* **itemsPadding** - *String* android only! for now
+* **itemsPadding** - *String*
 Gets or sets the padding for items in the DropDown. 
 
 ### Methods 
