@@ -17,6 +17,7 @@ import { ObservableArray } from "data/observable-array";
 import { CoercibleProperty, EventData, Property, View } from "ui/core/view";
 import { GestureTypes } from "ui/gestures/gestures";
 import { ItemsSource } from "ui/list-picker";
+import { TextAlignment } from "ui/text-base";
 
 export interface SelectedIndexChangedEventData extends EventData {
     oldIndex: number;
