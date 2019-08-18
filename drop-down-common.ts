@@ -161,9 +161,8 @@ hintProperty.register(DropDownBase);
 
 
 const textAlignmentConverter = makeParser<TextAlignment>(makeValidator<TextAlignment>("initial", "left", "center", "right"));
-export const itemsTextAlignmentProperty = new InheritedCssProperty<DropDownBase, TextAlignment>({ 
+export const itemsTextAlignmentProperty = new Property<DropDownBase, TextAlignment>({ 
     name: "itemsTextAlignment", 
-    cssName: "items-text-align", 
     defaultValue: "initial", 
     valueConverter: textAlignmentConverter 
 });
