@@ -36,7 +36,7 @@ export class DropDown extends View {
 
     public items: any[] | ItemsSource;
     public selectedIndex: number;
-    public itemsTextAlignment: string; 
+    public itemsTextAlignment: TextAlignment; 
     public itemsPadding: string;
     public hint: string;
     public accessoryViewVisible: boolean; /* iOS ONLY! */

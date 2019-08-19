@@ -192,10 +192,10 @@ export class DropDown extends DropDownBase {
         this.ios.hint = value;
     }
 
-    public [itemsTextAlignmentProperty.getDefault](): string {
+    public [itemsTextAlignmentProperty.getDefault](): TextAlignment {
         return "initial";
     }
-    public [itemsTextAlignmentProperty.setNative](value: string) {
+    public [itemsTextAlignmentProperty.setNative](value: TextAlignment) {
         this.itemsTextAlignment = value;
     }
     

@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
 import { ObservableArray } from "data/observable-array";
-import { CSSType, CoercibleProperty, EventData, Property, View } from "ui/core/view";
+import { CSSType, CoercibleProperty, EventData, Property, View, makeParser, makeValidator } from "ui/core/view";
 import { addWeakEventListener, removeWeakEventListener } from "ui/core/weak-event-listener";
 import { ItemsSource } from "ui/list-picker";
+import { TextAlignment } from "ui/text-base";
 import * as types from "utils/types";
 import { DropDown as DropDownDefinition, SelectedIndexChangedEventData, ValueItem, ValueList as ValueListDefinition } from ".";
 
@@ -29,7 +30,7 @@ export abstract class DropDownBase extends View implements DropDownDefinition {
     public static selectedIndexChangedEvent = "selectedIndexChanged";
 
     public hint: string;
-    public itemsTextAlignment: string;
+    public itemsTextAlignment: TextAlignment;
     public itemsPadding: string;
     public selectedIndex: number;
     public items: any[] | ItemsSource;
@@ -158,9 +159,11 @@ export const hintProperty = new Property<DropDownBase, string>({
 });
 hintProperty.register(DropDownBase);
 
-export const itemsTextAlignmentProperty = new Property<DropDownBase, string>({
-    name: "itemsTextAlignment",
-    defaultValue: ""
+const textAlignmentConverter = makeParser<TextAlignment>(makeValidator<TextAlignment>("initial", "left", "center", "right"));
+export const itemsTextAlignmentProperty = new Property<DropDownBase, TextAlignment>({ 
+    name: "itemsTextAlignment", 
+    defaultValue: "initial", 
+    valueConverter: textAlignmentConverter 
 });
 itemsTextAlignmentProperty.register(DropDownBase);
 
