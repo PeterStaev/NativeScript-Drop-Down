@@ -197,14 +197,14 @@ export class DropDown extends DropDownBase {
         return "initial";
     }
     public [itemsTextAlignmentProperty.setNative](value: TextAlignment) {
-        this.ios.itemsTextAlignment = value;
+        this.itemsTextAlignment = value;
     }
     
     public [itemsPaddingProperty.getDefault](): string {
         return "";
     }
     public [itemsPaddingProperty.setNative](value: string) {
-        this.ios.itemsPadding = value;
+        this.itemsPadding = value;
     }
     
     public [colorProperty.getDefault](): UIColor {
@@ -374,8 +374,8 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
         let itemsPaddingRight = owner.effectivePaddingRight;
         let itemsPaddingBottom = owner.effectivePaddingBottom;
         let itemsPaddingLeft = owner.effectivePaddingLeft;
-        if (owner.ios.itemsPadding !== "") { 
-            const itemsPadding = owner.ios.itemsPadding.split(" ");
+        if (owner.itemsPadding !== "") { 
+            const itemsPadding = owner.itemsPadding.split(" ");
             if (itemsPadding.length === 1) {
                 itemsPaddingTop = itemsPadding[0];
                 itemsPaddingRight = itemsPadding[0];
@@ -407,7 +407,7 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
         };
 
         label.font = style.fontInternal.getUIFont(label.font);
-        let itemsTextAlignment = owner.ios.itemsTextAlignment;
+        let itemsTextAlignment = owner.itemsTextAlignment;
         if (itemsTextAlignment === "initial") {
             itemsTextAlignment = style.textAlignment;
         }
