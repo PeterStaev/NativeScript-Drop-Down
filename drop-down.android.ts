@@ -93,6 +93,8 @@ export class DropDown extends DropDownBase {
         if (!types.isNullOrUndefined(this.selectedIndex)) {
             this.android.setSelection(this.selectedIndex + 1); // +1 for the hint first element
         }
+        this.android.itemsTextAlignment = itemsTextAlignmentProperty.defaultValue;
+        this.android.itemsPadding = itemsPaddingProperty.defaultValue;
     }
 
     public disposeNativeView() {
@@ -162,7 +164,7 @@ export class DropDown extends DropDownBase {
         return "";
     }
     public [itemsPaddingProperty.setNative](value: string) {
-        this.itemsPadding = value;
+        this.android.itemsPadding = value;
     }
     
     public [itemsProperty.getDefault](): any[] {
@@ -180,7 +182,7 @@ export class DropDown extends DropDownBase {
         return "initial";
     }
     public [itemsTextAlignmentProperty.setNative](value: TextAlignment) {
-        this.itemsTextAlignment = value;
+        this.android.itemsTextAlignment = value;
     }
     
     public [textDecorationProperty.getDefault](): TextDecoration {
@@ -425,8 +427,8 @@ function initializeDropDownAdapter() {
                     label.style.placeholderColor = owner.style.placeholderColor;
                 }
                 label.style.textDecoration = owner.style.textDecoration;
-                if (owner.itemsTextAlignment !== "initial" && realizedViewType === 1) {
-                     label.style.textAlignment = owner.itemsTextAlignment;
+                if (owner.android.itemsTextAlignment !== "initial" && realizedViewType === 1) {
+                     label.style.textAlignment = owner.android.itemsTextAlignment;
                 } else {
                     label.style.textAlignment = owner.style.textAlignment;
                 }
@@ -435,8 +437,8 @@ function initializeDropDownAdapter() {
                     label.style.fontSize = owner.style.fontSize;
                 }
                 view.style.backgroundColor = owner.style.backgroundColor;
-                if (owner.itemsPadding !== "" && realizedViewType === 1) {
-                    view.style["padding"] = owner.itemsPadding;
+                if (owner.android.itemsPadding !== "" && realizedViewType === 1) {
+                    view.style["padding"] = owner.android.itemsPadding;
                 } else {
                     view.style.padding = owner.style.padding;
                 }
