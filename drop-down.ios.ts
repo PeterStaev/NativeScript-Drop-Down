@@ -375,7 +375,7 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
         let itemsPaddingBottom = owner.effectivePaddingBottom;
         let itemsPaddingLeft = owner.effectivePaddingLeft;
         if (owner.itemsPadding !== "") { 
-            const itemsPadding = owner.itemsPadding.split(" ");
+            const itemsPadding = owner.itemsPadding.split(" ").map(s => parseInt(s, 10));
             if (itemsPadding.length === 1) {
                 itemsPaddingTop = itemsPadding[0];
                 itemsPaddingRight = itemsPadding[0];
