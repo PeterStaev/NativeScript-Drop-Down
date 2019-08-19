@@ -37,6 +37,7 @@ import {
     colorProperty,
     fontInternalProperty,
     hintProperty,
+    itemsPaddingProperty,
     itemsProperty,
     itemsTextAlignmentProperty,
     layout,
@@ -197,6 +198,13 @@ export class DropDown extends DropDownBase {
     }
     public [itemsTextAlignmentProperty.setNative](value: TextAlignment) {
         this.itemsTextAlignment = value;
+    }
+    
+    public [itemsPaddingProperty.getDefault](): string {
+        return "";
+    }
+    public [itemsPaddingProperty.setNative](value: string) {
+        this.itemsPadding = value;
     }
     
     public [colorProperty.getDefault](): UIColor {
@@ -361,12 +369,41 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
         if (style.color) {
             label.textColor = style.color.ios;
         }
+        
+        let itemsPaddingTop = owner.effectivePaddingTop;
+        let itemsPaddingRight = owner.effectivePaddingRight;
+        let itemsPaddingBottom = owner.effectivePaddingBottom;
+        let itemsPaddingLeft = owner.effectivePaddingLeft;
+        if (owner.itemsPadding !== "") { 
+            const itemsPadding = owner.itemsPadding.split(" ").map((s) => parseInt(s, 10));
+            if (itemsPadding.length === 1) {
+                itemsPaddingTop = itemsPadding[0];
+                itemsPaddingRight = itemsPadding[0];
+                itemsPaddingBottom = itemsPadding[0];
+                itemsPaddingLeft = itemsPadding[0];
+            } else if (itemsPadding.length === 2) {
+                itemsPaddingTop = itemsPadding[0];
+                itemsPaddingRight = itemsPadding[1];
+                itemsPaddingBottom = itemsPadding[0];
+                itemsPaddingLeft = itemsPadding[1];
+            } else if (itemsPadding.length === 3) {
+                itemsPaddingTop = itemsPadding[0];
+                itemsPaddingRight = itemsPadding[1];
+                itemsPaddingBottom = itemsPadding[2];
+                itemsPaddingLeft = itemsPadding[1];
+            } else if (itemsPadding.length === 4) {
+                itemsPaddingTop = itemsPadding[0];
+                itemsPaddingRight = itemsPadding[1];
+                itemsPaddingBottom = itemsPadding[2];
+                itemsPaddingLeft = itemsPadding[3];
+            }
+        }
 
         label.padding = {
-            top: utils.layout.toDeviceIndependentPixels(owner.effectivePaddingTop),
-            right: utils.layout.toDeviceIndependentPixels(owner.effectivePaddingRight),
-            bottom: utils.layout.toDeviceIndependentPixels(owner.effectivePaddingBottom),
-            left: utils.layout.toDeviceIndependentPixels(owner.effectivePaddingLeft)
+            top: utils.layout.toDeviceIndependentPixels(itemsPaddingTop),
+            right: utils.layout.toDeviceIndependentPixels(itemsPaddingRight),
+            bottom: utils.layout.toDeviceIndependentPixels(itemsPaddingBottom),
+            left: utils.layout.toDeviceIndependentPixels(itemsPaddingLeft)
         };
 
         label.font = style.fontInternal.getUIFont(label.font);
