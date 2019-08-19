@@ -197,14 +197,14 @@ export class DropDown extends DropDownBase {
         return "initial";
     }
     public [itemsTextAlignmentProperty.setNative](value: TextAlignment) {
-        this.itemsTextAlignment = value;
+        this.ios.itemsTextAlignment = value;
     }
     
     public [itemsPaddingProperty.getDefault](): string {
-        return "";
+        return "0";
     }
     public [itemsPaddingProperty.setNative](value: string) {
-        this.itemsPadding = value;
+        this.ios.itemsPadding = value;
     }
     
     public [colorProperty.getDefault](): UIColor {
@@ -374,8 +374,8 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
         let itemsPaddingRight = owner.effectivePaddingRight;
         let itemsPaddingBottom = owner.effectivePaddingBottom;
         let itemsPaddingLeft = owner.effectivePaddingLeft;
-        if (owner.itemsPadding !== "") { 
-            const itemsPadding = owner.itemsPadding.split(" ").map((s) => parseInt(s, 10));
+        if (owner.ios.itemsPadding !== "0") { 
+            const itemsPadding = owner.ios.itemsPadding.split(" ").map((s) => parseInt(s, 10));
             if (itemsPadding.length === 1) {
                 itemsPaddingTop = itemsPadding[0];
                 itemsPaddingRight = itemsPadding[0];
@@ -407,7 +407,7 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
         };
 
         label.font = style.fontInternal.getUIFont(label.font);
-        let itemsTextAlignment = owner.itemsTextAlignment;
+        let itemsTextAlignment = owner.ios.itemsTextAlignment;
         if (itemsTextAlignment === "initial") {
             itemsTextAlignment = style.textAlignment;
         }
@@ -454,10 +454,11 @@ class TNSDropDownLabel extends TNSLabel {
 
         label._owner = owner;
         label._isInputViewOpened = false;
+        label._itemsTextAlignment = _owner.itemsTextAlignmentProperty.getDefault();
+        label._itemsPadding = _owner.itemsPaddingProperty.getDefault();
         label.color = utils.ios.getter(UIColor, UIColor.blackColor);
         label.placeholderColor = HINT_COLOR.ios;
         label.text = " "; // HACK: Set the text to space so that it takes the necessary height if no hint/selected item
-
         label.addGestureRecognizer(UITapGestureRecognizer.alloc().initWithTargetAction(label, "tap"));
 
         return label;
@@ -471,6 +472,8 @@ class TNSDropDownLabel extends TNSLabel {
     private _hasText: boolean;
     private _internalColor: UIColor;
     private _internalPlaceholderColor: UIColor;
+    private _itemsTextAlignment: TextAlignment;
+    private _itemsPadding: string;
 
     get inputView(): UIView {
         return this._inputView;
@@ -533,6 +536,20 @@ class TNSDropDownLabel extends TNSLabel {
         this._refreshColor();
 
         _setTextAttributes(owner.nativeView, owner.style);
+    }
+    
+    get itemsTextAlignment(): TextAlignment {
+        return this._itemsTextAlignment;
+    }
+    set itemsTextAlignment(value: TextAlignment) {
+        this._itemsTextAlignment = value;
+    }
+    
+    get itemsPadding(): string {
+        return this._itemsPadding;
+    }
+    set itemsPadding(value: string) {
+        this._itemsPadding = value;
     }
 
     public becomeFirstResponder(): boolean {
