@@ -454,8 +454,8 @@ class TNSDropDownLabel extends TNSLabel {
 
         label._owner = owner;
         label._isInputViewOpened = false;
-        label._itemsTextAlignment = _owner.itemsTextAlignmentProperty.getDefault();
-        label._itemsPadding = _owner.itemsPaddingProperty.getDefault();
+        label._itemsTextAlignment = label._owner.itemsTextAlignmentProperty.getDefault();
+        label._itemsPadding = label._owner.itemsPaddingProperty.getDefault();
         label.color = utils.ios.getter(UIColor, UIColor.blackColor);
         label.placeholderColor = HINT_COLOR.ios;
         label.text = " "; // HACK: Set the text to space so that it takes the necessary height if no hint/selected item
