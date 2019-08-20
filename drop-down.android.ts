@@ -93,8 +93,8 @@ export class DropDown extends DropDownBase {
         if (!types.isNullOrUndefined(this.selectedIndex)) {
             this.android.setSelection(this.selectedIndex + 1); // +1 for the hint first element
         }
-        this.android.itemsTextAlignment = itemsTextAlignmentProperty.defaultValue;
-        this.android.itemsPadding = itemsPaddingProperty.defaultValue;
+        nativeView.itemsTextAlignment = itemsTextAlignmentProperty.defaultValue;
+        nativeView.itemsPadding = itemsPaddingProperty.defaultValue;
     }
 
     public disposeNativeView() {
@@ -164,7 +164,7 @@ export class DropDown extends DropDownBase {
         return "";
     }
     public [itemsPaddingProperty.setNative](value: string) {
-        this.android.itemsPadding = value;
+        this.nativeView.itemsPadding = value;
     }
     
     public [itemsProperty.getDefault](): any[] {
@@ -182,7 +182,7 @@ export class DropDown extends DropDownBase {
         return "initial";
     }
     public [itemsTextAlignmentProperty.setNative](value: TextAlignment) {
-        this.android.itemsTextAlignment = value;
+        this.nativeView.itemsTextAlignment = value;
     }
     
     public [textDecorationProperty.getDefault](): TextDecoration {
@@ -273,7 +273,7 @@ export class DropDown extends DropDownBase {
 interface TNSSpinner extends android.widget.Spinner {
     adapter;
     itemSelectedListener;
-
+    
     /*tslint:disable-next-line no-misused-new*/
     new (owner: WeakRef<DropDown>): TNSSpinner;
 
@@ -290,12 +290,28 @@ function initializeTNSSpinner() {
 
     class TNSSpinnerImpl extends android.widget.Spinner {
         private _isOpenedIn = false;
+        private _itemsTextAlignment: TextAlignment;
+        private _itemsPadding: string;
 
         constructor(private owner: WeakRef<DropDown>) {
             super(owner.get()._context);
             return global.__native(this);
         }
-
+        
+        get itemsTextAlignment(): TextAlignment {
+            return this._itemsTextAlignment;
+        }
+        set itemsTextAlignment(value: TextAlignment) {
+            this._itemsTextAlignment = value;
+        }
+        
+        get itemsPadding(): string {
+            return this._itemsPadding;
+        }
+        set itemsPadding(value: string) {
+            this._itemsPadding = value;
+        }
+        
         public performClick() {
             const owner = this.owner.get();
 
@@ -427,8 +443,9 @@ function initializeDropDownAdapter() {
                     label.style.placeholderColor = owner.style.placeholderColor;
                 }
                 label.style.textDecoration = owner.style.textDecoration;
-                if (owner.android.itemsTextAlignment !== "initial" && realizedViewType === 1) {
-                     label.style.textAlignment = owner.android.itemsTextAlignment;
+                if (owner.nativeView.itemsTextAlignment !== itemsTextAlignmentProperty.defaultValue 
+                    && realizedViewType === 1) {
+                     label.style.textAlignment = owner.nativeView.itemsTextAlignment;
                 } else {
                     label.style.textAlignment = owner.style.textAlignment;
                 }
@@ -437,8 +454,8 @@ function initializeDropDownAdapter() {
                     label.style.fontSize = owner.style.fontSize;
                 }
                 view.style.backgroundColor = owner.style.backgroundColor;
-                if (owner.android.itemsPadding !== "" && realizedViewType === 1) {
-                    view.style["padding"] = owner.android.itemsPadding;
+                if (owner.nativeView.itemsPadding !== itemsPaddingProperty.defaultValue && realizedViewType === 1) {
+                    view.style["padding"] = owner.nativeView.itemsPadding;
                 } else {
                     view.style.padding = owner.style.padding;
                 }
