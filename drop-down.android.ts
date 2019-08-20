@@ -273,6 +273,8 @@ export class DropDown extends DropDownBase {
 interface TNSSpinner extends android.widget.Spinner {
     adapter;
     itemSelectedListener;
+    itemsTextAlignment;
+    itemsPadding;
     
     /*tslint:disable-next-line no-misused-new*/
     new (owner: WeakRef<DropDown>): TNSSpinner;
