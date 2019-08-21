@@ -445,22 +445,19 @@ function initializeDropDownAdapter() {
                     label.style.placeholderColor = owner.style.placeholderColor;
                 }
                 label.style.textDecoration = owner.style.textDecoration;
-                if (owner.nativeView.itemsTextAlignment !== itemsTextAlignmentProperty.defaultValue 
-                    && realizedViewType === 1) {
-                     label.style.textAlignment = owner.nativeView.itemsTextAlignment;
-                } else {
-                    label.style.textAlignment = owner.style.textAlignment;
-                }
+                
+                label.style.textAlignment = owner.nativeView.itemsTextAlignment !== itemsTextAlignmentProperty.defaultValue 
+                    && realizedViewType === 1 ? owner.nativeView.itemsTextAlignment : owner.style.textAlignment;
+                
                 label.style.fontInternal = owner.style.fontInternal;
                 if (owner.style.fontSize) {
                     label.style.fontSize = owner.style.fontSize;
                 }
                 view.style.backgroundColor = owner.style.backgroundColor;
-                if (owner.nativeView.itemsPadding !== itemsPaddingProperty.defaultValue && realizedViewType === 1) {
-                    view.style["padding"] = owner.nativeView.itemsPadding;
-                } else {
-                    view.style.padding = owner.style.padding;
-                }
+                
+                view.style.padding = owner.nativeView.itemsPadding !== itemsPaddingProperty.defaultValue 
+                    && realizedViewType === 1 ? owner.nativeView.itemsPadding : owner.style.padding;
+                
                 view.style.height = owner.style.height;
 
                 if (realizedViewType === RealizedViewType.DropDownView) {
