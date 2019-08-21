@@ -18,7 +18,6 @@ import { placeholderColorProperty } from "ui/editable-text-base/editable-text-ba
 import { ItemsSource } from "ui/list-picker";
 import { Font } from "ui/styling/font";
 import { Style } from "ui/styling/style";
-import { Length } from "ui/styling";
 import {
     TextAlignment,
     TextDecoration,
@@ -403,10 +402,10 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
         }
 
         label.padding = {
-            top: itemsPaddingTop.toDevicePixels(),
-            right: itemsPaddingRight.toDevicePixels(),
-            bottom: itemsPaddingBottom.toDevicePixels(),
-            left: itemsPaddingLeft.toDevicePixels()
+            top: Length.toDevicePixels(itemsPaddingTop),
+            right: Length.toDevicePixels(itemsPaddingRight),
+            bottom: Length.toDevicePixels(itemsPaddingBottom),
+            left: Length.toDevicePixels(itemsPaddingLeft)
         };
 
         label.font = style.fontInternal.getUIFont(label.font);
