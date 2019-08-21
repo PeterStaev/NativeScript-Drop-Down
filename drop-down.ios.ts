@@ -372,10 +372,10 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
             label.textColor = style.color.ios;
         }
         
-        let itemsPaddingTop = owner.effectivePaddingTop;
-        let itemsPaddingRight = owner.effectivePaddingRight;
-        let itemsPaddingBottom = owner.effectivePaddingBottom;
-        let itemsPaddingLeft = owner.effectivePaddingLeft;
+        let itemsPaddingTop;
+        let itemsPaddingRight;
+        let itemsPaddingBottom;
+        let itemsPaddingLeft;
         if (owner.nativeView.itemsPadding !== itemsPaddingProperty.defaultValue) { 
             const itemsPadding = owner.nativeView.itemsPadding.split(/[ ,]+/).map((s) => Length.parse(s));
             if (itemsPadding.length === 1) {
@@ -399,13 +399,18 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
                 itemsPaddingBottom = itemsPadding[2];
                 itemsPaddingLeft = itemsPadding[3];
             }
+        } else {
+            itemsPaddingTop = owner.effectivePaddingTop;
+            itemsPaddingRight = owner.effectivePaddingRight;
+            itemsPaddingBottom = owner.effectivePaddingBottom;
+            itemsPaddingLeft = owner.effectivePaddingLeft;
         }
 
         label.padding = {
-            top: Length.toDevicePixels(itemsPaddingTop),
-            right: Length.toDevicePixels(itemsPaddingRight),
-            bottom: Length.toDevicePixels(itemsPaddingBottom),
-            left: Length.toDevicePixels(itemsPaddingLeft)
+            top: Length.toDevicePixels(itemsPaddingTop, 0),
+            right: Length.toDevicePixels(itemsPaddingRight, 0),
+            bottom: Length.toDevicePixels(itemsPaddingBottom, 0),
+            left: Length.toDevicePixels(itemsPaddingLeft, 0)
         };
 
         label.font = style.fontInternal.getUIFont(label.font);
