@@ -37,7 +37,9 @@ import {
     colorProperty,
     fontInternalProperty,
     hintProperty,
+    itemsPaddingProperty,
     itemsProperty,
+    itemsTextAlignmentProperty,
     layout,
     paddingBottomProperty,
     paddingLeftProperty,
@@ -98,6 +100,8 @@ export class DropDown extends DropDownBase {
         nativeView.inputView = this._listPicker;
         this._accessoryViewVisible = true;
         this._showHideAccessoryView();
+        nativeView.itemsTextAlignment = itemsTextAlignmentProperty.defaultValue;
+        nativeView.itemsPadding = itemsPaddingProperty.defaultValue;
     }
 
     public disposeNativeView() {
@@ -191,6 +195,20 @@ export class DropDown extends DropDownBase {
         this.ios.hint = value;
     }
 
+    public [itemsTextAlignmentProperty.getDefault](): TextAlignment {
+        return "initial";
+    }
+    public [itemsTextAlignmentProperty.setNative](value: TextAlignment) {
+        this.nativeView.itemsTextAlignment = value;
+    }
+    
+    public [itemsPaddingProperty.getDefault](): string {
+        return "";
+    }
+    public [itemsPaddingProperty.setNative](value: string) {
+        this.nativeView.itemsPadding = value;
+    }
+    
     public [colorProperty.getDefault](): UIColor {
         return this.nativeView.color;
     }
@@ -353,17 +371,54 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
         if (style.color) {
             label.textColor = style.color.ios;
         }
+        
+        let itemsPaddingTop;
+        let itemsPaddingRight;
+        let itemsPaddingBottom;
+        let itemsPaddingLeft;
+        if (owner.nativeView.itemsPadding !== itemsPaddingProperty.defaultValue) { 
+            const itemsPadding = owner.nativeView.itemsPadding.split(/[ ,]+/).map((s) => Length.parse(s));
+            if (itemsPadding.length === 1) {
+                itemsPaddingTop = itemsPadding[0];
+                itemsPaddingRight = itemsPadding[0];
+                itemsPaddingBottom = itemsPadding[0];
+                itemsPaddingLeft = itemsPadding[0];
+            } else if (itemsPadding.length === 2) {
+                itemsPaddingTop = itemsPadding[0];
+                itemsPaddingRight = itemsPadding[1];
+                itemsPaddingBottom = itemsPadding[0];
+                itemsPaddingLeft = itemsPadding[1];
+            } else if (itemsPadding.length === 3) {
+                itemsPaddingTop = itemsPadding[0];
+                itemsPaddingRight = itemsPadding[1];
+                itemsPaddingBottom = itemsPadding[2];
+                itemsPaddingLeft = itemsPadding[1];
+            } else if (itemsPadding.length === 4) {
+                itemsPaddingTop = itemsPadding[0];
+                itemsPaddingRight = itemsPadding[1];
+                itemsPaddingBottom = itemsPadding[2];
+                itemsPaddingLeft = itemsPadding[3];
+            }
+        } else {
+            itemsPaddingTop = owner.effectivePaddingTop;
+            itemsPaddingRight = owner.effectivePaddingRight;
+            itemsPaddingBottom = owner.effectivePaddingBottom;
+            itemsPaddingLeft = owner.effectivePaddingLeft;
+        }
 
         label.padding = {
-            top: utils.layout.toDeviceIndependentPixels(owner.effectivePaddingTop),
-            right: utils.layout.toDeviceIndependentPixels(owner.effectivePaddingRight),
-            bottom: utils.layout.toDeviceIndependentPixels(owner.effectivePaddingBottom),
-            left: utils.layout.toDeviceIndependentPixels(owner.effectivePaddingLeft)
+            top: Length.toDevicePixels(itemsPaddingTop, 0),
+            right: Length.toDevicePixels(itemsPaddingRight, 0),
+            bottom: Length.toDevicePixels(itemsPaddingBottom, 0),
+            left: Length.toDevicePixels(itemsPaddingLeft, 0)
         };
 
         label.font = style.fontInternal.getUIFont(label.font);
+        
+        const itemsTextAlignment = (owner.nativeView.itemsTextAlignment === itemsTextAlignmentProperty.defaultValue) 
+            ? style.textAlignment : owner.nativeView.itemsTextAlignment;
 
-        switch (style.textAlignment) {
+        switch (itemsTextAlignment) {
             case "initial":
             case "left":
                 label.textAlignment = NSTextAlignment.Left;
@@ -409,7 +464,6 @@ class TNSDropDownLabel extends TNSLabel {
         label.color = utils.ios.getter(UIColor, UIColor.blackColor);
         label.placeholderColor = HINT_COLOR.ios;
         label.text = " "; // HACK: Set the text to space so that it takes the necessary height if no hint/selected item
-
         label.addGestureRecognizer(UITapGestureRecognizer.alloc().initWithTargetAction(label, "tap"));
 
         return label;
@@ -423,6 +477,8 @@ class TNSDropDownLabel extends TNSLabel {
     private _hasText: boolean;
     private _internalColor: UIColor;
     private _internalPlaceholderColor: UIColor;
+    private _itemsTextAlignment: TextAlignment;
+    private _itemsPadding: string;
 
     get inputView(): UIView {
         return this._inputView;
@@ -485,6 +541,20 @@ class TNSDropDownLabel extends TNSLabel {
         this._refreshColor();
 
         _setTextAttributes(owner.nativeView, owner.style);
+    }
+    
+    get itemsTextAlignment(): TextAlignment {
+        return this._itemsTextAlignment;
+    }
+    set itemsTextAlignment(value: TextAlignment) {
+        this._itemsTextAlignment = value;
+    }
+    
+    get itemsPadding(): string {
+        return this._itemsPadding;
+    }
+    set itemsPadding(value: string) {
+        this._itemsPadding = value;
     }
 
     public becomeFirstResponder(): boolean {

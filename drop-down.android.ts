@@ -35,7 +35,9 @@ import {
     backgroundColorProperty,
     colorProperty,
     hintProperty,
+    itemsPaddingProperty,
     itemsProperty,
+    itemsTextAlignmentProperty,
     selectedIndexProperty
 } from "./drop-down-common";
 
@@ -91,6 +93,8 @@ export class DropDown extends DropDownBase {
         if (!types.isNullOrUndefined(this.selectedIndex)) {
             this.android.setSelection(this.selectedIndex + 1); // +1 for the hint first element
         }
+        nativeView.itemsTextAlignment = itemsTextAlignmentProperty.defaultValue;
+        nativeView.itemsPadding = itemsPaddingProperty.defaultValue;
     }
 
     public disposeNativeView() {
@@ -129,14 +133,40 @@ export class DropDown extends DropDownBase {
         selectedIndexProperty.coerce(this);
     }
 
-    public [selectedIndexProperty.getDefault](): number {
-        return null;
-    }
-    public [selectedIndexProperty.setNative](value: number) {
-        const actualIndex = (types.isNullOrUndefined(value) ? 0 : value + 1);
-        this.nativeView.setSelection(actualIndex);
+    public [backgroundColorProperty.setNative](value: Color | number) {
+        this._propagateStylePropertyToRealizedViews("backgroundColor", value, true);
     }
 
+    public [colorProperty.setNative](value: Color | number) {
+        if (!types.isNullOrUndefined(value)) {
+            this._propagateStylePropertyToRealizedViews("color", value, false);
+        }
+    }
+    
+    public [fontInternalProperty.setNative](value: Font | android.graphics.Typeface) {
+        this._propagateStylePropertyToRealizedViews("fontInternal", value, true);
+    }
+
+    public [fontSizeProperty.setNative](value: number | { nativeSize: number }) {
+        if (!types.isNullOrUndefined(value)) {
+            this._propagateStylePropertyToRealizedViews("fontSize", value, true);
+        }
+    }
+    
+    public [hintProperty.getDefault](): string {
+        return "";
+    }
+    public [hintProperty.setNative](value: string) {
+        (this.android.getAdapter() as DropDownAdapter).notifyDataSetChanged();
+    }
+
+    public [itemsPaddingProperty.getDefault](): string {
+        return "";
+    }
+    public [itemsPaddingProperty.setNative](value: string) {
+        this.nativeView.itemsPadding = value;
+    }
+    
     public [itemsProperty.getDefault](): any[] {
         return null;
     }
@@ -147,14 +177,14 @@ export class DropDown extends DropDownBase {
         // Coerce selected index after we have set items to native view.
         selectedIndexProperty.coerce(this);
     }
-
-    public [hintProperty.getDefault](): string {
-        return "";
+    
+    public [itemsTextAlignmentProperty.getDefault](): TextAlignment {
+        return "initial";
     }
-    public [hintProperty.setNative](value: string) {
-        (this.android.getAdapter() as DropDownAdapter).notifyDataSetChanged();
+    public [itemsTextAlignmentProperty.setNative](value: TextAlignment) {
+        this.nativeView.itemsTextAlignment = value;
     }
-
+    
     public [textDecorationProperty.getDefault](): TextDecoration {
         return "none";
     }
@@ -169,28 +199,16 @@ export class DropDown extends DropDownBase {
         this._propagateStylePropertyToRealizedViews("textAlignment", value, true);
     }
 
-    public [fontInternalProperty.setNative](value: Font | android.graphics.Typeface) {
-        this._propagateStylePropertyToRealizedViews("fontInternal", value, true);
-    }
-
-    public [fontSizeProperty.setNative](value: number | { nativeSize: number }) {
-        if (!types.isNullOrUndefined(value)) {
-            this._propagateStylePropertyToRealizedViews("fontSize", value, true);
-        }
-    }
-
-    public [backgroundColorProperty.setNative](value: Color | number) {
-        this._propagateStylePropertyToRealizedViews("backgroundColor", value, true);
-    }
-
-    public [colorProperty.setNative](value: Color | number) {
-        if (!types.isNullOrUndefined(value)) {
-            this._propagateStylePropertyToRealizedViews("color", value, false);
-        }
-    }
-
     public [placeholderColorProperty.setNative](value: Color | number) {
         this._propagateStylePropertyToRealizedViews("placeholderColor", value, true);
+    }
+    
+    public [selectedIndexProperty.getDefault](): number {
+        return null;
+    }
+    public [selectedIndexProperty.setNative](value: number) {
+        const actualIndex = (types.isNullOrUndefined(value) ? 0 : value + 1);
+        this.nativeView.setSelection(actualIndex);
     }
 
     public _getRealizedView(convertView: android.view.View, realizedViewType: RealizedViewType): View {
@@ -255,7 +273,9 @@ export class DropDown extends DropDownBase {
 interface TNSSpinner extends android.widget.Spinner {
     adapter;
     itemSelectedListener;
-
+    itemsTextAlignment;
+    itemsPadding;
+    
     /*tslint:disable-next-line no-misused-new*/
     new (owner: WeakRef<DropDown>): TNSSpinner;
 
@@ -272,12 +292,28 @@ function initializeTNSSpinner() {
 
     class TNSSpinnerImpl extends android.widget.Spinner {
         private _isOpenedIn = false;
+        private _itemsTextAlignment: TextAlignment;
+        private _itemsPadding: string;
 
         constructor(private owner: WeakRef<DropDown>) {
             super(owner.get()._context);
             return global.__native(this);
         }
-
+        
+        get itemsTextAlignment(): TextAlignment {
+            return this._itemsTextAlignment;
+        }
+        set itemsTextAlignment(value: TextAlignment) {
+            this._itemsTextAlignment = value;
+        }
+        
+        get itemsPadding(): string {
+            return this._itemsPadding;
+        }
+        set itemsPadding(value: string) {
+            this._itemsPadding = value;
+        }
+        
         public performClick() {
             const owner = this.owner.get();
 
@@ -409,13 +445,19 @@ function initializeDropDownAdapter() {
                     label.style.placeholderColor = owner.style.placeholderColor;
                 }
                 label.style.textDecoration = owner.style.textDecoration;
-                label.style.textAlignment = owner.style.textAlignment;
+                
+                label.style.textAlignment = owner.nativeView.itemsTextAlignment !== itemsTextAlignmentProperty.defaultValue 
+                    && realizedViewType === 1 ? owner.nativeView.itemsTextAlignment : owner.style.textAlignment;
+                
                 label.style.fontInternal = owner.style.fontInternal;
                 if (owner.style.fontSize) {
                     label.style.fontSize = owner.style.fontSize;
                 }
                 view.style.backgroundColor = owner.style.backgroundColor;
-                view.style.padding = owner.style.padding;
+                
+                view.style.padding = owner.nativeView.itemsPadding !== itemsPaddingProperty.defaultValue 
+                    && realizedViewType === 1 ? owner.nativeView.itemsPadding : owner.style.padding;
+                
                 view.style.height = owner.style.height;
 
                 if (realizedViewType === RealizedViewType.DropDownView) {
