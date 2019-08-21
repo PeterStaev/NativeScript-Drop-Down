@@ -18,6 +18,7 @@ import { placeholderColorProperty } from "ui/editable-text-base/editable-text-ba
 import { ItemsSource } from "ui/list-picker";
 import { Font } from "ui/styling/font";
 import { Style } from "ui/styling/style";
+import { Length } from "ui/styling";
 import {
     TextAlignment,
     TextDecoration,
@@ -377,7 +378,7 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
         let itemsPaddingBottom = owner.effectivePaddingBottom;
         let itemsPaddingLeft = owner.effectivePaddingLeft;
         if (owner.nativeView.itemsPadding !== itemsPaddingProperty.defaultValue) { 
-            const itemsPadding = owner.nativeView.itemsPadding.split(" ").map((s) => parseInt(s, 10));
+            const itemsPadding = owner.nativeView.itemsPadding.split(/[ ,]+/).map((s) => Length.parse(s));
             if (itemsPadding.length === 1) {
                 itemsPaddingTop = itemsPadding[0];
                 itemsPaddingRight = itemsPadding[0];
@@ -402,17 +403,17 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
         }
 
         label.padding = {
-            top: utils.layout.toDeviceIndependentPixels(itemsPaddingTop),
-            right: utils.layout.toDeviceIndependentPixels(itemsPaddingRight),
-            bottom: utils.layout.toDeviceIndependentPixels(itemsPaddingBottom),
-            left: utils.layout.toDeviceIndependentPixels(itemsPaddingLeft)
+            top: itemsPaddingTop.toDevicePixels(),
+            right: itemsPaddingRight.toDevicePixels(),
+            bottom: itemsPaddingBottom.toDevicePixels(),
+            left: itemsPaddingLeft.toDevicePixels()
         };
 
         label.font = style.fontInternal.getUIFont(label.font);
-        let itemsTextAlignment = owner.nativeView.itemsTextAlignment;
-        if (itemsTextAlignment === itemsTextAlignmentProperty.defaultValue) {
-            itemsTextAlignment = style.textAlignment;
-        }
+        
+        const itemsTextAlignment = (owner.nativeView.itemsTextAlignment === itemsTextAlignmentProperty.defaultValue) 
+            ? style.textAlignment : owner.nativeView.itemsTextAlignment;
+
         switch (itemsTextAlignment) {
             case "initial":
             case "left":
