@@ -1,6 +1,6 @@
 {
   "name": "nativescript-drop-down",
-  "version": "5.0.3",
+  "version": "5.0.4",
   "description": "A NativeScript DropDown widget.",
   "main": "drop-down",
   "typings": "drop-down.d.ts",
@@ -37,7 +37,8 @@
   ],
   "author": "Peter Staev <peter@tangrasoft.com>",
   "contributors": [
-    "Dick Smith (https://github.com/DickSmith)"
+    "Dick Smith (https://github.com/DickSmith)",
+    "AWhiteSheep (https://github.com/AWhiteSheep)"
   ],
   "license": "Apache-2.0",
   "peerDependencies": {
