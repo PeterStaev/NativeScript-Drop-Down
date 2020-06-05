@@ -28,7 +28,6 @@ import {
     textTransformProperty
 } from "ui/text-base";
 import * as types from "utils/types";
-import * as utils from "utils/utils";
 import { SelectedIndexChangedEventData } from ".";
 import {
     DropDownBase,
@@ -78,7 +77,7 @@ export class DropDown extends DropDownBase {
         super.initNativeView();
 
         const nativeView: TNSDropDownLabel = this.nativeViewProtected;
-        var applicationFrame = UIApplication.sharedApplication.keyWindow.frame;
+        const applicationFrame = UIApplication.sharedApplication.keyWindow.frame;
         
         this._listPicker = UIPickerView.alloc().init();
 
