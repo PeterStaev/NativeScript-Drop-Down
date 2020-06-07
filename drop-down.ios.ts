@@ -28,7 +28,6 @@ import {
     textTransformProperty
 } from "ui/text-base";
 import * as types from "utils/types";
-import * as utils from "utils/utils";
 import { SelectedIndexChangedEventData } from ".";
 import {
     DropDownBase,
@@ -78,7 +77,7 @@ export class DropDown extends DropDownBase {
         super.initNativeView();
 
         const nativeView: TNSDropDownLabel = this.nativeViewProtected;
-        const applicationFrame = utils.ios.getter(UIScreen, UIScreen.mainScreen).applicationFrame;
+        const applicationFrame = UIApplication.sharedApplication.keyWindow.frame;
         
         this._listPicker = UIPickerView.alloc().init();
 
@@ -461,7 +460,7 @@ class TNSDropDownLabel extends TNSLabel {
 
         label._owner = owner;
         label._isInputViewOpened = false;
-        label.color = utils.ios.getter(UIColor, UIColor.blackColor);
+        label.color = UIColor.blackColor;
         label.placeholderColor = HINT_COLOR.ios;
         label.text = " "; // HACK: Set the text to space so that it takes the necessary height if no hint/selected item
         label.addGestureRecognizer(UITapGestureRecognizer.alloc().initWithTargetAction(label, "tap"));
