@@ -336,6 +336,7 @@ function initializeTNSSpinner() {
                     eventName: DropDownBase.closedEvent,
                     object: owner
                 });
+                this._isOpenedIn = false;
             }
         }
 
