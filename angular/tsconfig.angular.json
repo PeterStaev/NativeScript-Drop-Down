@@ -1,0 +1,13 @@
+{
+  "extends": "../node_modules/ng-packagr/lib/ts/conf/tsconfig.ngc.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "baseUrl": ".",
+    "experimentalDecorators": true,
+    "paths": {
+      "nativescript-drop-down": [
+        "../bin/dist"
+      ]
+    }
+  }
+}

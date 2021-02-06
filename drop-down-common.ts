@@ -13,24 +13,24 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
-import { ObservableArray } from "@nativescript/core/data/observable-array";
 import {
   CSSType,
   CoercibleProperty,
+  EventData,
+  ItemsSource,
+  ObservableArray,
   Property,
   View,
+  addWeakEventListener,
   makeParser,
   makeValidator,
-  EventData,
-  addWeakEventListener,
-  removeWeakEventListener,
-  ItemsSource
+  removeWeakEventListener
 } from "@nativescript/core";
 import { TextAlignment } from "@nativescript/core/ui/text-base";
 import * as types from "@nativescript/core/utils/types";
 import { DropDown as DropDownDefinition, SelectedIndexChangedEventData, ValueItem, ValueList as ValueListDefinition } from ".";
 
-export { layout } from '@nativescript/core/utils';
+export { layout } from "@nativescript/core/utils";
 export {
   Length,
   backgroundColorProperty,

@@ -9,14 +9,19 @@
         "noImplicitUseStrict": true,
         "experimentalDecorators": true,
         "target": "es2017",
-        "module": "commonjs",
+        "module": "esnext",
+        "moduleResolution": "node",
         "outDir": "bin/dist",
-        "lib": ["es2018", "es2017", "dom", "es6"],
+        "lib": ["es2017", "dom"],
         "rootDir": ".",
         "baseUrl": ".",
+        "plugins": [{
+          "transform": "@nativescript/webpack/transformers/ns-transform-native-classes",
+          "type": "raw"
+        }],
         "paths": {
             "*": [
-            "./node_modules/tns-core-modules/*",
+            "./node_modules/@nativescript/core/*",
             "./node_modules/*"
             ]
         },
@@ -26,7 +31,9 @@
         "node_modules",
         "demo",
         "demo-ng",
-        "bin"
+        "demo-ng-bak",
+        "bin",
+        "angular"
     ],
     "compileOnSave": false
 }

@@ -13,19 +13,19 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
-import { TextAlignment } from '@nativescript/core/ui/enums';
 import {
-    TextTransform,
-    letterSpacingProperty,
-    textAlignmentProperty,
-    textDecorationProperty,
-    textTransformProperty,
-    Style,
+    Color,
     Font,
     ItemsSource,
+    Style,
+    TextTransform,
+    letterSpacingProperty,
     placeholderColorProperty,
-    Color
+    textAlignmentProperty,
+    textDecorationProperty,
+    textTransformProperty
 } from "@nativescript/core";
+import { TextAlignment, TextDecoration } from "@nativescript/core/ui/text-base";
 import * as types from "@nativescript/core/utils/types";
 import {
     DropDownBase,
@@ -44,7 +44,6 @@ import {
     paddingTopProperty,
     selectedIndexProperty
 } from "./drop-down-common";
-import { TextDecoration } from '@nativescript/core/ui/text-base';
 
 export * from "./drop-down-common";
 
@@ -308,6 +307,7 @@ export class DropDown extends DropDownBase {
     }
 }
 
+@NativeClass()
 @ObjCClass()
 class TapHandler extends NSObject {
     public static initWithOwner(owner: WeakRef<DropDown>) {
@@ -325,6 +325,7 @@ class TapHandler extends NSObject {
     }
 }
 
+@NativeClass()
 @ObjCClass(UIPickerViewDataSource)
 class DropDownListDataSource extends NSObject implements UIPickerViewDataSource {
     public static initWithOwner(owner: WeakRef<DropDown>): DropDownListDataSource {
@@ -347,6 +348,7 @@ class DropDownListDataSource extends NSObject implements UIPickerViewDataSource 
     }
 }
 
+@NativeClass()
 @ObjCClass(UIPickerViewDelegate)
 class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDelegate {
     public static initWithOwner(owner: WeakRef<DropDown>): DropDownListPickerDelegateImpl {
@@ -454,6 +456,7 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
     }
 }
 
+@NativeClass()
 @ObjCClass()
 class TNSDropDownLabel extends TNSLabel {
     public static initWithOwner(owner: WeakRef<DropDown>): TNSDropDownLabel {

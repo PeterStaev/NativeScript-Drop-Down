@@ -13,20 +13,20 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
-import { TextAlignment, TextDecoration, } from "@nativescript/core/ui/text-base"
 import {
-    textAlignmentProperty,
-    textDecorationProperty,
+    Color,
     Font,
     ItemsSource,
-    StackLayout,
     Label,
-    placeholderColorProperty,
+    StackLayout,
     View,
-    Color,
     fontInternalProperty,
-    fontSizeProperty
+    fontSizeProperty,
+    placeholderColorProperty,
+    textAlignmentProperty,
+    textDecorationProperty
 } from "@nativescript/core";
+import { TextAlignment, TextDecoration } from "@nativescript/core/ui/text-base";
 import * as types from "@nativescript/core/utils/types";
 import {
     DropDownBase,
@@ -48,6 +48,7 @@ const enum RealizedViewType {
     DropDownView
 }
 
+@NativeClass()
 export class DropDown extends DropDownBase {
     public nativeView: TNSSpinner;
     public _realizedItems = [
@@ -289,6 +290,7 @@ function initializeTNSSpinner() {
         return;
     }
 
+    @NativeClass()
     class TNSSpinnerImpl extends android.widget.Spinner {
         private _isOpenedIn = false;
         private _itemsTextAlignment: TextAlignment;
@@ -361,6 +363,7 @@ function initializeDropDownAdapter() {
         return;
     }
 
+    @NativeClass()
     class DropDownAdapterImpl extends android.widget.BaseAdapter implements android.widget.SpinnerAdapter {
         constructor(private owner: WeakRef<DropDown>) {
             super();
@@ -507,6 +510,7 @@ function initializeDropDownItemSelectedListener() {
         return;
     }
 
+    @NativeClass()
     @Interfaces([android.widget.AdapterView.OnItemSelectedListener])
     class DropDownItemSelectedListenerImpl extends java.lang.Object implements android.widget.AdapterView.OnItemSelectedListener {
         constructor(private owner: WeakRef<DropDown>) {
