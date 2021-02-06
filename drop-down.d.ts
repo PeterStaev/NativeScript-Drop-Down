@@ -13,11 +13,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
-import { ObservableArray } from "data/observable-array";
-import { CoercibleProperty, EventData, Property, View } from "ui/core/view";
-import { GestureTypes } from "ui/gestures/gestures";
-import { ItemsSource } from "ui/list-picker";
-import { TextAlignment } from "ui/text-base";
+import { ObservableArray } from "@nativescript/core/data/observable-array";
+import { CoercibleProperty, EventData, Property, View } from "@nativescript/core/ui/core/view";
+import { GestureTypes } from "@nativescript/core/ui/gestures";
+import { ItemsSource } from "@nativescript/core/ui/list-picker/list-picker-common";
+import { TextAlignment } from "@nativescript/core/ui/text-base";
 
 export interface SelectedIndexChangedEventData extends EventData {
     oldIndex: number;

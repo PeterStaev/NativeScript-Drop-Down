@@ -13,23 +13,21 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
-import { Color } from "color";
-import { View } from "ui/core/view";
-import { placeholderColorProperty } from "ui/editable-text-base/editable-text-base";
-import { Label } from "ui/label";
-import { StackLayout } from "ui/layouts/stack-layout";
-import { ItemsSource } from "ui/list-picker";
-import { Font } from "ui/styling/font";
+import { TextAlignment, TextDecoration, } from "@nativescript/core/ui/text-base"
 import {
-    TextAlignment,
-    TextDecoration,
-    fontInternalProperty,
-    fontSizeProperty,
     textAlignmentProperty,
-    textDecorationProperty
-} from "ui/text-base";
-import * as types from "utils/types";
-import { SelectedIndexChangedEventData } from ".";
+    textDecorationProperty,
+    Font,
+    ItemsSource,
+    StackLayout,
+    Label,
+    placeholderColorProperty,
+    View,
+    Color,
+    fontInternalProperty,
+    fontSizeProperty
+} from "@nativescript/core";
+import * as types from "@nativescript/core/utils/types";
 import {
     DropDownBase,
     backgroundColorProperty,
@@ -108,6 +106,7 @@ export class DropDown extends DropDownBase {
         super.disposeNativeView();
     }
 
+    // @ts-ignore
     get android(): android.widget.Spinner {
         return this.nativeView;
     }
@@ -247,7 +246,7 @@ export class DropDown extends DropDownBase {
                         || property === "color"
                         || property === "placeholderColor") {
                         const label = view.getViewById<Label>(LABELVIEWID);
-                        label.style[property] = value;
+                        label.style[property] = value as never;
                     }
                     else {
                         view.style[property] = value;
@@ -350,7 +349,7 @@ function initializeTNSSpinner() {
 /* TNSSpinner END */
 
 /* A snapshot-friendly, lazy-loaded class for DropDownAdpater BEGIN */
-interface DropDownAdapter extends android.widget.BaseAdapter, android.widget.ISpinnerAdapter {
+interface DropDownAdapter extends android.widget.BaseAdapter, android.widget.SpinnerAdapter {
     /*tslint:disable-next-line no-misused-new*/
     new (owner: WeakRef<DropDown>): DropDownAdapter;
 }
@@ -362,7 +361,7 @@ function initializeDropDownAdapter() {
         return;
     }
 
-    class DropDownAdapterImpl extends android.widget.BaseAdapter implements android.widget.ISpinnerAdapter {
+    class DropDownAdapterImpl extends android.widget.BaseAdapter implements android.widget.SpinnerAdapter {
         constructor(private owner: WeakRef<DropDown>) {
             super();
 
@@ -529,7 +528,7 @@ function initializeDropDownItemSelectedListener() {
                     object: owner,
                     oldIndex,
                     newIndex
-                } as SelectedIndexChangedEventData);
+                });
             
                 // Seems if the user does not select an item the control reuses the views on the next open.
                 // So it should be safe to clear the cache once the user selects an item (and not when the dropdown is closed)

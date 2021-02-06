@@ -8,10 +8,10 @@
         "noImplicitAny": false,
         "noImplicitUseStrict": true,
         "experimentalDecorators": true,
-        "target": "es5",
+        "target": "es2017",
         "module": "commonjs",
         "outDir": "bin/dist",
-        "lib": ["es6", "dom"],
+        "lib": ["es2018", "es2017", "dom", "es6"],
         "rootDir": ".",
         "baseUrl": ".",
         "paths": {

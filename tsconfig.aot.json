@@ -9,7 +9,7 @@
         "target": "es5",
         "module": "commonjs",
         "outDir": "bin/dist",
-        "lib": ["es6", "dom", "es2015.iterable"],
+        "lib": ["es2018", "es2017", "dom", "es6"],
         "rootDir": ".",
         "baseUrl": ".",
         "paths": {

@@ -13,15 +13,34 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
-import { ObservableArray } from "data/observable-array";
-import { CSSType, CoercibleProperty, EventData, Property, View, makeParser, makeValidator } from "ui/core/view";
-import { addWeakEventListener, removeWeakEventListener } from "ui/core/weak-event-listener";
-import { ItemsSource } from "ui/list-picker";
-import { TextAlignment } from "ui/text-base";
-import * as types from "utils/types";
+import { ObservableArray } from "@nativescript/core/data/observable-array";
+import {
+  CSSType,
+  CoercibleProperty,
+  Property,
+  View,
+  makeParser,
+  makeValidator,
+  EventData,
+  addWeakEventListener,
+  removeWeakEventListener,
+  ItemsSource
+} from "@nativescript/core";
+import { TextAlignment } from "@nativescript/core/ui/text-base";
+import * as types from "@nativescript/core/utils/types";
 import { DropDown as DropDownDefinition, SelectedIndexChangedEventData, ValueItem, ValueList as ValueListDefinition } from ".";
 
-export * from "ui/core/view";
+export { layout } from '@nativescript/core/utils';
+export {
+  Length,
+  backgroundColorProperty,
+  colorProperty,
+  fontInternalProperty,
+  paddingBottomProperty,
+  paddingLeftProperty,
+  paddingRightProperty,
+  paddingTopProperty
+} from "@nativescript/core";
 
 @CSSType("DropDown")
 export abstract class DropDownBase extends View implements DropDownDefinition {
@@ -68,7 +87,7 @@ export interface DropDownBase {
 }
 
 export class ValueList<T> extends ObservableArray<ValueItem<T>> implements ValueListDefinition<T> {
-    private _array: Array<ValueItem<T>>;
+    private _valueArray: Array<ValueItem<T>>;
 
     public getDisplay(index: number): string {
         if (types.isNullOrUndefined(index)) {
@@ -79,7 +98,7 @@ export class ValueList<T> extends ObservableArray<ValueItem<T>> implements Value
             return "";
         }
 
-        return this._array[index].display;
+        return this._valueArray[index].display;
     }
 
     public getValue(index: number): T {
@@ -87,7 +106,7 @@ export class ValueList<T> extends ObservableArray<ValueItem<T>> implements Value
             return null;
         }
 
-        return this._array[index].value;
+        return this._valueArray[index].value;
     }
 
     public getIndex(value: T): number {
