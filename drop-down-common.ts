@@ -27,7 +27,7 @@ import {
   removeWeakEventListener
 } from "@nativescript/core";
 import { TextAlignment } from "@nativescript/core/ui/text-base";
-import * as types from "@nativescript/core/utils/types";
+import { isNullOrUndefined } from "@nativescript/core/utils/types";
 import { DropDown as DropDownDefinition, SelectedIndexChangedEventData, ValueItem, ValueList as ValueListDefinition } from ".";
 
 export { layout } from "@nativescript/core/utils";
@@ -68,7 +68,7 @@ export abstract class DropDownBase extends View implements DropDownDefinition {
             return " ";
         }
 
-        if (types.isNullOrUndefined(index)) {
+        if (isNullOrUndefined(index)) {
             return null;
         }
 
@@ -90,7 +90,7 @@ export class ValueList<T> extends ObservableArray<ValueItem<T>> implements Value
     private _valueArray: Array<ValueItem<T>>;
 
     public getDisplay(index: number): string {
-        if (types.isNullOrUndefined(index)) {
+        if (isNullOrUndefined(index)) {
             return null;
         }
 
@@ -102,7 +102,7 @@ export class ValueList<T> extends ObservableArray<ValueItem<T>> implements Value
     }
 
     public getValue(index: number): T {
-        if (types.isNullOrUndefined(index) || index < 0 || index >= this.length) {
+        if (isNullOrUndefined(index) || index < 0 || index >= this.length) {
             return null;
         }
 

@@ -1,6 +1,8 @@
 {
-	"name": "nativescript-drop-down-angular",
+  "name": "nativescript-drop-down-angular",
+  "main": "index.js",
 	"ngPackage": {
+    "dest": "../bin/dist/angular",
 		"lib": {
 			"entryFile": "index.ts",
 			"umdModuleIds": {
@@ -11,7 +13,6 @@
 		},
 		"whitelistedNonPeerDependencies": [
 			"."
-    ],
-    "dest": "../bin/dist/angular"
+    ]
 	}
 }

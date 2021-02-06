@@ -13,17 +13,16 @@
         "moduleResolution": "node",
         "outDir": "bin/dist",
         "lib": ["es2017", "dom"],
-        "rootDir": ".",
-        "baseUrl": ".",
+        "rootDir": "./",
+        "baseUrl": "./",
         "plugins": [{
           "transform": "@nativescript/webpack/transformers/ns-transform-native-classes",
           "type": "raw"
         }],
         "paths": {
-            "*": [
-            "./node_modules/@nativescript/core/*",
-            "./node_modules/*"
-            ]
+          "tns-core-modules": ["./node_modules/@nativescript/core"],
+          "tns-core-modules/*": ["./node_modules/@nativescript/core/*"],
+          "*": ["node_modules/*"]
         },
         "skipLibCheck": true
     },
@@ -31,7 +30,6 @@
         "node_modules",
         "demo",
         "demo-ng",
-        "demo-ng-bak",
         "bin",
         "angular"
     ],

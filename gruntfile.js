@@ -94,8 +94,7 @@
     
     grunt.registerTask("build", [
         "exec:tslint",
-        "compile",
-        "copy"
+        "compile"
     ]);
 
     grunt.registerTask("ci", "Performs CI builds for the demo projects", function (action, platform) {

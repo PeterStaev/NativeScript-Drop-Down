@@ -1,7 +1,7 @@
 import { AfterViewInit, Directive, ElementRef, HostListener, Inject, NgModule, forwardRef } from "@angular/core";
 import { NG_VALUE_ACCESSOR, ReactiveFormsModule } from "@angular/forms";
 import { BaseValueAccessor, registerElement } from "@nativescript/angular";
-import { View } from "@nativescript/core/ui/core/view";
+import { View } from "@nativescript/core";
 import { DropDown } from "nativescript-drop-down";
 
 registerElement("DropDown", () => DropDown);

@@ -1,18 +1,18 @@
-<Page xmlns="http://schemas.nativescript.org/tns.xsd" loaded="pageLoaded" xmlns:dd="nativescript-drop-down">
-  <GridLayout rows="auto, auto, auto, auto, auto, auto, *" columns="auto, *">
-    <dd:DropDown id="dd" hint="{{ hint }}" items="{{ items }}" selectedIndex="{{ selectedIndex }}" 
-                  opened="dropDownOpened" closed="dropDownClosed" selectedIndexChanged="dropDownSelectedIndexChanged" 
-                  class="{{ cssClass }}" isEnabled="{{ isEnabled }}"
-                  row="0" colSpan="2" /> 
+<!--
+The markup in NativeScript apps contains a series of user interface components, each
+of which NativeScript renders with a platform-specific iOS or Android native control.
+You can find a full list of user interface components you can use in your app at
+https://docs.nativescript.org/ui/components.
+-->
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="navigatingTo" xmlns:dd="nativescript-drop-down">
+    <ActionBar title="My App" icon=""></ActionBar>
 
-    <Label text="Selected Index:" row="1" col="0" fontSize="18" verticalAlignment="bottom"/>
-    <TextField text="{{ selectedIndex }}" row="1" col="1" />
-                  
-    <Label text="Enabled?" row="2" col="0" fontSize="18" verticalAlignment="bottom"/>
-    <Switch checked="{{ isEnabled }}" row="2" col="1" horizontalAlignment="left" />
-
-    <Button row="3" col="0" colSpan="2" tap="changeStyles" text="Change Styles" style="font-size: 25" />
-    <Button row="4" col="0" colSpan="2" tap="open" text="Open" style="font-size: 25" />
-    <Button row="5" col="0" colSpan="2" tap="close" text="Close" style="font-size: 25" />
-  </GridLayout>
+    <GridLayout rows="auto, auto, *" columns="auto, *">
+        <dd:DropDown items="{{ items }}" selectedIndex="{{ selectedIndex }}" 
+                     opened="dropDownOpened" closed="dropDownClosed" 
+                     selectedIndexChanged="dropDownSelectedIndexChanged"
+                     row="0" colSpan="2" />
+        <Label text="Selected Index:" row="1" col="0" fontSize="18" verticalAlignment="bottom"/>
+        <TextField text="{{ selectedIndex }}" row="1" col="1" />
+    </GridLayout>
 </Page>

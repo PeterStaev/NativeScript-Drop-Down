@@ -1,0 +1,16 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "rootDir": ".",
+    "baseUrl": ".",
+    "experimentalDecorators": true,
+    "paths": {
+      "nativescript-drop-down": [
+        "../bin/dist"
+      ]
+    }
+  },
+  "include": ["./**/*.ts", "../references.d.ts"],
+  "exclude": ["../node_modules"]
+}

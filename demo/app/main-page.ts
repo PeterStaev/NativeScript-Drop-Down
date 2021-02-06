@@ -1,52 +1,30 @@
-import { EventData, Observable } from "data/observable";
-import * as pages from "ui/page";
+/*
+In NativeScript, a file with the same name as an XML file is known as
+a code-behind file. The code-behind is a great place to place your view
+logic, and to set up your page’s data binding.
+*/
 
-import { DropDown, SelectedIndexChangedEventData, ValueList } from "nativescript-drop-down";
+import { EventData, Page } from '@nativescript/core';
+import { HelloWorldModel } from './main-view-model';
 
-let viewModel: Observable;
-let dd: DropDown;
+// Event handler for Page 'navigatingTo' event attached in main-page.xml
+export function navigatingTo(args: EventData) {
+    /*
+    This gets a reference this page’s <Page> UI component. You can
+    view the API reference of the Page to see what’s available at
+    https://docs.nativescript.org/api-reference/classes/_ui_page_.page.html
+    */
+    const page = <Page>args.object;
 
-export function pageLoaded(args: EventData) {
-    const page = args.object as pages.Page;
-    const items = new ValueList<string>();
+    /*
+    A page’s bindingContext is an object that should be used to perform
+    data binding between XML markup and TypeScript code. Properties
+    on the bindingContext can be accessed using the {{ }} syntax in XML.
+    In this example, the {{ message }} and {{ onTap }} bindings are resolved
+    against the object returned by createViewModel().
 
-    dd = page.getViewById<DropDown>("dd");
-
-    viewModel = new Observable();
-
-    viewModel.set("items", items);
-    viewModel.set("hint", "My Hint");
-    viewModel.set("selectedIndex", null);    
-    viewModel.set("isEnabled", true);    
-    viewModel.set("cssClass", "default");
-
-    page.bindingContext = viewModel;
-
-    for (let loop = 0; loop < 200; loop++) {
-        items.push({ value: `I${loop}`, display: `Item ${loop}`});
-    }
-}
-
-export function dropDownOpened(args: EventData) {
-    console.log("Drop Down opened");
-}
-
-export function dropDownClosed(args: EventData) {
-    console.log("Drop Down closed");
-}
-
-export function dropDownSelectedIndexChanged(args: SelectedIndexChangedEventData) {
-    console.log(`Drop Down selected index changed from ${args.oldIndex} to ${args.newIndex}. New value is '${viewModel.get("items").getValue(args.newIndex)}'`);
-}
-
-export function changeStyles() {
-    viewModel.set("cssClass", "changed-styles");
-}
-
-export function open() {
-    dd.open();
-}
-
-export function close() {
-    dd.close();
+    You can learn more about data binding in NativeScript at
+    https://docs.nativescript.org/core-concepts/data-binding.
+    */
+    page.bindingContext = new HelloWorldModel();
 }

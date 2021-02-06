@@ -26,7 +26,7 @@ import {
     textTransformProperty
 } from "@nativescript/core";
 import { TextAlignment, TextDecoration } from "@nativescript/core/ui/text-base";
-import * as types from "@nativescript/core/utils/types";
+import { isNullOrUndefined } from "@nativescript/core/utils/types";
 import {
     DropDownBase,
     Length,
@@ -542,7 +542,7 @@ class TNSDropDownLabel extends TNSLabel {
         const actualText = value || this._hint || "";
         const owner = this._owner.get();
 
-        this._hasText = !types.isNullOrUndefined(value) && value !== "";
+        this._hasText = !isNullOrUndefined(value) && value !== "";
         this.text = (actualText === "" ? " " : actualText); // HACK: If empty use <space> so the label does not collapse
 
         this._refreshColor();
@@ -644,7 +644,7 @@ function _setTextAttributes(nativeView: TNSLabel, style: Style) {
         attributes.set(NSForegroundColorAttributeName, nativeView.textColor);
     }
 
-    const text: string = types.isNullOrUndefined(nativeView.text) ? "" : nativeView.text.toString();
+    const text: string = isNullOrUndefined(nativeView.text) ? "" : nativeView.text.toString();
     let sourceString: string;
     switch (style.textTransform) {
         case "uppercase":
