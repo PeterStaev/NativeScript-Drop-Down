@@ -1,5 +1,5 @@
 import { EventData, Observable, ObservableArray } from '@nativescript/core';
-import { SelectedIndexChangedEventData } from "nativescript-drop-down";
+import { SelectedIndexChangedEventData, ValueList } from "nativescript-drop-down";
 
 export class HelloWorldModel extends Observable {
     public items = new ObservableArray();
@@ -11,6 +11,11 @@ export class HelloWorldModel extends Observable {
         for (var loop = 0; loop < 20; loop++) {
           this.items.push("Item " + loop.toString());
         }
+
+        let itemSource = new ValueList<string>([
+          { value: "FL", display: "Florida" }, 
+          { value: "MI", display: "Michigan" }
+        ]);
     }
 
     dropDownOpened(args: EventData) {

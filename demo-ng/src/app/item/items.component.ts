@@ -36,8 +36,4 @@ export class ItemsComponent implements OnInit {
     public onclose() {
         console.log("Drop Down closed.");
     }
-
-    public changeStyles() {
-        this.cssClass = "changed-styles";
-    }
 }

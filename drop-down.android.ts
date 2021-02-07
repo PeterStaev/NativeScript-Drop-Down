@@ -41,14 +41,13 @@ import {
 
 export * from "./drop-down-common";
 
-const LABELVIEWID = "spinner-label";
-
-const enum RealizedViewType {
-    ItemView,
-    DropDownView
+enum RealizedViewType {
+  ItemView,
+  DropDownView
 }
 
-@NativeClass()
+const LABELVIEWID = "spinner-label";
+
 export class DropDown extends DropDownBase {
     public nativeView: TNSSpinner;
     public _realizedItems = [

@@ -31,10 +31,10 @@
     "@nativescript/angular": "~11.0.0",
     "@nativescript/core": "~7.1.0",
     "@nativescript/theme": "~3.0.0",
+    "nativescript-drop-down": "file:../bin/dist",
     "reflect-metadata": "~0.1.12",
     "rxjs": "^6.6.0",
-    "zone.js": "~0.11.1",
-    "nativescript-drop-down": "file:../bin/dist"
+    "zone.js": "~0.11.1"
   },
   "devDependencies": {
     "@angular/compiler-cli": "~11.0.0",

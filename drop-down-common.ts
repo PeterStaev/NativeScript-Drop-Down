@@ -86,8 +86,9 @@ export interface DropDownBase {
     on(event: "selectedIndexChanged", callback: (args: SelectedIndexChangedEventData) => void, thisArg?: any);
 }
 
+// @ts-ignore
 export class ValueList<T> extends ObservableArray<ValueItem<T>> implements ValueListDefinition<T> {
-    private _valueArray: Array<ValueItem<T>>;
+    private _array: Array<ValueItem<T>>;
 
     public getDisplay(index: number): string {
         if (isNullOrUndefined(index)) {
@@ -98,7 +99,7 @@ export class ValueList<T> extends ObservableArray<ValueItem<T>> implements Value
             return "";
         }
 
-        return this._valueArray[index].display;
+        return this._array[index].display;
     }
 
     public getValue(index: number): T {
@@ -106,7 +107,7 @@ export class ValueList<T> extends ObservableArray<ValueItem<T>> implements Value
             return null;
         }
 
-        return this._valueArray[index].value;
+        return this._array[index].value;
     }
 
     public getIndex(value: T): number {
