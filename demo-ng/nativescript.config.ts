@@ -1,7 +1,7 @@
 import { NativeScriptConfig } from '@nativescript/core';
 
 export default {
-  id: 'org.nativescript.demong',
+  id: 'com.tangrainc.dropdownsample.ng',
   appPath: 'src',
   appResourcesPath: 'App_Resources',
   android: {

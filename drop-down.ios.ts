@@ -26,7 +26,6 @@ import {
     textTransformProperty
 } from "@nativescript/core";
 import { TextAlignment, TextDecoration } from "@nativescript/core/ui/text-base";
-import { isNullOrUndefined } from "@nativescript/core/utils/types";
 import {
     DropDownBase,
     Length,
@@ -37,7 +36,7 @@ import {
     itemsPaddingProperty,
     itemsProperty,
     itemsTextAlignmentProperty,
-    layout,
+    Utils,
     paddingBottomProperty,
     paddingLeftProperty,
     paddingRightProperty,
@@ -281,19 +280,19 @@ export class DropDown extends DropDownBase {
     }
 
     public [paddingTopProperty.setNative](value: Length) {
-        this._setPadding({ top: layout.toDeviceIndependentPixels(this.effectivePaddingTop) });
+        this._setPadding({ top: Utils.layout.toDeviceIndependentPixels(this.effectivePaddingTop) });
     }
 
     public [paddingRightProperty.setNative](value: Length) {
-        this._setPadding({ right: layout.toDeviceIndependentPixels(this.effectivePaddingRight) });
+        this._setPadding({ right: Utils.layout.toDeviceIndependentPixels(this.effectivePaddingRight) });
     }
 
     public [paddingBottomProperty.setNative](value: Length) {
-        this._setPadding({ bottom: layout.toDeviceIndependentPixels(this.effectivePaddingBottom) });
+        this._setPadding({ bottom: Utils.layout.toDeviceIndependentPixels(this.effectivePaddingBottom) });
     }
 
     public [paddingLeftProperty.setNative](value: Length) {
-        this._setPadding({ left: layout.toDeviceIndependentPixels(this.effectivePaddingLeft) });
+        this._setPadding({ left: Utils.layout.toDeviceIndependentPixels(this.effectivePaddingLeft) });
     }
 
     private _setPadding(newPadding: { top?: number, right?: number, bottom?: number, left?: number }) {
@@ -542,7 +541,7 @@ class TNSDropDownLabel extends TNSLabel {
         const actualText = value || this._hint || "";
         const owner = this._owner.get();
 
-        this._hasText = !isNullOrUndefined(value) && value !== "";
+        this._hasText = !Utils.isNullOrUndefined(value) && value !== "";
         this.text = (actualText === "" ? " " : actualText); // HACK: If empty use <space> so the label does not collapse
 
         this._refreshColor();
@@ -644,7 +643,7 @@ function _setTextAttributes(nativeView: TNSLabel, style: Style) {
         attributes.set(NSForegroundColorAttributeName, nativeView.textColor);
     }
 
-    const text: string = isNullOrUndefined(nativeView.text) ? "" : nativeView.text.toString();
+    const text: string = Utils.isNullOrUndefined(nativeView.text) ? "" : nativeView.text.toString();
     let sourceString: string;
     switch (style.textTransform) {
         case "uppercase":

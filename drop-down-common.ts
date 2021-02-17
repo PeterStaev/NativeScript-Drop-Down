@@ -24,13 +24,11 @@ import {
   addWeakEventListener,
   makeParser,
   makeValidator,
-  removeWeakEventListener
+  removeWeakEventListener,
+  Utils
 } from "@nativescript/core";
 import { TextAlignment } from "@nativescript/core/ui/text-base";
-import { isNullOrUndefined } from "@nativescript/core/utils/types";
 import { DropDown as DropDownDefinition, SelectedIndexChangedEventData, ValueItem, ValueList as ValueListDefinition } from ".";
-
-export { layout } from "@nativescript/core/utils";
 export {
   Length,
   backgroundColorProperty,
@@ -39,7 +37,8 @@ export {
   paddingBottomProperty,
   paddingLeftProperty,
   paddingRightProperty,
-  paddingTopProperty
+  paddingTopProperty,
+  Utils
 } from "@nativescript/core";
 
 @CSSType("DropDown")
@@ -68,7 +67,7 @@ export abstract class DropDownBase extends View implements DropDownDefinition {
             return " ";
         }
 
-        if (isNullOrUndefined(index)) {
+        if (Utils.isNullOrUndefined(index)) {
             return null;
         }
 
@@ -91,7 +90,7 @@ export class ValueList<T> extends ObservableArray<ValueItem<T>> implements Value
     private _array: Array<ValueItem<T>>;
 
     public getDisplay(index: number): string {
-        if (isNullOrUndefined(index)) {
+        if (Utils.isNullOrUndefined(index)) {
             return null;
         }
 
@@ -103,7 +102,7 @@ export class ValueList<T> extends ObservableArray<ValueItem<T>> implements Value
     }
 
     public getValue(index: number): T {
-        if (isNullOrUndefined(index) || index < 0 || index >= this.length) {
+        if (Utils.isNullOrUndefined(index) || index < 0 || index >= this.length) {
             return null;
         }
 

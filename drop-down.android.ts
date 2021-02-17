@@ -24,10 +24,10 @@ import {
     fontSizeProperty,
     placeholderColorProperty,
     textAlignmentProperty,
-    textDecorationProperty
+    textDecorationProperty,
+    Utils
 } from "@nativescript/core";
 import { TextAlignment, TextDecoration } from "@nativescript/core/ui/text-base";
-import { isNullOrUndefined } from "@nativescript/core/utils/types";
 import {
     DropDownBase,
     backgroundColorProperty,
@@ -88,7 +88,7 @@ export class DropDown extends DropDownBase {
 
         // When used in templates the selectedIndex changed event is fired before the native widget is init.
         // So here we must set the inital value (if any)
-        if (!isNullOrUndefined(this.selectedIndex)) {
+        if (!Utils.isNullOrUndefined(this.selectedIndex)) {
             this.android.setSelection(this.selectedIndex + 1); // +1 for the hint first element
         }
         nativeView.itemsTextAlignment = itemsTextAlignmentProperty.defaultValue;
@@ -137,7 +137,7 @@ export class DropDown extends DropDownBase {
     }
 
     public [colorProperty.setNative](value: Color | number) {
-        if (!isNullOrUndefined(value)) {
+        if (!Utils.isNullOrUndefined(value)) {
             this._propagateStylePropertyToRealizedViews("color", value, false);
         }
     }
@@ -147,7 +147,7 @@ export class DropDown extends DropDownBase {
     }
 
     public [fontSizeProperty.setNative](value: number | { nativeSize: number }) {
-        if (!isNullOrUndefined(value)) {
+        if (!Utils.isNullOrUndefined(value)) {
             this._propagateStylePropertyToRealizedViews("fontSize", value, true);
         }
     }
@@ -206,7 +206,7 @@ export class DropDown extends DropDownBase {
         return null;
     }
     public [selectedIndexProperty.setNative](value: number) {
-        const actualIndex = (isNullOrUndefined(value) ? 0 : value + 1);
+        const actualIndex = (Utils.isNullOrUndefined(value) ? 0 : value + 1);
         this.nativeView.setSelection(actualIndex);
     }
 
@@ -479,7 +479,7 @@ function initializeDropDownAdapter() {
 
                     // HACK: if there is no hint defined, make the view in the drop down virtually invisible.
                     if (realizedViewType === RealizedViewType.DropDownView
-                        && (isNullOrUndefined(owner.hint) || owner.hint === "")) {
+                        && (Utils.isNullOrUndefined(owner.hint) || owner.hint === "")) {
                         view.height = 1;
                     }
                     // END HACK

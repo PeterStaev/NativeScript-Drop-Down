@@ -47,6 +47,7 @@
             }
         },
         exec: {
+            setup: "npm run setup",
             tsCompile: "npm run tsc -- --outDir " + localConfig.outDir,
             ngCompile: "npm run package",
             tslint: "npm run tslint",
@@ -87,6 +88,7 @@
 
     grunt.registerTask("compile", [
         "clean:build",
+        "exec:setup",
         "exec:tsCompile",
         "copy",
         "exec:ngCompile",
