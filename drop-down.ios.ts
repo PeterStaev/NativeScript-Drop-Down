@@ -29,6 +29,7 @@ import { TextAlignment, TextDecoration } from "@nativescript/core/ui/text-base";
 import {
     DropDownBase,
     Length,
+    Utils,
     backgroundColorProperty,
     colorProperty,
     fontInternalProperty,
@@ -36,7 +37,6 @@ import {
     itemsPaddingProperty,
     itemsProperty,
     itemsTextAlignmentProperty,
-    Utils,
     paddingBottomProperty,
     paddingLeftProperty,
     paddingRightProperty,

@@ -19,13 +19,13 @@ import {
     ItemsSource,
     Label,
     StackLayout,
+    Utils,
     View,
     fontInternalProperty,
     fontSizeProperty,
     placeholderColorProperty,
     textAlignmentProperty,
-    textDecorationProperty,
-    Utils
+    textDecorationProperty
 } from "@nativescript/core";
 import { TextAlignment, TextDecoration } from "@nativescript/core/ui/text-base";
 import {

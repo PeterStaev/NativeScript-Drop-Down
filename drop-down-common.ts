@@ -20,25 +20,25 @@ import {
   ItemsSource,
   ObservableArray,
   Property,
+  Utils,
   View,
   addWeakEventListener,
   makeParser,
   makeValidator,
-  removeWeakEventListener,
-  Utils
+  removeWeakEventListener
 } from "@nativescript/core";
 import { TextAlignment } from "@nativescript/core/ui/text-base";
 import { DropDown as DropDownDefinition, SelectedIndexChangedEventData, ValueItem, ValueList as ValueListDefinition } from ".";
 export {
   Length,
+  Utils,
   backgroundColorProperty,
   colorProperty,
   fontInternalProperty,
   paddingBottomProperty,
   paddingLeftProperty,
   paddingRightProperty,
-  paddingTopProperty,
-  Utils
+  paddingTopProperty
 } from "@nativescript/core";
 
 @CSSType("DropDown")
