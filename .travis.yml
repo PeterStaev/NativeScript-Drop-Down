@@ -31,13 +31,13 @@ matrix:
     - stage: lint
       language: node_js
       os: linux
-      node_js: "8"
+      node_js: "10"
       script: grunt lint
 
     - stage: deploy
       if: branch = release
       language: node_js 
-      node_js: "8"
+      node_js: "10"
       before_deploy:
           - cd bin/dist
       deploy:
