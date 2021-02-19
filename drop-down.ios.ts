@@ -15,6 +15,7 @@ limitations under the License.
 ***************************************************************************** */
 import {
     Color,
+    Device,
     Font,
     ItemsSource,
     Style,
@@ -48,6 +49,7 @@ export * from "./drop-down-common";
 
 const TOOLBAR_HEIGHT = 44;
 const HINT_COLOR = new Color("#3904041E");
+const NEW_PICKER_STYLE_ROW_INSET = parseFloat(Device.osVersion) >= 14.0 ? 16 : 0;
 
 export class DropDown extends DropDownBase {
     public _listPicker: UIPickerView;
@@ -409,9 +411,9 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
 
         label.padding = {
             top: Length.toDevicePixels(itemsPaddingTop, 0),
-            right: Length.toDevicePixels(itemsPaddingRight, 0),
+            right: NEW_PICKER_STYLE_ROW_INSET + Length.toDevicePixels(itemsPaddingRight, 0),
             bottom: Length.toDevicePixels(itemsPaddingBottom, 0),
-            left: Length.toDevicePixels(itemsPaddingLeft, 0)
+            left: NEW_PICKER_STYLE_ROW_INSET + Length.toDevicePixels(itemsPaddingLeft, 0)
         };
 
         label.font = style.fontInternal.getUIFont(label.font);
