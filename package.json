@@ -40,7 +40,8 @@
   "author": "Peter Staev <peter@tangrasoft.com>",
   "contributors": [
     "Dick Smith (https://github.com/DickSmith)",
-    "AWhiteSheep (https://github.com/AWhiteSheep)"
+    "AWhiteSheep (https://github.com/AWhiteSheep)",
+    "ReazerDev (https://github.com/ReazerDev)"
   ],
   "license": "Apache-2.0",
   "devDependencies": {
