@@ -13,15 +13,33 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
-import { ObservableArray } from "data/observable-array";
-import { CSSType, CoercibleProperty, EventData, Property, View, makeParser, makeValidator } from "ui/core/view";
-import { addWeakEventListener, removeWeakEventListener } from "ui/core/weak-event-listener";
-import { ItemsSource } from "ui/list-picker";
-import { TextAlignment } from "ui/text-base";
-import * as types from "utils/types";
+import {
+  CSSType,
+  CoercibleProperty,
+  EventData,
+  ItemsSource,
+  ObservableArray,
+  Property,
+  Utils,
+  View,
+  addWeakEventListener,
+  makeParser,
+  makeValidator,
+  removeWeakEventListener
+} from "@nativescript/core";
+import { TextAlignment } from "@nativescript/core/ui/text-base";
 import { DropDown as DropDownDefinition, SelectedIndexChangedEventData, ValueItem, ValueList as ValueListDefinition } from ".";
-
-export * from "ui/core/view";
+export {
+  Length,
+  Utils,
+  backgroundColorProperty,
+  colorProperty,
+  fontInternalProperty,
+  paddingBottomProperty,
+  paddingLeftProperty,
+  paddingRightProperty,
+  paddingTopProperty
+} from "@nativescript/core";
 
 @CSSType("DropDown")
 export abstract class DropDownBase extends View implements DropDownDefinition {
@@ -49,7 +67,7 @@ export abstract class DropDownBase extends View implements DropDownDefinition {
             return " ";
         }
 
-        if (types.isNullOrUndefined(index)) {
+        if (Utils.isNullOrUndefined(index)) {
             return null;
         }
 
@@ -67,11 +85,12 @@ export interface DropDownBase {
     on(event: "selectedIndexChanged", callback: (args: SelectedIndexChangedEventData) => void, thisArg?: any);
 }
 
+// @ts-ignore
 export class ValueList<T> extends ObservableArray<ValueItem<T>> implements ValueListDefinition<T> {
     private _array: Array<ValueItem<T>>;
 
     public getDisplay(index: number): string {
-        if (types.isNullOrUndefined(index)) {
+        if (Utils.isNullOrUndefined(index)) {
             return null;
         }
 
@@ -83,7 +102,7 @@ export class ValueList<T> extends ObservableArray<ValueItem<T>> implements Value
     }
 
     public getValue(index: number): T {
-        if (types.isNullOrUndefined(index) || index < 0 || index >= this.length) {
+        if (Utils.isNullOrUndefined(index) || index < 0 || index >= this.length) {
             return null;
         }
 

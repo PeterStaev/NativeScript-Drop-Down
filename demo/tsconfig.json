@@ -1,20 +1,20 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
-        "target": "es5",
+        "module": "esnext",
+        "target": "es2017",
+        "moduleResolution": "node",
         "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
         "noEmitHelpers": true,
         "noEmitOnError": true,
+        "skipLibCheck": true,
         "lib": [
-            "es6",
-            "dom"
+            "es2017",
+            "dom",
+            "es6"
         ],
         "baseUrl": ".",
         "paths": {
-            "*": [
-                "./node_modules/tns-core-modules/*",
-                "./node_modules/*"
-            ],
             "~/*": [
                 "app/*"
             ]

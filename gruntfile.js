@@ -6,7 +6,9 @@
             "!node_modules/**/*.*",
             "!demo/**/*.*",
             "!demo-ng/**/*.*",
-            "!bin/**/*.*"
+            "!demo-ng-bak/**/*.*",
+            "!bin/**/*.*",
+            "!angular/**/*.*"
         ],
         outDir: "bin/dist/"
     }
@@ -14,7 +16,7 @@
     grunt.initConfig({
         clean: {
             build: {
-                src: [localConfig.outDir]
+                src: [localConfig.outDir, "angular/dist"]
             }
         },
         copy: {
@@ -45,8 +47,9 @@
             }
         },
         exec: {
+            setup: "npm run setup",
             tsCompile: "npm run tsc -- --outDir " + localConfig.outDir,
-            ngCompile: "npm run ngc -- --outDir " + localConfig.outDir,
+            ngCompile: "npm run package",
             tslint: "npm run tslint",
             checkRequiredReadmeSection: {
                 cwd: "bin/dist",
@@ -85,15 +88,15 @@
 
     grunt.registerTask("compile", [
         "clean:build",
+        "exec:setup",
         "exec:tsCompile",
+        "copy",
         "exec:ngCompile",
-        "copy"
     ]);
     
     grunt.registerTask("build", [
         "exec:tslint",
-        "compile",
-        "copy"
+        "compile"
     ]);
 
     grunt.registerTask("ci", "Performs CI builds for the demo projects", function (action, platform) {

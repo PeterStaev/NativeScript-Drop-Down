@@ -13,23 +13,21 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************** */
-import { Color } from "color";
-import { View } from "ui/core/view";
-import { placeholderColorProperty } from "ui/editable-text-base/editable-text-base";
-import { Label } from "ui/label";
-import { StackLayout } from "ui/layouts/stack-layout";
-import { ItemsSource } from "ui/list-picker";
-import { Font } from "ui/styling/font";
 import {
-    TextAlignment,
-    TextDecoration,
+    Color,
+    Font,
+    ItemsSource,
+    Label,
+    StackLayout,
+    Utils,
+    View,
     fontInternalProperty,
     fontSizeProperty,
+    placeholderColorProperty,
     textAlignmentProperty,
     textDecorationProperty
-} from "ui/text-base";
-import * as types from "utils/types";
-import { SelectedIndexChangedEventData } from ".";
+} from "@nativescript/core";
+import { TextAlignment, TextDecoration } from "@nativescript/core/ui/text-base";
 import {
     DropDownBase,
     backgroundColorProperty,
@@ -43,12 +41,12 @@ import {
 
 export * from "./drop-down-common";
 
-const LABELVIEWID = "spinner-label";
-
-const enum RealizedViewType {
-    ItemView,
-    DropDownView
+enum RealizedViewType {
+  ItemView,
+  DropDownView
 }
+
+const LABELVIEWID = "spinner-label";
 
 export class DropDown extends DropDownBase {
     public nativeView: TNSSpinner;
@@ -90,7 +88,7 @@ export class DropDown extends DropDownBase {
 
         // When used in templates the selectedIndex changed event is fired before the native widget is init.
         // So here we must set the inital value (if any)
-        if (!types.isNullOrUndefined(this.selectedIndex)) {
+        if (!Utils.isNullOrUndefined(this.selectedIndex)) {
             this.android.setSelection(this.selectedIndex + 1); // +1 for the hint first element
         }
         nativeView.itemsTextAlignment = itemsTextAlignmentProperty.defaultValue;
@@ -108,6 +106,7 @@ export class DropDown extends DropDownBase {
         super.disposeNativeView();
     }
 
+    // @ts-ignore
     get android(): android.widget.Spinner {
         return this.nativeView;
     }
@@ -138,7 +137,7 @@ export class DropDown extends DropDownBase {
     }
 
     public [colorProperty.setNative](value: Color | number) {
-        if (!types.isNullOrUndefined(value)) {
+        if (!Utils.isNullOrUndefined(value)) {
             this._propagateStylePropertyToRealizedViews("color", value, false);
         }
     }
@@ -148,7 +147,7 @@ export class DropDown extends DropDownBase {
     }
 
     public [fontSizeProperty.setNative](value: number | { nativeSize: number }) {
-        if (!types.isNullOrUndefined(value)) {
+        if (!Utils.isNullOrUndefined(value)) {
             this._propagateStylePropertyToRealizedViews("fontSize", value, true);
         }
     }
@@ -207,7 +206,7 @@ export class DropDown extends DropDownBase {
         return null;
     }
     public [selectedIndexProperty.setNative](value: number) {
-        const actualIndex = (types.isNullOrUndefined(value) ? 0 : value + 1);
+        const actualIndex = (Utils.isNullOrUndefined(value) ? 0 : value + 1);
         this.nativeView.setSelection(actualIndex);
     }
 
@@ -247,7 +246,7 @@ export class DropDown extends DropDownBase {
                         || property === "color"
                         || property === "placeholderColor") {
                         const label = view.getViewById<Label>(LABELVIEWID);
-                        label.style[property] = value;
+                        label.style[property] = value as never;
                     }
                     else {
                         view.style[property] = value;
@@ -290,6 +289,7 @@ function initializeTNSSpinner() {
         return;
     }
 
+    @NativeClass()
     class TNSSpinnerImpl extends android.widget.Spinner {
         private _isOpenedIn = false;
         private _itemsTextAlignment: TextAlignment;
@@ -350,7 +350,7 @@ function initializeTNSSpinner() {
 /* TNSSpinner END */
 
 /* A snapshot-friendly, lazy-loaded class for DropDownAdpater BEGIN */
-interface DropDownAdapter extends android.widget.BaseAdapter, android.widget.ISpinnerAdapter {
+interface DropDownAdapter extends android.widget.BaseAdapter, android.widget.SpinnerAdapter {
     /*tslint:disable-next-line no-misused-new*/
     new (owner: WeakRef<DropDown>): DropDownAdapter;
 }
@@ -362,7 +362,8 @@ function initializeDropDownAdapter() {
         return;
     }
 
-    class DropDownAdapterImpl extends android.widget.BaseAdapter implements android.widget.ISpinnerAdapter {
+    @NativeClass()
+    class DropDownAdapterImpl extends android.widget.BaseAdapter implements android.widget.SpinnerAdapter {
         constructor(private owner: WeakRef<DropDown>) {
             super();
 
@@ -478,7 +479,7 @@ function initializeDropDownAdapter() {
 
                     // HACK: if there is no hint defined, make the view in the drop down virtually invisible.
                     if (realizedViewType === RealizedViewType.DropDownView
-                        && (types.isNullOrUndefined(owner.hint) || owner.hint === "")) {
+                        && (Utils.isNullOrUndefined(owner.hint) || owner.hint === "")) {
                         view.height = 1;
                     }
                     // END HACK
@@ -508,6 +509,7 @@ function initializeDropDownItemSelectedListener() {
         return;
     }
 
+    @NativeClass()
     @Interfaces([android.widget.AdapterView.OnItemSelectedListener])
     class DropDownItemSelectedListenerImpl extends java.lang.Object implements android.widget.AdapterView.OnItemSelectedListener {
         constructor(private owner: WeakRef<DropDown>) {
@@ -529,7 +531,7 @@ function initializeDropDownItemSelectedListener() {
                     object: owner,
                     oldIndex,
                     newIndex
-                } as SelectedIndexChangedEventData);
+                });
             
                 // Seems if the user does not select an item the control reuses the views on the next open.
                 // So it should be safe to clear the cache once the user selects an item (and not when the dropdown is closed)
