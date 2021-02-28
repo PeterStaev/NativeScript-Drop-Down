@@ -1,4 +1,15 @@
-<span style="color:red">**This repo only supports NativeScript pre-6.0. The latest version of the plugin supporting and tested on the latest version of NativeScript is availble as part of [ProPlugins](https://www.proplugins.org).**</span>
+__The author of this plugin will continue to support it in a separate repo exclusively as part of [ProPlugins](https://proplugins.org). This repo will remain supported by the NativeScript community.__
+
+# Contribution - help wanted
+This plugin is supported by the NativeScript community. All PRs are welcome but make sure that the demo applications work correctly before creating a new PR. If you do not have an issue you are facing but want to contribute to this plugin you can find a list of the on going issues [here](https://github.com/PeterStaev/nativescript-image-swipe/issues).
+
+## Creating a PR checklist:
+- Fork the repo
+- Add new functionality or fix an issue and push it to your fork
+- Start both demo and demo-ng apps and make sure they work correctly (make sure that no console errors are thrown on both iOS and Android)
+- From your fork create a PR targeting the 'master' branch of this repository
+
+Thank you for your contribution.
 
 # NativeScript DropDown widget 
 [![Build Status](https://travis-ci.org/PeterStaev/NativeScript-Drop-Down.svg?branch=master)](https://travis-ci.org/PeterStaev/NativeScript-Drop-Down)
