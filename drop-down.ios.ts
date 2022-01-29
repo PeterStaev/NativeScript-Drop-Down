@@ -76,7 +76,7 @@ export class DropDown extends DropDownBase {
         super.initNativeView();
 
         const nativeView: TNSDropDownLabel = this.nativeViewProtected;
-        const applicationFrame = UIApplication.sharedApplication.keyWindow.frame;
+        const applicationFrame = (UIApplication.sharedApplication.keyWindow || UIApplication.sharedApplication.windows[0]).frame;
 
         this._listPicker = UIPickerView.alloc().init();
 
