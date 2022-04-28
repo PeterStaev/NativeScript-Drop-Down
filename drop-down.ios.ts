@@ -416,7 +416,9 @@ class DropDownListPickerDelegateImpl extends NSObject implements UIPickerViewDel
             left: NEW_PICKER_STYLE_ROW_INSET + Length.toDevicePixels(itemsPaddingLeft, 0)
         };
 
-        label.font = style.fontInternal.getUIFont(label.font);
+        if (style.fontInternal) {
+            label.font = style.fontInternal.getUIFont(label.font);
+        }
 
         const itemsTextAlignment = (owner.nativeView.itemsTextAlignment === itemsTextAlignmentProperty.defaultValue)
             ? style.textAlignment : owner.nativeView.itemsTextAlignment;
