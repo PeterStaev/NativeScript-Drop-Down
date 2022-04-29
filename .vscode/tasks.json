@@ -1,20 +1,28 @@
 {
 	// See http://go.microsoft.com/fwlink/?LinkId=733558
 	// for the documentation about the tasks.json format
-	"version": "0.1.0",
+	"version": "2.0.0",
 	"command": "grunt",
-	"isShellCommand": true,
-	"args": ["--no-color"],
-	"showOutput": "always", 
+	"args": [
+		"--no-color"
+	],
+	
 	"tasks": [
 		{
-			"taskName": "build",
-			"args": [], 
-			"isBuildCommand": true, 
-			"problemMatcher": ["$tsc", {
-                "base": "$tslint4",
-                "fileLocation": "relative"
-            }]
-		}	
+			"label": "build",
+			"type": "grunt",
+			"task": "--no-color",
+			"problemMatcher": [
+				"$tsc",
+				{
+					"base": "$tslint4",
+					"fileLocation": "relative"
+				}
+			],
+			"group": {
+				"_id": "build",
+				"isDefault": false
+			}
+		}
 	]
 }
